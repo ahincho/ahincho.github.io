@@ -1,0 +1,173 @@
+---
+import { translations, getLang } from '../i18n';
+
+const lang = getLang(Astro.currentLocale);
+const t = translations[lang].experience;
+---
+
+<section id="experience" class="section">
+	<div class="container">
+		<p class="section-eyebrow">{t.eyebrow}</p>
+		<h2 class="section-title">{t.title}</h2>
+		<ol class="timeline">
+			{t.jobs.map((job) => (
+				<li>
+					<div class="meta">{job.meta}</div>
+					<h3>{job.role}</h3>
+					<p class="company">{job.company}</p>
+					<ul class="bullets">
+						{job.bullets.map((b) => <li>{b}</li>)}
+					</ul>
+					<div class="tags">
+						{job.tags.map((tag) => <span class="pill">{tag}</span>)}
+					</div>
+				</li>
+			))}
+		</ol>
+		<h3 class="edu-title">{t.educationTitle}</h3>
+		<div class="education">
+			{t.education.map((e) => (
+				<div class="edu-card">
+					<p class="school">{e.school}</p>
+					<p class="degree">{e.degree}</p>
+					<p class="edu-meta">{e.meta}</p>
+				</div>
+			))}
+		</div>
+	</div>
+</section>
+
+<style>
+	.timeline {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+		position: relative;
+	}
+
+	.timeline::before {
+		content: '';
+		position: absolute;
+		left: 0.35rem;
+		top: 0.5rem;
+		bottom: 0.5rem;
+		width: 2px;
+		background: var(--border);
+	}
+
+	.timeline > li {
+		position: relative;
+		padding: 0 0 3rem 2.4rem;
+	}
+
+	.timeline > li:last-child {
+		padding-bottom: 0.5rem;
+	}
+
+	.timeline > li::before {
+		content: '';
+		position: absolute;
+		left: 0;
+		top: 0.45rem;
+		width: 0.8rem;
+		height: 0.8rem;
+		border-radius: 50%;
+		background: var(--bg);
+		border: 2.5px solid var(--accent);
+	}
+
+	.meta {
+		font-family: var(--font-mono);
+		font-size: 0.78rem;
+		color: var(--accent);
+		margin-bottom: 0.4rem;
+	}
+
+	h3 {
+		font-size: 1.15rem;
+		font-weight: 700;
+	}
+
+	.company {
+		color: var(--text-muted);
+		font-size: 0.95rem;
+		margin-top: 0.2rem;
+	}
+
+	.bullets {
+		list-style: none;
+		margin: 1rem 0 0;
+		padding: 0;
+		display: grid;
+		gap: 0.55rem;
+		max-width: 52rem;
+	}
+
+	.bullets li {
+		position: relative;
+		padding-left: 1.4rem;
+		color: var(--text-muted);
+		font-size: 0.94rem;
+		line-height: 1.65;
+	}
+
+	.bullets li::before {
+		content: '▸';
+		position: absolute;
+		left: 0;
+		color: var(--accent);
+	}
+
+	.tags {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.45rem;
+		margin-top: 1rem;
+	}
+
+	.edu-title {
+		font-size: 1.05rem;
+		font-weight: 700;
+		margin: 3.5rem 0 1.4rem;
+	}
+
+	.education {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		gap: 1rem;
+	}
+
+	.edu-card {
+		background: var(--card);
+		border: 1px solid var(--border);
+		border-radius: 12px;
+		padding: 1.2rem 1.4rem;
+	}
+
+	.school {
+		font-family: var(--font-mono);
+		font-size: 0.75rem;
+		font-weight: 600;
+		color: var(--accent);
+		text-transform: uppercase;
+		letter-spacing: 0.06em;
+	}
+
+	.degree {
+		font-weight: 600;
+		font-size: 0.95rem;
+		margin-top: 0.4rem;
+	}
+
+	.edu-meta {
+		color: var(--text-faint);
+		font-size: 0.85rem;
+		margin-top: 0.3rem;
+	}
+
+	@media (max-width: 800px) {
+		.education {
+			grid-template-columns: 1fr;
+		}
+	}
+</style>

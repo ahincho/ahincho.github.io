@@ -1,0 +1,286 @@
+---
+import { translations, getLang } from '../i18n';
+
+const lang = getLang(Astro.currentLocale);
+const t = translations[lang].hero;
+
+const stackJson = `{
+  "backend":  ["Spring Boot", "NestJS",
+               "FastAPI", ".NET"],
+  "frontend": ["React", "Angular", "Astro"],
+  "cloud":    ["AWS", "Azure", "GCP"],
+  "devops":   ["GitHub Actions", "Terraform"],
+  "ia":       ["LangChain", "Bedrock", "MLOps"]
+}`;
+---
+
+<section id="top" class="hero">
+	<div class="container grid">
+		<div class="intro">
+			<p class="eyebrow">{t.location}</p>
+			<h1>Angel Hincho</h1>
+			<p class="role">{t.role}</p>
+			<p class="lead">{t.lead}</p>
+			<div class="actions">
+				<a class="btn btn-primary" href="#project">{t.ctaProject}</a>
+				<a class="btn btn-ghost" href="#contact">{t.ctaContact}</a>
+			</div>
+			<div class="social">
+				<a href="https://github.com/ahincho" target="_blank" rel="noopener noreferrer" aria-label={t.githubAria}>
+					<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+						<path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.11.79-.25.79-.55 0-.27-.01-1.17-.02-2.12-3.2.7-3.87-1.36-3.87-1.36-.52-1.33-1.28-1.68-1.28-1.68-1.04-.71.08-.7.08-.7 1.15.08 1.76 1.19 1.76 1.19 1.03 1.75 2.69 1.25 3.34.95.1-.74.4-1.25.72-1.54-2.55-.29-5.23-1.28-5.23-5.68 0-1.26.45-2.28 1.19-3.09-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.18 1.18a11.1 11.1 0 0 1 5.79 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.83 1.19 3.09 0 4.41-2.69 5.38-5.25 5.67.41.35.77 1.05.77 2.12 0 1.53-.01 2.76-.01 3.14 0 .3.2.67.8.55A11.51 11.51 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5Z"></path>
+					</svg>
+				</a>
+				<a href="https://www.linkedin.com/in/ahincho" target="_blank" rel="noopener noreferrer" aria-label={t.linkedinAria}>
+					<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+						<path d="M20.45 20.45h-3.55v-5.57c0-1.33-.03-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.36V9h3.41v1.56h.05c.47-.9 1.63-1.85 3.36-1.85 3.6 0 4.27 2.37 4.27 5.45v6.29ZM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12ZM7.12 20.45H3.55V9h3.57v11.45Z"></path>
+					</svg>
+				</a>
+				<span class="divider" aria-hidden="true"></span>
+				<a class="mail" href="mailto:ahincho@unsa.edu.pe">ahincho@unsa.edu.pe</a>
+			</div>
+		</div>
+		<div class="terminal" aria-hidden="true">
+			<div class="bar">
+				<span></span><span></span><span></span>
+				<em>angel@arequipa — zsh</em>
+			</div>
+<pre><code><span class="p">~ $</span> whoami
+<span class="o">{t.whoami}</span>
+<span class="p">~ $</span> cat stack.json
+<span class="o">{stackJson}</span>
+<span class="p">~ $</span> echo $NOW
+<span class="o">{t.now}</span>
+<span class="p">~ $</span> <span class="cursor"></span></code></pre>
+		</div>
+	</div>
+	<div class="container">
+		<dl class="stats">
+			{t.stats.map((stat) => (
+				<div>
+					<dt>{stat.label}</dt>
+					<dd>{stat.value}</dd>
+				</div>
+			))}
+		</dl>
+	</div>
+</section>
+
+<style>
+	.hero {
+		position: relative;
+		padding-block: 6.5rem 4rem;
+		overflow: hidden;
+	}
+
+	.hero::before {
+		content: '';
+		position: absolute;
+		top: -20rem;
+		right: -10rem;
+		width: 42rem;
+		height: 42rem;
+		background: radial-gradient(circle, var(--accent-dim) 0%, transparent 65%);
+		pointer-events: none;
+	}
+
+	.grid {
+		display: grid;
+		grid-template-columns: 1.15fr 0.85fr;
+		gap: 3.5rem;
+		align-items: center;
+	}
+
+	.eyebrow {
+		font-family: var(--font-mono);
+		font-size: 0.82rem;
+		color: var(--accent);
+		margin-bottom: 1rem;
+	}
+
+	.eyebrow::before {
+		content: '▸ ';
+	}
+
+	h1 {
+		font-size: clamp(2.6rem, 6vw, 4rem);
+		font-weight: 800;
+		letter-spacing: -0.03em;
+	}
+
+	.role {
+		font-family: var(--font-mono);
+		font-size: clamp(1rem, 2.2vw, 1.25rem);
+		font-weight: 600;
+		color: var(--accent);
+		margin-top: 0.75rem;
+	}
+
+	.lead {
+		max-width: 34rem;
+		color: var(--text-muted);
+		font-size: 1.05rem;
+		margin-top: 1.25rem;
+	}
+
+	.actions {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.85rem;
+		margin-top: 2rem;
+	}
+
+	.social {
+		display: flex;
+		align-items: center;
+		gap: 0.9rem;
+		margin-top: 2rem;
+	}
+
+	.social a {
+		color: var(--text-muted);
+		display: inline-flex;
+	}
+
+	.social a:hover {
+		color: var(--accent);
+	}
+
+	.social .mail {
+		font-family: var(--font-mono);
+		font-size: 0.85rem;
+	}
+
+	.divider {
+		width: 1px;
+		height: 1.1rem;
+		background: var(--border-strong);
+	}
+
+	.terminal {
+		background: var(--card);
+		border: 1px solid var(--border);
+		border-radius: 14px;
+		box-shadow: var(--shadow);
+		overflow: hidden;
+		font-family: var(--font-mono);
+		font-size: 0.8rem;
+		line-height: 1.75;
+		container-type: inline-size;
+	}
+
+	.bar {
+		display: flex;
+		align-items: center;
+		gap: 0.45rem;
+		padding: 0.7rem 1rem;
+		border-bottom: 1px solid var(--border);
+		background: var(--bg-soft);
+	}
+
+	.bar span {
+		width: 0.7rem;
+		height: 0.7rem;
+		border-radius: 50%;
+		background: var(--border-strong);
+	}
+
+	.bar span:nth-child(1) {
+		background: #f87171;
+	}
+
+	.bar span:nth-child(2) {
+		background: #fbbf24;
+	}
+
+	.bar span:nth-child(3) {
+		background: #34d399;
+	}
+
+	.bar em {
+		margin-left: auto;
+		font-style: normal;
+		font-size: 0.72rem;
+		color: var(--text-faint);
+	}
+
+	pre {
+		margin: 0;
+		padding: 1.1rem 1.25rem 1.3rem;
+		overflow-x: auto;
+		font-size: clamp(0.62rem, 2.8cqw, 0.8rem);
+		scrollbar-width: none;
+	}
+
+	pre::-webkit-scrollbar {
+		display: none;
+	}
+
+	.p {
+		color: var(--accent);
+		font-weight: 600;
+	}
+
+	.o {
+		color: var(--text-muted);
+	}
+
+	.cursor {
+		display: inline-block;
+		width: 0.55em;
+		height: 1.05em;
+		background: var(--accent);
+		vertical-align: text-bottom;
+		animation: blink 1.7s steps(1) infinite;
+	}
+
+	@keyframes blink {
+		50% {
+			opacity: 0;
+		}
+	}
+
+	.stats {
+		display: grid;
+		grid-template-columns: repeat(4, 1fr);
+		gap: 1rem;
+		margin: 3.5rem 0 0;
+		padding: 1.6rem 0 0;
+		border-top: 1px solid var(--border);
+	}
+
+	.stats div {
+		display: flex;
+		flex-direction: column-reverse;
+	}
+
+	.stats dd {
+		margin: 0;
+		font-family: var(--font-mono);
+		font-size: clamp(1.5rem, 3vw, 2rem);
+		font-weight: 700;
+		color: var(--accent);
+		letter-spacing: -0.02em;
+	}
+
+	.stats dt {
+		color: var(--text-muted);
+		font-size: 0.85rem;
+	}
+
+	@media (max-width: 900px) {
+		.grid {
+			grid-template-columns: 1fr;
+			gap: 2.5rem;
+		}
+
+		.hero {
+			padding-block: 4rem 3rem;
+		}
+
+		.stats {
+			grid-template-columns: repeat(2, 1fr);
+			gap: 1.5rem 1rem;
+		}
+	}
+</style>

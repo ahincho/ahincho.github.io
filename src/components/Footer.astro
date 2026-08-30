@@ -1,0 +1,42 @@
+---
+import { translations, getLang } from '../i18n';
+
+const lang = getLang(Astro.currentLocale);
+const t = translations[lang].footer;
+---
+
+<footer>
+	<div class="container inner">
+		<p>{t.rights}</p>
+		<p class="made">
+			{t.madeWith} <a href="https://astro.build" target="_blank" rel="noopener noreferrer">Astro</a>
+			· <a href="https://github.com/ahincho" target="_blank" rel="noopener noreferrer">GitHub</a>
+			· <a href="https://www.linkedin.com/in/ahincho" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+		</p>
+	</div>
+</footer>
+
+<style>
+	footer {
+		border-top: 1px solid var(--border);
+		padding-block: 1.8rem;
+		margin-top: 2rem;
+	}
+
+	.inner {
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: space-between;
+		gap: 0.5rem;
+		font-size: 0.85rem;
+		color: var(--text-faint);
+	}
+
+	.made a {
+		color: var(--text-muted);
+	}
+
+	.made a:hover {
+		color: var(--accent);
+	}
+</style>

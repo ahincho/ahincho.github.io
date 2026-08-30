@@ -1,0 +1,67 @@
+---
+import '@fontsource-variable/inter';
+import '@fontsource-variable/jetbrains-mono';
+import '../styles/global.css';
+import { translations, getLang } from '../i18n';
+
+interface Props {
+	title?: string;
+	description?: string;
+}
+
+const lang = getLang(Astro.currentLocale);
+const t = translations[lang];
+
+const { title = t.meta.title, description = t.meta.description } = Astro.props;
+
+const jsonLd = JSON.stringify({
+	'@context': 'https://schema.org',
+	'@type': 'Person',
+	name: 'Angel Eduardo Hincho Jove',
+	jobTitle: 'Full Stack & DevSecOps Engineer',
+	address: { '@type': 'PostalAddress', addressLocality: 'Arequipa', addressCountry: 'PE' },
+	alumniOf: 'Universidad Nacional de San Agustín',
+	sameAs: ['https://github.com/ahincho', 'https://www.linkedin.com/in/ahincho'],
+});
+---
+
+<!doctype html>
+<html lang={lang}>
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="generator" content={Astro.generator} />
+		<title>{title}</title>
+		<meta name="description" content={description} />
+		<meta name="author" content="Angel Hincho" />
+		<meta property="og:type" content="website" />
+		<meta property="og:title" content={title} />
+		<meta property="og:description" content={description} />
+		<meta property="og:locale" content={t.meta.ogLocale} />
+		<meta name="twitter:card" content="summary" />
+		{
+			Astro.site && (
+				<>
+					<link rel="canonical" href={new URL(Astro.url.pathname, Astro.site)} />
+					<link rel="alternate" hreflang="es" href={new URL('/', Astro.site)} />
+					<link rel="alternate" hreflang="en" href={new URL('/en/', Astro.site)} />
+					<link rel="alternate" hreflang="x-default" href={new URL('/', Astro.site)} />
+				</>
+			)
+		}
+		<script type="application/ld+json" set:html={jsonLd} />
+		<script is:inline>
+			try {
+				const saved = localStorage.getItem('theme');
+				const theme = saved ?? (matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+				document.documentElement.dataset.theme = theme;
+			} catch {
+				document.documentElement.dataset.theme = 'dark';
+			}
+		</script>
+	</head>
+	<body>
+		<slot />
+	</body>
+</html>
