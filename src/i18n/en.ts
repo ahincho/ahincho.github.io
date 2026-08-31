@@ -70,6 +70,21 @@ export const en: Translations = {
 			'Multi-environment infrastructure (dev/prod) with pure Terraform and OIDC-based CI/CD — zero access keys — plus quality gates and security scanning.',
 			'Real MLOps: datasets versioned with DVC, experiments tracked with MLflow and an academic paper with an automated LaTeX build.',
 		],
+		video: {
+			label: 'Video demo',
+			caption:
+				'Final presentation for the Generative AI & MLOps specialization at UNI, with the platform running.',
+			play: 'Play the Spark Match demo',
+			alt: 'Spark Match landing page',
+			iframeTitle: 'Spark Match demo',
+		},
+		shotsLabel: 'The platform',
+		shots: [
+			'The agent delegates to specialised subagents and surfaces every step as it reasons.',
+			'Each programme is matched against official figures: admission rate, length, cost and starting salary.',
+			'The report is exported as a PDF detailing every recommended programme.',
+			'Automated evaluation in LangSmith: custom evaluators and model comparison.',
+		],
 		roleLabel: 'My role:',
 		roleText:
 			'I led the design and construction of the platform end to end — infrastructure, CI/CD, backend, frontend and the deep agent (400+ commits) — alongside teammates who supported the academic research.',

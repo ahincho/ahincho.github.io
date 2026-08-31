@@ -68,6 +68,21 @@ export const es = {
 			'Infraestructura multi-ambiente (dev/prod) con Terraform puro y CI/CD vía OIDC — cero access keys — con quality gates y análisis de seguridad.',
 			'MLOps de verdad: datasets versionados con DVC, experimentos trazados con MLflow y artículo académico con build automatizado en LaTeX.',
 		],
+		video: {
+			label: 'Demo en video',
+			caption:
+				'Presentación final del programa de especialización en IA Generativa y MLOps de la UNI, con la plataforma en funcionamiento.',
+			play: 'Reproducir la demo de Spark Match',
+			alt: 'Página de inicio de Spark Match',
+			iframeTitle: 'Demo de Spark Match',
+		},
+		shotsLabel: 'La plataforma',
+		shots: [
+			'El agente delega en subagentes especializados y muestra cada paso mientras razona.',
+			'Cada carrera se contrasta con cifras oficiales: tasa de admisión, duración, costo e ingreso al egresar.',
+			'El informe se exporta en PDF con el detalle de cada programa recomendado.',
+			'Evaluación automatizada en LangSmith: evaluadores propios y comparación entre modelos.',
+		],
 		roleLabel: 'Mi rol:',
 		roleText:
 			'lideré el diseño y la construcción de la plataforma de punta a punta — infraestructura, CI/CD, backend, frontend y el deep agent (400+ commits) — junto a mi equipo de apoyo en la investigación académica.',
