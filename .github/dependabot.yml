@@ -1,0 +1,29 @@
+version: 2
+
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    commit-message:
+      prefix: ci
+
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+    commit-message:
+      prefix: chore
+    groups:
+      astro:
+        patterns:
+          - astro
+          - '@astrojs/*'
+
+  # worker/ keeps its own lockfile, so Dependabot has to be pointed at it.
+  - package-ecosystem: npm
+    directory: /worker
+    schedule:
+      interval: weekly
+    commit-message:
+      prefix: chore
