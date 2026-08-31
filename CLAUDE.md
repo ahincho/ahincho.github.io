@@ -1,7 +1,7 @@
 ## Conventions
 
 - **Commits**: Conventional Commits, enforced by commitlint (husky `commit-msg` hook). Never add AI co-author trailers (`Co-Authored-By: Claude ...`) — commits are authored solely by the repo owner.
-- **Versioning**: semver managed with changesets. Run `pnpm changeset` to record user-facing changes; `pnpm version` applies bumps and updates the changelog.
+- **Versioning**: semver managed with changesets. Run `pnpm changeset` to record user-facing changes; `pnpm version` applies bumps and updates the changelog. Default to `patch` — fixes, copy tweaks, styling. Use `minor` only for a new feature or a genuinely notable addition. Do not release a `major`: it is reserved for when the owner considers the portfolio actually useful and to his liking.
 - **Branching**: trunk-based development — commit to `main`; no long-lived branches.
 - **Language**: all code, routes, anchors/IDs, file names and identifiers in English. Visible content is bilingual via `src/i18n/` dictionaries (`es.ts` is the source of truth, `en.ts` is type-checked against it) — never hardcode visible strings in components.
 
