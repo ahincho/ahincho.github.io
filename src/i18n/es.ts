@@ -27,6 +27,7 @@ export const es = {
 		linkedinAria: 'LinkedIn de Angel Hincho',
 		whoami: 'Angel Hincho · Ingeniero de Sistemas',
 		now: 'Especialización IA Generativa & MLOps — UNI',
+		visits: 'visitas únicas',
 		stats: [
 			{ value: '5+', label: 'años de experiencia' },
 			{ value: '300k+', label: 'usuarios en producción' },

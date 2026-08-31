@@ -21,6 +21,10 @@ jobs:
         uses: withastro/action@v3
         with:
           node-version: 22
+        env:
+          # Set this repository variable to the deployed Worker URL to enable
+          # the public counters. Unset means the site builds without them.
+          PUBLIC_COUNTER_URL: ${{ vars.PUBLIC_COUNTER_URL }}
 
   deploy:
     needs: build

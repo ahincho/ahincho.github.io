@@ -1,3 +1,8 @@
+# The site is the only workspace package. worker/ is deployed by wrangler on its
+# own schedule and keeps a separate lockfile, so the Pages build never has to
+# install the Workers runtime.
+packages: []
+
 allowBuilds:
   esbuild: true
   sharp: true

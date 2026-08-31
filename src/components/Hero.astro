@@ -4,6 +4,8 @@ import { translations, getLang } from '../i18n';
 const lang = getLang(Astro.currentLocale);
 const t = translations[lang].hero;
 
+const counterUrl = import.meta.env.PUBLIC_COUNTER_URL;
+
 const stackJson = `{
   "backend":  ["Spring Boot", "NestJS",
                "FastAPI", ".NET"],
@@ -50,7 +52,7 @@ const stackJson = `{
 <span class="p">~ $</span> cat stack.json
 <span class="o">{stackJson}</span>
 <span class="p">~ $</span> echo $NOW
-<span class="o">{t.now}</span>
+<span class="o">{t.now}</span>{counterUrl && (<span class="visits" hidden data-label={t.visits}>{'\n'}<span class="p">~ $</span> cat visits.log{'\n'}<span class="o" data-visits></span></span>)}
 <span class="p">~ $</span> <span class="cursor"></span></code></pre>
 		</div>
 	</div>
@@ -65,6 +67,23 @@ const stackJson = `{
 		</dl>
 	</div>
 </section>
+
+<script>
+	const endpoint = import.meta.env.PUBLIC_COUNTER_URL;
+	const wrapper = document.querySelector<HTMLElement>('.visits');
+	const target = wrapper?.querySelector('[data-visits]');
+
+	if (endpoint && wrapper && target) {
+		fetch(`${endpoint}/v1/counters/site-visits`, { method: 'POST' })
+			.then((response) => (response.ok ? response.json() : Promise.reject(response.status)))
+			.then((payload: { value: number }) => {
+				const formatted = new Intl.NumberFormat(document.documentElement.lang).format(payload.value);
+				target.textContent = `${formatted} ${wrapper.dataset.label}`;
+				wrapper.hidden = false;
+			})
+			.catch(() => {});
+	}
+</script>
 
 <style>
 	.hero {
@@ -223,6 +242,10 @@ const stackJson = `{
 
 	.o {
 		color: var(--text-muted);
+	}
+
+	.visits[hidden] {
+		display: none;
 	}
 
 	.cursor {
