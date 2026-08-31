@@ -184,6 +184,8 @@ svg {
   *::before,
   *::after {
     animation-duration: 0.01ms !important;
+    /* Without this, an infinite animation becomes a strobe instead of stopping. */
+    animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
 }
