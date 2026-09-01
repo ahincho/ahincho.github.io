@@ -65,6 +65,7 @@ export const en: Translations = {
 			back: 'Back to the portfolio',
 			read: 'Read the case study',
 		},
+		all: 'All projects',
 		eyebrow: 'what I build',
 		title: 'Featured projects',
 		lead: 'Two platforms I designed and built end to end. Each one has its own case study.',

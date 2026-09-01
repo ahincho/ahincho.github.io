@@ -48,6 +48,11 @@ const prefix = lang === defaultLang ? '' : `/${lang}`;
 				<span aria-hidden="true">→</span>
 			</a>
 		</article>
+
+		<a class="all" href={`${prefix}/projects/`}>
+			{t.all}
+			<span aria-hidden="true">→</span>
+		</a>
 	</div>
 </section>
 
@@ -154,6 +159,21 @@ const prefix = lang === defaultLang ? '' : `/${lang}`;
 	.cta:hover span,
 	.cta:focus-visible span {
 		transform: translateX(0.25rem);
+	}
+
+	.all {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.45rem;
+		margin-top: 1.6rem;
+		font-family: var(--font-mono);
+		font-size: 0.85rem;
+		font-weight: 600;
+		color: var(--text-muted);
+	}
+
+	.all:hover {
+		color: var(--accent);
 	}
 
 	@media (max-width: 800px) {

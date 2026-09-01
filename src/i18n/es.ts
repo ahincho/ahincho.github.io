@@ -63,6 +63,7 @@ export const es = {
 			back: 'Volver al portafolio',
 			read: 'Leer el caso de estudio',
 		},
+		all: 'Todos los proyectos',
 		eyebrow: 'lo que construyo',
 		title: 'Proyectos destacados',
 		lead: 'Dos plataformas que diseñé y construí de punta a punta. Cada una tiene su caso de estudio.',
