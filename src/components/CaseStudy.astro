@@ -1,0 +1,356 @@
+---
+import { Image } from 'astro:assets';
+import { translations, getLang, defaultLang } from '../i18n';
+import VideoDemo from './VideoDemo.astro';
+import chatSubagents from '../assets/spark-match/chat-subagents.webp';
+import reportCareers from '../assets/spark-match/report-careers.webp';
+import reportPdf from '../assets/spark-match/report-pdf.webp';
+import evalsLangsmith from '../assets/spark-match/evals-langsmith.webp';
+
+const lang = getLang(Astro.currentLocale);
+const t = translations[lang].project;
+
+const homePath = lang === defaultLang ? '/#project' : `/${lang}/#project`;
+
+const flow = ['Angular 22 SPA', 'AG-UI · SSE', 'Deep Agent · LangGraph', 'AWS Bedrock · Claude'];
+const subagents = ['assessment', 'matching', 'planning'];
+const infra = ['Lambda', 'EventBridge', 'API Gateway', 'Terraform + OIDC', 'MLflow', 'DVC'];
+const shots = [chatSubagents, reportCareers, reportPdf, evalsLangsmith].map((image, i) => ({
+	image,
+	caption: t.shots[i],
+	// The PDF page is portrait; letting it stretch to the full column upscales it.
+	portrait: image.height > image.width,
+}));
+---
+
+<section class="section">
+	<div class="container">
+		<a class="back" href={homePath}>
+			<span aria-hidden="true">←</span>
+			{t.back}
+		</a>
+		<p class="section-eyebrow">{t.eyebrow}</p>
+		<h1 class="section-title">{t.title}</h1>
+		<article class="card">
+			<div class="head">
+				<p class="tagline">{t.tagline}</p>
+				<div class="badges">
+					<span class="badge tfp">{t.badgeTfp}</span>
+					<span class="badge status">{t.badgeStatus}</span>
+				</div>
+			</div>
+			<p class="description">{t.description}</p>
+			<VideoDemo />
+			<div class="arch" role="img" aria-label={t.archAria}>
+				<div class="flow">
+					{flow.map((step, i) => (
+						<>
+							<span class="chip">{step}</span>
+							{i < flow.length - 1 && <span class="arrow" aria-hidden="true">→</span>}
+						</>
+					))}
+				</div>
+				<div class="subflow">
+					<span class="label">{t.subagentsLabel}</span>
+					{subagents.map((s) => <span class="chip small">{s}</span>)}
+					<span class="sep" aria-hidden="true"></span>
+					<span class="label">{t.infraLabel}</span>
+					{infra.map((s) => <span class="chip small">{s}</span>)}
+				</div>
+			</div>
+			<ul class="highlights">
+				{t.highlights.map((h) => <li>{h}</li>)}
+			</ul>
+			<section class="shots" aria-label={t.shotsLabel}>
+				<p class="shots-label">{t.shotsLabel}</p>
+				{shots.map(({ image, caption, portrait }) => (
+					<figure class:list={['shot', { portrait }]}>
+						<Image
+							src={image}
+							alt=""
+							widths={portrait ? [420, 539] : [760, 1100, 1536]}
+							sizes={portrait ? '(min-width: 56rem) 26rem, 92vw' : '(min-width: 70rem) 62rem, 92vw'}
+							loading="lazy"
+						/>
+						<figcaption>{caption}</figcaption>
+					</figure>
+				))}
+			</section>
+			<p class="role">
+				<strong>{t.roleLabel}</strong>{' '}{t.roleText}
+			</p>
+			<div class="links">
+				{t.links.map((link) => (
+					<a class="repo" href={link.href} target="_blank" rel="noopener noreferrer">
+						<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+							<path d="M15 3h6v6"></path>
+							<path d="M10 14 21 3"></path>
+							<path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+						</svg>
+						{link.label}
+					</a>
+				))}
+			</div>
+		</article>
+	</div>
+</section>
+
+<style>
+	.back {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.4rem;
+		font-family: var(--font-mono);
+		font-size: 0.8rem;
+		color: var(--text-muted);
+		margin-bottom: 1.6rem;
+	}
+
+	.back:hover {
+		color: var(--accent);
+	}
+
+	.card {
+		background: var(--card);
+		border: 1px solid var(--border);
+		border-radius: 18px;
+		padding: 2.2rem 2.4rem;
+		box-shadow: var(--shadow);
+		position: relative;
+		overflow: hidden;
+	}
+
+	.card::before {
+		content: '';
+		position: absolute;
+		inset: 0 auto auto 0;
+		width: 100%;
+		height: 3px;
+		background: linear-gradient(90deg, var(--accent), transparent 70%);
+	}
+
+	.head {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		justify-content: space-between;
+		gap: 0.8rem;
+		margin-bottom: 1.1rem;
+	}
+
+	.tagline {
+		font-size: 1.12rem;
+		font-weight: 600;
+	}
+
+	.badges {
+		display: flex;
+		gap: 0.5rem;
+		flex-wrap: wrap;
+	}
+
+	.badge {
+		font-family: var(--font-mono);
+		font-size: 0.7rem;
+		font-weight: 600;
+		padding: 0.28rem 0.7rem;
+		border-radius: 999px;
+	}
+
+	.badge.tfp {
+		color: var(--accent);
+		background: var(--accent-dim);
+		border: 1px solid var(--accent-border);
+	}
+
+	.badge.status {
+		color: var(--text-muted);
+		border: 1px solid var(--border-strong);
+	}
+
+	.description {
+		color: var(--text-muted);
+		max-width: 60rem;
+	}
+
+	.shots {
+		margin: 2.2rem 0 2rem;
+		display: flex;
+		flex-direction: column;
+		gap: 2.2rem;
+	}
+
+	.shots-label {
+		font-family: var(--font-mono);
+		font-size: 0.78rem;
+		color: var(--accent);
+		margin: 0;
+	}
+
+	.shot {
+		margin: 0;
+	}
+
+	.shot :global(img) {
+		width: 100%;
+		/* Astro emits a height attribute; without this the natural ratio is lost. */
+		height: auto;
+		border: 1px solid var(--border);
+		border-radius: 10px;
+		display: block;
+		background: var(--bg-soft);
+	}
+
+	/* Portrait pages would blur if stretched to the full column width. */
+	.shot.portrait :global(img) {
+		max-width: 26rem;
+		margin-inline: auto;
+	}
+
+	.shot figcaption {
+		margin-top: 0.7rem;
+		font-size: 0.88rem;
+		line-height: 1.55;
+		color: var(--text-muted);
+	}
+
+	.arch {
+		margin: 1.8rem 0;
+		padding: 1.3rem 1.4rem;
+		background: var(--bg-soft);
+		border: 1px solid var(--border);
+		border-radius: 12px;
+		display: grid;
+		gap: 0.9rem;
+	}
+
+	.flow {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 0.55rem;
+	}
+
+	.chip {
+		font-family: var(--font-mono);
+		font-size: 0.78rem;
+		font-weight: 600;
+		color: var(--text);
+		background: var(--card);
+		border: 1px solid var(--border-strong);
+		border-radius: 8px;
+		padding: 0.4rem 0.75rem;
+		white-space: nowrap;
+	}
+
+	.chip.small {
+		font-size: 0.7rem;
+		font-weight: 500;
+		color: var(--text-muted);
+		padding: 0.22rem 0.55rem;
+	}
+
+	.arrow {
+		color: var(--accent);
+		font-weight: 700;
+	}
+
+	.subflow {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 0.45rem;
+		padding-top: 0.9rem;
+		border-top: 1px dashed var(--border-strong);
+	}
+
+	.label {
+		font-family: var(--font-mono);
+		font-size: 0.7rem;
+		letter-spacing: 0.06em;
+		text-transform: uppercase;
+		color: var(--accent);
+		margin-right: 0.2rem;
+	}
+
+	.sep {
+		width: 1px;
+		height: 1rem;
+		background: var(--border-strong);
+		margin-inline: 0.5rem;
+	}
+
+	.highlights {
+		list-style: none;
+		margin: 0 0 1.6rem;
+		padding: 0;
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 0.9rem 1.8rem;
+	}
+
+	.highlights li {
+		position: relative;
+		padding-left: 1.5rem;
+		color: var(--text-muted);
+		font-size: 0.94rem;
+		line-height: 1.65;
+	}
+
+	.highlights li::before {
+		content: '▸';
+		position: absolute;
+		left: 0;
+		color: var(--accent);
+	}
+
+	.role {
+		font-size: 0.94rem;
+		color: var(--text-muted);
+		border-left: 3px solid var(--accent);
+		padding-left: 1rem;
+		margin-bottom: 1.8rem;
+	}
+
+	.role strong {
+		color: var(--text);
+	}
+
+	.links {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.7rem;
+	}
+
+	.repo {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.45rem;
+		font-family: var(--font-mono);
+		font-size: 0.8rem;
+		font-weight: 600;
+		color: var(--text);
+		background: var(--bg-soft);
+		border: 1px solid var(--border-strong);
+		border-radius: 9px;
+		padding: 0.5rem 0.9rem;
+		transition: all 0.2s ease;
+	}
+
+	.repo:hover {
+		color: var(--accent);
+		border-color: var(--accent-border);
+		transform: translateY(-1px);
+	}
+
+	@media (max-width: 800px) {
+		.card {
+			padding: 1.5rem 1.3rem;
+		}
+
+		.highlights {
+			grid-template-columns: 1fr;
+		}
+
+	}
+</style>

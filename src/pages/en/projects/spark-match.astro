@@ -1,0 +1,17 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import Header from '../../../components/Header.astro';
+import Footer from '../../../components/Footer.astro';
+import CaseStudy from '../../../components/CaseStudy.astro';
+import { translations, getLang } from '../../../i18n';
+
+const t = translations[getLang(Astro.currentLocale)].project.detailMeta;
+---
+
+<Layout title={t.title} description={t.description}>
+	<Header />
+	<main>
+		<CaseStudy />
+	</main>
+	<Footer />
+</Layout>

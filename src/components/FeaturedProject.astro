@@ -1,24 +1,12 @@
 ---
-import { Image } from 'astro:assets';
-import { translations, getLang } from '../i18n';
-import landing from '../assets/spark-match/landing.webp';
-import chatSubagents from '../assets/spark-match/chat-subagents.webp';
-import reportCareers from '../assets/spark-match/report-careers.webp';
-import reportPdf from '../assets/spark-match/report-pdf.webp';
-import evalsLangsmith from '../assets/spark-match/evals-langsmith.webp';
+import { translations, getLang, defaultLang } from '../i18n';
+import VideoDemo from './VideoDemo.astro';
 
 const lang = getLang(Astro.currentLocale);
 const t = translations[lang].project;
 
-const VIDEO_ID = 'c_wMR6HVe1M';
-
-const flow = ['Angular 22 SPA', 'AG-UI · SSE', 'Deep Agent · LangGraph', 'AWS Bedrock · Claude'];
-const subagents = ['assessment', 'matching', 'planning'];
-const infra = ['Lambda', 'EventBridge', 'API Gateway', 'Terraform + OIDC', 'MLflow', 'DVC'];
-const shots = [chatSubagents, reportCareers, reportPdf, evalsLangsmith].map((image, i) => ({
-	image,
-	caption: t.shots[i],
-}));
+const caseStudyPath =
+	lang === defaultLang ? '/projects/spark-match/' : `/${lang}/projects/spark-match/`;
 ---
 
 <section id="project" class="section">
@@ -34,102 +22,14 @@ const shots = [chatSubagents, reportCareers, reportPdf, evalsLangsmith].map((ima
 				</div>
 			</div>
 			<p class="description">{t.description}</p>
-			<figure class="demo">
-				<button
-					class="player"
-					type="button"
-					aria-label={t.video.play}
-					data-video={VIDEO_ID}
-					data-title={t.video.iframeTitle}
-				>
-					<Image
-						src={landing}
-						alt=""
-						widths={[560, 900, 1280]}
-						sizes="(min-width: 56rem) 52rem, 92vw"
-						loading="lazy"
-					/>
-					<span class="play" aria-hidden="true">
-						<svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-							<path d="M8 5.14v13.72a1 1 0 0 0 1.52.86l11.14-6.86a1 1 0 0 0 0-1.72L9.52 4.28A1 1 0 0 0 8 5.14Z"></path>
-						</svg>
-					</span>
-				</button>
-				<figcaption>{t.video.caption}</figcaption>
-			</figure>
-			<div class="arch" role="img" aria-label={t.archAria}>
-				<div class="flow">
-					{flow.map((step, i) => (
-						<>
-							<span class="chip">{step}</span>
-							{i < flow.length - 1 && <span class="arrow" aria-hidden="true">→</span>}
-						</>
-					))}
-				</div>
-				<div class="subflow">
-					<span class="label">{t.subagentsLabel}</span>
-					{subagents.map((s) => <span class="chip small">{s}</span>)}
-					<span class="sep" aria-hidden="true"></span>
-					<span class="label">{t.infraLabel}</span>
-					{infra.map((s) => <span class="chip small">{s}</span>)}
-				</div>
-			</div>
-			<ul class="highlights">
-				{t.highlights.map((h) => <li>{h}</li>)}
-			</ul>
-			<section class="shots" aria-label={t.shotsLabel}>
-				<p class="shots-label">{t.shotsLabel}</p>
-				<div class="shots-grid">
-					{shots.map(({ image, caption }) => (
-						<figure>
-							<Image
-								src={image}
-								alt=""
-								widths={[420, 640, 1010]}
-								sizes="(min-width: 56rem) 25rem, 92vw"
-								loading="lazy"
-							/>
-							<figcaption>{caption}</figcaption>
-						</figure>
-					))}
-				</div>
-			</section>
-			<p class="role">
-				<strong>{t.roleLabel}</strong>{' '}{t.roleText}
-			</p>
-			<div class="links">
-				{t.links.map((link) => (
-					<a class="repo" href={link.href} target="_blank" rel="noopener noreferrer">
-						<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-							<path d="M15 3h6v6"></path>
-							<path d="M10 14 21 3"></path>
-							<path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
-						</svg>
-						{link.label}
-					</a>
-				))}
-			</div>
+			<VideoDemo />
+			<a class="cta" href={caseStudyPath}>
+				{t.cta}
+				<span aria-hidden="true">→</span>
+			</a>
 		</article>
 	</div>
 </section>
-
-<script>
-	document.querySelectorAll<HTMLButtonElement>('.player').forEach((button) => {
-		button.addEventListener(
-			'click',
-			() => {
-				const frame = document.createElement('iframe');
-				frame.src = `https://www.youtube-nocookie.com/embed/${button.dataset.video}?autoplay=1&rel=0`;
-				frame.title = button.dataset.title ?? '';
-				frame.allow =
-					'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
-				frame.allowFullscreen = true;
-				button.replaceWith(frame);
-			},
-			{ once: true },
-		);
-	});
-</script>
 
 <style>
 	.card {
@@ -195,251 +95,31 @@ const shots = [chatSubagents, reportCareers, reportPdf, evalsLangsmith].map((ima
 		max-width: 60rem;
 	}
 
-	.demo {
-		margin: 1.8rem 0 0;
-	}
-
-	.demo figcaption {
-		margin-top: 0.7rem;
-		font-size: 0.85rem;
-		color: var(--text-faint);
-	}
-
-	.player {
-		display: block;
-		position: relative;
-		width: 100%;
-		aspect-ratio: 16 / 9;
-		padding: 0;
-		border: 1px solid var(--border);
-		border-radius: 12px;
-		overflow: hidden;
-		background: var(--bg-soft);
-		cursor: pointer;
-	}
-
-	.player :global(img) {
-		width: 100%;
-		height: 100%;
-		object-fit: cover;
-		display: block;
-	}
-
-	.play {
-		position: absolute;
-		inset: 0;
-		margin: auto;
-		width: 4.4rem;
-		height: 4.4rem;
-		display: grid;
-		place-items: center;
-		padding-left: 0.25rem;
-		border-radius: 50%;
-		color: #0b0e14;
-		background: var(--accent);
-		box-shadow: 0 6px 24px rgb(0 0 0 / 35%);
-		transition: transform 0.2s ease;
-	}
-
-	.player:hover .play,
-	.player:focus-visible .play {
-		transform: scale(1.08);
-	}
-
-	.demo :global(iframe) {
-		width: 100%;
-		aspect-ratio: 16 / 9;
-		border: 1px solid var(--border);
-		border-radius: 12px;
-		display: block;
-	}
-
-	.shots {
-		margin: 2rem 0 1.8rem;
-	}
-
-	.shots-label {
-		font-family: var(--font-mono);
-		font-size: 0.78rem;
-		color: var(--accent);
-		margin: 0 0 0.9rem;
-	}
-
-	.shots-grid {
-		display: grid;
-		grid-template-columns: 1fr 1fr;
-		gap: 1.2rem;
-	}
-
-	.shots-grid figure {
-		margin: 0;
-	}
-
-	.shots-grid :global(img) {
-		width: 100%;
-		/* Astro emits a height attribute; without this it wins over aspect-ratio. */
-		height: auto;
-		aspect-ratio: 16 / 10;
-		object-fit: cover;
-		object-position: top center;
-		border: 1px solid var(--border);
-		border-radius: 10px;
-		display: block;
-		background: var(--bg-soft);
-	}
-
-	.shots-grid figcaption {
-		margin-top: 0.55rem;
-		font-size: 0.83rem;
-		line-height: 1.5;
-		color: var(--text-muted);
-	}
-
-	.arch {
-		margin: 1.8rem 0;
-		padding: 1.3rem 1.4rem;
-		background: var(--bg-soft);
-		border: 1px solid var(--border);
-		border-radius: 12px;
-		display: grid;
-		gap: 0.9rem;
-	}
-
-	.flow {
-		display: flex;
-		flex-wrap: wrap;
-		align-items: center;
-		gap: 0.55rem;
-	}
-
-	.chip {
-		font-family: var(--font-mono);
-		font-size: 0.78rem;
-		font-weight: 600;
-		color: var(--text);
-		background: var(--card);
-		border: 1px solid var(--border-strong);
-		border-radius: 8px;
-		padding: 0.4rem 0.75rem;
-		white-space: nowrap;
-	}
-
-	.chip.small {
-		font-size: 0.7rem;
-		font-weight: 500;
-		color: var(--text-muted);
-		padding: 0.22rem 0.55rem;
-	}
-
-	.arrow {
-		color: var(--accent);
-		font-weight: 700;
-	}
-
-	.subflow {
-		display: flex;
-		flex-wrap: wrap;
-		align-items: center;
-		gap: 0.45rem;
-		padding-top: 0.9rem;
-		border-top: 1px dashed var(--border-strong);
-	}
-
-	.label {
-		font-family: var(--font-mono);
-		font-size: 0.7rem;
-		letter-spacing: 0.06em;
-		text-transform: uppercase;
-		color: var(--accent);
-		margin-right: 0.2rem;
-	}
-
-	.sep {
-		width: 1px;
-		height: 1rem;
-		background: var(--border-strong);
-		margin-inline: 0.5rem;
-	}
-
-	.highlights {
-		list-style: none;
-		margin: 0 0 1.6rem;
-		padding: 0;
-		display: grid;
-		grid-template-columns: 1fr 1fr;
-		gap: 0.9rem 1.8rem;
-	}
-
-	.highlights li {
-		position: relative;
-		padding-left: 1.5rem;
-		color: var(--text-muted);
-		font-size: 0.94rem;
-		line-height: 1.65;
-	}
-
-	.highlights li::before {
-		content: '▸';
-		position: absolute;
-		left: 0;
-		color: var(--accent);
-	}
-
-	.role {
-		font-size: 0.94rem;
-		color: var(--text-muted);
-		border-left: 3px solid var(--accent);
-		padding-left: 1rem;
-		margin-bottom: 1.8rem;
-	}
-
-	.role strong {
-		color: var(--text);
-	}
-
-	.links {
-		display: flex;
-		flex-wrap: wrap;
-		gap: 0.7rem;
-	}
-
-	.repo {
+	.cta {
 		display: inline-flex;
 		align-items: center;
 		gap: 0.45rem;
+		margin-top: 1.8rem;
 		font-family: var(--font-mono);
-		font-size: 0.8rem;
+		font-size: 0.88rem;
 		font-weight: 600;
-		color: var(--text);
-		background: var(--bg-soft);
-		border: 1px solid var(--border-strong);
-		border-radius: 9px;
-		padding: 0.5rem 0.9rem;
-		transition: all 0.2s ease;
+		color: var(--accent);
+		border-bottom: 1px solid var(--accent-border);
+		padding-bottom: 0.15rem;
 	}
 
-	.repo:hover {
-		color: var(--accent);
-		border-color: var(--accent-border);
-		transform: translateY(-1px);
+	.cta span {
+		transition: transform 0.2s ease;
+	}
+
+	.cta:hover span,
+	.cta:focus-visible span {
+		transform: translateX(0.25rem);
 	}
 
 	@media (max-width: 800px) {
 		.card {
 			padding: 1.5rem 1.3rem;
-		}
-
-		.highlights {
-			grid-template-columns: 1fr;
-		}
-
-		.shots-grid {
-			grid-template-columns: 1fr;
-		}
-
-		.play {
-			width: 3.4rem;
-			height: 3.4rem;
 		}
 	}
 </style>

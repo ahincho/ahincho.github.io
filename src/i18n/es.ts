@@ -10,11 +10,11 @@ export const es = {
 		themeToggle: 'Cambiar tema claro/oscuro',
 		langSwitcher: 'Cambiar idioma',
 		links: [
-			{ href: '#about', label: 'Sobre mí' },
-			{ href: '#project', label: 'Proyecto' },
-			{ href: '#experience', label: 'Experiencia' },
-			{ href: '#skills', label: 'Habilidades' },
-			{ href: '#contact', label: 'Contacto' },
+			{ href: '/#about', label: 'Sobre mí' },
+			{ href: '/#project', label: 'Proyecto' },
+			{ href: '/#experience', label: 'Experiencia' },
+			{ href: '/#skills', label: 'Habilidades' },
+			{ href: '/#contact', label: 'Contacto' },
 		],
 	},
 	hero: {
@@ -75,6 +75,13 @@ export const es = {
 			play: 'Reproducir la demo de Spark Match',
 			alt: 'Página de inicio de Spark Match',
 			iframeTitle: 'Demo de Spark Match',
+		},
+		cta: 'Ver el caso de estudio',
+		back: 'Volver al portafolio',
+		detailMeta: {
+			title: 'Spark Match — Caso de estudio | Angel Hincho',
+			description:
+				'Cómo diseñé y construí Spark Match: un agente de orientación vocacional con LangChain Deep Agents sobre AWS Bedrock, backend serverless en Lambda e infraestructura con Terraform.',
 		},
 		shotsLabel: 'La plataforma',
 		shots: [

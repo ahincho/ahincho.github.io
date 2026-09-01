@@ -5,9 +5,13 @@ const lang = getLang(Astro.currentLocale);
 const t = translations[lang].nav;
 
 const homePath = lang === defaultLang ? '/' : `/${lang}/`;
+
+// Keep the visitor on the same page when they switch language.
+const path = Astro.url.pathname;
+const esPath = path === '/en' ? '/' : path.startsWith('/en/') ? path.slice(3) : path;
 const languages = [
-	{ code: 'es', path: '/' },
-	{ code: 'en', path: '/en/' },
+	{ code: 'es', path: esPath },
+	{ code: 'en', path: esPath === '/' ? '/en/' : `/en${esPath}` },
 ];
 ---
 

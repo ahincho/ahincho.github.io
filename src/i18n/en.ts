@@ -12,11 +12,11 @@ export const en: Translations = {
 		themeToggle: 'Toggle light/dark theme',
 		langSwitcher: 'Switch language',
 		links: [
-			{ href: '#about', label: 'About' },
-			{ href: '#project', label: 'Project' },
-			{ href: '#experience', label: 'Experience' },
-			{ href: '#skills', label: 'Skills' },
-			{ href: '#contact', label: 'Contact' },
+			{ href: '/en/#about', label: 'About' },
+			{ href: '/en/#project', label: 'Project' },
+			{ href: '/en/#experience', label: 'Experience' },
+			{ href: '/en/#skills', label: 'Skills' },
+			{ href: '/en/#contact', label: 'Contact' },
 		],
 	},
 	hero: {
@@ -77,6 +77,13 @@ export const en: Translations = {
 			play: 'Play the Spark Match demo',
 			alt: 'Spark Match landing page',
 			iframeTitle: 'Spark Match demo',
+		},
+		cta: 'Read the case study',
+		back: 'Back to the portfolio',
+		detailMeta: {
+			title: 'Spark Match — Case study | Angel Hincho',
+			description:
+				'How I designed and built Spark Match: a career guidance agent using LangChain Deep Agents on AWS Bedrock, a serverless backend on Lambda and infrastructure managed with Terraform.',
 		},
 		shotsLabel: 'The platform',
 		shots: [

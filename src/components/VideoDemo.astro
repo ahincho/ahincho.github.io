@@ -1,0 +1,120 @@
+---
+import { Image } from 'astro:assets';
+import { translations, getLang } from '../i18n';
+import landing from '../assets/spark-match/landing.webp';
+
+const lang = getLang(Astro.currentLocale);
+const t = translations[lang].project.video;
+
+const VIDEO_ID = 'c_wMR6HVe1M';
+---
+
+<figure class="demo">
+	<button
+		class="player"
+		type="button"
+		aria-label={t.play}
+		data-video={VIDEO_ID}
+		data-title={t.iframeTitle}
+	>
+		<Image
+			src={landing}
+			alt=""
+			widths={[560, 900, 1280]}
+			sizes="(min-width: 56rem) 52rem, 92vw"
+			loading="lazy"
+		/>
+		<span class="play" aria-hidden="true">
+			<svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+				<path d="M8 5.14v13.72a1 1 0 0 0 1.52.86l11.14-6.86a1 1 0 0 0 0-1.72L9.52 4.28A1 1 0 0 0 8 5.14Z"></path>
+			</svg>
+		</span>
+	</button>
+	<figcaption>{t.caption}</figcaption>
+</figure>
+
+<script>
+	document.querySelectorAll<HTMLButtonElement>('.player').forEach((button) => {
+		button.addEventListener(
+			'click',
+			() => {
+				const frame = document.createElement('iframe');
+				frame.src = `https://www.youtube-nocookie.com/embed/${button.dataset.video}?autoplay=1&rel=0`;
+				frame.title = button.dataset.title ?? '';
+				frame.allow =
+					'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
+				frame.allowFullscreen = true;
+				button.replaceWith(frame);
+			},
+			{ once: true },
+		);
+	});
+</script>
+
+<style>
+	.demo {
+		margin: 1.8rem 0 0;
+	}
+
+	.demo figcaption {
+		margin-top: 0.7rem;
+		font-size: 0.85rem;
+		color: var(--text-faint);
+	}
+
+	.player {
+		display: block;
+		position: relative;
+		width: 100%;
+		aspect-ratio: 16 / 9;
+		padding: 0;
+		border: 1px solid var(--border);
+		border-radius: 12px;
+		overflow: hidden;
+		background: var(--bg-soft);
+		cursor: pointer;
+	}
+
+	.player :global(img) {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		display: block;
+	}
+
+	.play {
+		position: absolute;
+		inset: 0;
+		margin: auto;
+		width: 4.4rem;
+		height: 4.4rem;
+		display: grid;
+		place-items: center;
+		padding-left: 0.25rem;
+		border-radius: 50%;
+		color: #0b0e14;
+		background: var(--accent);
+		box-shadow: 0 6px 24px rgb(0 0 0 / 35%);
+		transition: transform 0.2s ease;
+	}
+
+	.player:hover .play,
+	.player:focus-visible .play {
+		transform: scale(1.08);
+	}
+
+	.demo :global(iframe) {
+		width: 100%;
+		aspect-ratio: 16 / 9;
+		border: 1px solid var(--border);
+		border-radius: 12px;
+		display: block;
+	}
+
+	@media (max-width: 800px) {
+		.play {
+			width: 3.4rem;
+			height: 3.4rem;
+		}
+	}
+</style>
