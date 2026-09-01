@@ -1,0 +1,17 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import Header from '../../../components/Header.astro';
+import Footer from '../../../components/Footer.astro';
+import ProjectIndex from '../../../components/ProjectIndex.astro';
+import { translations, getLang } from '../../../i18n';
+
+const t = translations[getLang(Astro.currentLocale)].projects.index;
+---
+
+<Layout title={t.title} description={t.description}>
+	<Header />
+	<main>
+		<ProjectIndex />
+	</main>
+	<Footer />
+</Layout>

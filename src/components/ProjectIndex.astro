@@ -1,0 +1,184 @@
+---
+import { translations, getLang, defaultLang } from '../i18n';
+import TechPill from './TechPill.astro';
+
+const lang = getLang(Astro.currentLocale);
+const t = translations[lang].projects;
+
+const prefix = lang === defaultLang ? '' : `/${lang}`;
+
+// Featured work only. Smaller collaborations and MVPs get a second tier here once
+// there are any — an empty section would read worse than no section at all.
+const featured = [
+	{
+		key: t.sparkMatch,
+		badge: t.sparkMatch.badgeTfp,
+		href: `${prefix}/projects/spark-match/`,
+		tags: ['LangGraph', 'AWS', 'Angular', 'Terraform'],
+	},
+	{
+		key: t.nova,
+		badge: t.nova.badgeKind,
+		href: `${prefix}/projects/nova/`,
+		tags: ['Java', 'Spring Boot', 'Quarkus', 'NestJS'],
+	},
+];
+---
+
+<section class="section">
+	<div class="container">
+		<a class="back" href={`${prefix}/#projects`}>
+			<span aria-hidden="true">←</span>
+			{t.index.back}
+		</a>
+		<p class="section-eyebrow">{t.eyebrow}</p>
+		<h1 class="section-title">{t.index.heading}</h1>
+		<div class="list">
+			{
+				featured.map(({ key, badge, href, tags }) => (
+					<a class="entry" href={href}>
+						<div class="top">
+							<h2>{key.title}</h2>
+							<div class="badges">
+								<span class="badge accent">{badge}</span>
+								<span class="badge status">{key.badgeStatus}</span>
+							</div>
+						</div>
+						<p class="tagline">{key.tagline}</p>
+						<p class="description">{key.description}</p>
+						<div class="tags">
+							{tags.map((tag) => (
+								<TechPill label={tag} />
+							))}
+						</div>
+						<span class="read">
+							{t.index.read}
+							<span aria-hidden="true">→</span>
+						</span>
+					</a>
+				))
+			}
+		</div>
+	</div>
+</section>
+
+<style>
+	.back {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.4rem;
+		font-family: var(--font-mono);
+		font-size: 0.8rem;
+		color: var(--text-muted);
+		margin-bottom: 1.6rem;
+	}
+
+	.back:hover {
+		color: var(--accent);
+	}
+
+	.list {
+		display: grid;
+		gap: 1.4rem;
+	}
+
+	.entry {
+		display: block;
+		color: inherit;
+		background: var(--card);
+		border: 1px solid var(--border);
+		border-radius: 18px;
+		padding: 2rem 2.2rem;
+		box-shadow: var(--shadow);
+		transition: border-color 0.2s ease, transform 0.2s ease;
+	}
+
+	.entry:hover,
+	.entry:focus-visible {
+		border-color: var(--accent-border);
+		transform: translateY(-2px);
+		color: inherit;
+	}
+
+	.top {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 0.8rem;
+	}
+
+	h2 {
+		font-size: clamp(1.4rem, 3vw, 1.75rem);
+		font-weight: 700;
+		letter-spacing: -0.02em;
+	}
+
+	.badges {
+		display: flex;
+		gap: 0.5rem;
+		flex-wrap: wrap;
+		margin-left: auto;
+	}
+
+	.badge {
+		font-family: var(--font-mono);
+		font-size: 0.7rem;
+		font-weight: 600;
+		padding: 0.28rem 0.7rem;
+		border-radius: 999px;
+	}
+
+	.badge.accent {
+		color: var(--accent);
+		background: var(--accent-dim);
+		border: 1px solid var(--accent-border);
+	}
+
+	.badge.status {
+		color: var(--text-muted);
+		border: 1px solid var(--border-strong);
+	}
+
+	.tagline {
+		font-weight: 600;
+		margin: 0.5rem 0 0.7rem;
+	}
+
+	.description {
+		color: var(--text-muted);
+		font-size: 0.95rem;
+	}
+
+	.tags {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.45rem;
+		margin-top: 1.1rem;
+	}
+
+	.read {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.45rem;
+		margin-top: 1.4rem;
+		font-family: var(--font-mono);
+		font-size: 0.85rem;
+		font-weight: 600;
+		color: var(--accent);
+	}
+
+	.entry:hover .read span,
+	.entry:focus-visible .read span {
+		transform: translateX(0.25rem);
+	}
+
+	.read span {
+		transition: transform 0.2s ease;
+	}
+
+	@media (max-width: 800px) {
+		.entry {
+			padding: 1.5rem 1.3rem;
+		}
+	}
+</style>

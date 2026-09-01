@@ -54,6 +54,10 @@ html {
 
 body {
   margin: 0;
+  /* Keeps the footer at the bottom on short pages such as the project index. */
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
   background: var(--bg);
   color: var(--text);
   font-family: var(--font-sans);
@@ -100,6 +104,10 @@ svg {
   outline: 2px solid var(--accent);
   outline-offset: 3px;
   border-radius: 4px;
+}
+
+main {
+  flex: 1;
 }
 
 .container {

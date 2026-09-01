@@ -57,6 +57,14 @@ export const en: Translations = {
 		],
 	},
 	projects: {
+		index: {
+			title: 'Projects | Angel Hincho',
+			description:
+				"Angel Hincho's projects: Spark Match, a career guidance agent built with Generative AI, and Nova, a meta-framework for enterprise microservices.",
+			heading: 'Projects',
+			back: 'Back to the portfolio',
+			read: 'Read the case study',
+		},
 		eyebrow: 'what I build',
 		title: 'Featured projects',
 		lead: 'Two platforms I designed and built end to end. Each one has its own case study.',

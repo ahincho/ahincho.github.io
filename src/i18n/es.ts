@@ -55,6 +55,14 @@ export const es = {
 		],
 	},
 	projects: {
+		index: {
+			title: 'Proyectos | Angel Hincho',
+			description:
+				'Proyectos de Angel Hincho: Spark Match, un agente de orientación vocacional con IA Generativa, y Nova, un meta-framework para microservicios empresariales.',
+			heading: 'Proyectos',
+			back: 'Volver al portafolio',
+			read: 'Leer el caso de estudio',
+		},
 		eyebrow: 'lo que construyo',
 		title: 'Proyectos destacados',
 		lead: 'Dos plataformas que diseñé y construí de punta a punta. Cada una tiene su caso de estudio.',
