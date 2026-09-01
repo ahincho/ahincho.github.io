@@ -30,7 +30,7 @@ export const en: Translations = {
 		ctaContact: 'Get in touch',
 		githubAria: "Angel Hincho's GitHub",
 		linkedinAria: "Angel Hincho's LinkedIn",
-		whoami: 'Angel Hincho · Systems Engineer',
+		whoami: 'Angel Hincho · BSc in Systems Engineering',
 		now: 'Generative AI & MLOps specialization — UNI',
 		visits: 'unique visits',
 		stats: [

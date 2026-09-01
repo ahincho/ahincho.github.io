@@ -28,7 +28,7 @@ export const es = {
 		ctaContact: 'Contáctame',
 		githubAria: 'GitHub de Angel Hincho',
 		linkedinAria: 'LinkedIn de Angel Hincho',
-		whoami: 'Angel Hincho · Ingeniero de Sistemas',
+		whoami: 'Angel Hincho · Bachiller en Ing. de Sistemas',
 		now: 'Especialización IA Generativa & MLOps — UNI',
 		visits: 'visitas únicas',
 		stats: [
