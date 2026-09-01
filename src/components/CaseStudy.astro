@@ -187,7 +187,7 @@ const shots = [chatSubagents, reportCareers, reportPdf, evalsLangsmith].map((ima
 		display: grid;
 		grid-template-columns: repeat(3, 1fr);
 		gap: 1rem;
-		margin: 1.8rem 0 0.7rem;
+		margin: var(--space-block) 0 0.7rem;
 		padding: 1.4rem 0;
 		border-top: 1px solid var(--border);
 		border-bottom: 1px solid var(--border);
@@ -223,7 +223,7 @@ const shots = [chatSubagents, reportCareers, reportPdf, evalsLangsmith].map((ima
 	}
 
 	.shots {
-		margin: 2.2rem 0 2rem;
+		margin: var(--space-block) 0;
 		display: flex;
 		flex-direction: column;
 		gap: 2.2rem;
@@ -264,7 +264,7 @@ const shots = [chatSubagents, reportCareers, reportPdf, evalsLangsmith].map((ima
 	}
 
 	.arch {
-		margin: 1.8rem 0;
+		margin: var(--space-block) 0;
 		padding: 1.3rem 1.4rem;
 		background: var(--bg-soft);
 		border: 1px solid var(--border);
@@ -331,7 +331,7 @@ const shots = [chatSubagents, reportCareers, reportPdf, evalsLangsmith].map((ima
 
 	.highlights {
 		list-style: none;
-		margin: 0 0 1.6rem;
+		margin: 0 0 var(--space-block);
 		padding: 0;
 		display: grid;
 		grid-template-columns: 1fr 1fr;
@@ -358,7 +358,7 @@ const shots = [chatSubagents, reportCareers, reportPdf, evalsLangsmith].map((ima
 		color: var(--text-muted);
 		border-left: 3px solid var(--accent);
 		padding-left: 1rem;
-		margin-bottom: 1.8rem;
+		margin-bottom: var(--space-block);
 	}
 
 	.role strong {
