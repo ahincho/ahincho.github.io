@@ -2,4 +2,4 @@
 'ahincho-portfolio': patch
 ---
 
-Extend the Claro (Central America) engagement through August 2026.
+Run the Claro (Central America) engagement through March 2026, ending alongside the UTP one.

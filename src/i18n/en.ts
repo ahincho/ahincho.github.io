@@ -122,7 +122,7 @@ export const en: Translations = {
 			{
 				company: 'Claro (Central America)',
 				role: 'Senior FullStack Engineer · Freelance',
-				meta: 'May 2025 — Aug 2026 · Remote',
+				meta: 'May 2025 — Mar 2026 · Remote',
 				bullets: [
 					'Multi-country convergent sales platform: 30+ serverless microservices deployed across 4 countries and 12 environments.',
 					'Led the migration from a single-country to a multi-country architecture and the modernization to NestJS, Angular micro-frontends and Ionic.',

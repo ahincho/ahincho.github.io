@@ -120,7 +120,7 @@ export const es = {
 			{
 				company: 'Claro (Centroamérica)',
 				role: 'Senior FullStack Engineer · Freelance',
-				meta: 'May 2025 — Ago 2026 · Remoto',
+				meta: 'May 2025 — Mar 2026 · Remoto',
 				bullets: [
 					'Plataforma de ventas convergente multi-país: 30+ microservicios serverless desplegados en 4 países y 12 ambientes.',
 					'Lideré la migración de la arquitectura mono-país a multi-país y la modernización hacia NestJS, micro-frontends en Angular e Ionic.',
