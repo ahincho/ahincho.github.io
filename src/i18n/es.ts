@@ -54,59 +54,118 @@ export const es = {
 			'AI-SDLC: desarrollo asistido por agentes',
 		],
 	},
-	project: {
-		eyebrow: 'proyecto destacado',
-		title: 'Spark Match',
-		tagline: 'Copiloto de orientación vocacional con IA Generativa',
-		badgeTfp: 'TFP · UNI 2026',
-		badgeStatus: 'En desarrollo activo',
-		description:
-			'Una plataforma que acompaña a estudiantes a descubrir su camino profesional conversando con un agente inteligente: evalúa su perfil vocacional, calcula la afinidad con carreras y construye planes de acción con recursos reales — no un chatbot, sino un agente con razonamiento multi-paso, memoria y delegación a subagentes.',
-		figures: [
-			{ value: '550+', label: 'carreras analizadas' },
-			{ value: '1.000+', label: 'instituciones' },
-			{ value: '25', label: 'regiones del Perú' },
-		],
-		figuresSource: 'Datos oficiales de Ponte en Carrera · MINEDU Perú',
-		archAria: 'Arquitectura: Angular se comunica por AG-UI con el deep agent, que usa AWS Bedrock',
-		subagentsLabel: 'subagentes',
-		infraLabel: 'infra',
-		highlights: [
-			'Deep agent con 3 subagentes especializados y memoria de perfil del estudiante (langmem), basado en el modelo vocacional RIASEC de Holland.',
-			'Backend serverless con DDD y arquitectura orientada a eventos sobre Lambda y EventBridge; frontend Angular 22 con Signals e i18n.',
-			'Infraestructura multi-ambiente (dev/prod) con Terraform puro y CI/CD vía OIDC — cero access keys — con quality gates y análisis de seguridad.',
-			'MLOps de verdad: datasets versionados con DVC, experimentos trazados con MLflow y artículo académico con build automatizado en LaTeX.',
-		],
-		video: {
-			label: 'Demo en video',
-			caption:
-				'Presentación final del programa de especialización en IA Generativa y MLOps de la UNI, con la plataforma en funcionamiento.',
-			play: 'Reproducir la demo de Spark Match',
-			alt: 'Página de inicio de Spark Match',
-			iframeTitle: 'Demo de Spark Match',
-		},
-		cta: 'Ver el caso de estudio',
-		back: 'Volver al portafolio',
-		detailMeta: {
-			title: 'Spark Match — Caso de estudio | Angel Hincho',
+	projects: {
+		sparkMatch: {
+			eyebrow: 'proyecto destacado',
+			title: 'Spark Match',
+			tagline: 'Copiloto de orientación vocacional con IA Generativa',
+			badgeTfp: 'TFP · UNI 2026',
+			badgeStatus: 'En desarrollo activo',
 			description:
-				'Cómo diseñé y construí Spark Match: un agente de orientación vocacional con LangChain Deep Agents sobre AWS Bedrock, backend serverless en Lambda e infraestructura con Terraform.',
+				'Una plataforma que acompaña a estudiantes a descubrir su camino profesional conversando con un agente inteligente: evalúa su perfil vocacional, calcula la afinidad con carreras y construye planes de acción con recursos reales — no un chatbot, sino un agente con razonamiento multi-paso, memoria y delegación a subagentes.',
+			figures: [
+				{ value: '550+', label: 'carreras analizadas' },
+				{ value: '1.000+', label: 'instituciones' },
+				{ value: '25', label: 'regiones del Perú' },
+			],
+			figuresSource: 'Datos oficiales de Ponte en Carrera · MINEDU Perú',
+			archAria: 'Arquitectura: Angular se comunica por AG-UI con el deep agent, que usa AWS Bedrock',
+			subagentsLabel: 'subagentes',
+			infraLabel: 'infra',
+			highlights: [
+				'Deep agent con 3 subagentes especializados y memoria de perfil del estudiante (langmem), basado en el modelo vocacional RIASEC de Holland.',
+				'Backend serverless con DDD y arquitectura orientada a eventos sobre Lambda y EventBridge; frontend Angular 22 con Signals e i18n.',
+				'Infraestructura multi-ambiente (dev/prod) con Terraform puro y CI/CD vía OIDC — cero access keys — con quality gates y análisis de seguridad.',
+				'MLOps de verdad: datasets versionados con DVC, experimentos trazados con MLflow y artículo académico con build automatizado en LaTeX.',
+			],
+			video: {
+				label: 'Demo en video',
+				caption:
+					'Presentación final del programa de especialización en IA Generativa y MLOps de la UNI, con la plataforma en funcionamiento.',
+				play: 'Reproducir la demo de Spark Match',
+				alt: 'Página de inicio de Spark Match',
+				iframeTitle: 'Demo de Spark Match',
+			},
+			cta: 'Ver el caso de estudio',
+			back: 'Volver al portafolio',
+			detailMeta: {
+				title: 'Spark Match — Caso de estudio | Angel Hincho',
+				description:
+					'Cómo diseñé y construí Spark Match: un agente de orientación vocacional con LangChain Deep Agents sobre AWS Bedrock, backend serverless en Lambda e infraestructura con Terraform.',
+			},
+			shotsLabel: 'La plataforma',
+			shots: [
+				'El agente delega en subagentes especializados y muestra cada paso mientras razona.',
+				'Cada carrera se contrasta con cifras oficiales del MINEDU: tasa de admisión, duración, costo anual e ingreso mensual al egresar.',
+				'El informe se exporta en PDF con el detalle de cada programa recomendado.',
+				'Evaluación automatizada en LangSmith: evaluadores propios y comparación entre modelos.',
+			],
+			roleLabel: 'Mi rol:',
+			roleText:
+				'lideré el diseño y la construcción de la plataforma de punta a punta — infraestructura, CI/CD, backend, frontend y el deep agent (400+ commits) — junto a mi equipo de apoyo en la investigación académica.',
+			links: [
+				{ href: 'https://github.com/spark-match', label: 'Organización en GitHub' },
+				{ href: 'https://github.com/spark-match/spark-match-08-deep-agent', label: 'Deep agent' },
+				{ href: 'https://github.com/spark-match/spark-match-02-infrastructure', label: 'Infraestructura' },
+			],
 		},
-		shotsLabel: 'La plataforma',
-		shots: [
-			'El agente delega en subagentes especializados y muestra cada paso mientras razona.',
-			'Cada carrera se contrasta con cifras oficiales del MINEDU: tasa de admisión, duración, costo anual e ingreso mensual al egresar.',
-			'El informe se exporta en PDF con el detalle de cada programa recomendado.',
-			'Evaluación automatizada en LangSmith: evaluadores propios y comparación entre modelos.',
-		],
-		roleLabel: 'Mi rol:',
-		roleText:
-			'lideré el diseño y la construcción de la plataforma de punta a punta — infraestructura, CI/CD, backend, frontend y el deep agent (400+ commits) — junto a mi equipo de apoyo en la investigación académica.',
-		links: [
-			{ href: 'https://github.com/spark-match', label: 'Organización en GitHub' },
-			{ href: 'https://github.com/spark-match/spark-match-08-deep-agent', label: 'Deep agent' },
-			{ href: 'https://github.com/spark-match/spark-match-02-infrastructure', label: 'Infraestructura' },
-		],
+		nova: {
+			eyebrow: 'plataforma propia',
+			title: 'Nova',
+			tagline: 'Meta-framework para microservicios empresariales',
+			badgeKind: 'Plataforma propia',
+			badgeStatus: 'En construcción',
+			description:
+				'La fontanería que toda empresa reescribe en cada servicio — estándar de API, observabilidad, seguridad y convenciones de build — resuelta una vez, versionada y publicada. Un núcleo en Java puro, sin dependencias de framework, y encima adaptadores finos para Spring Boot, Quarkus y NestJS.',
+			figures: [
+				{ value: '28', label: 'repositorios públicos' },
+				{ value: '3', label: 'stacks soportados' },
+				{ value: '7', label: 'librerías de núcleo sin framework' },
+			],
+			archAria:
+				'Arquitectura en capas: un núcleo en Java puro, adaptadores por stack y el microservicio que los consume',
+			layersLabel: 'Cómo se apila',
+			layers: [
+				{
+					name: 'núcleo',
+					note: 'Java puro, sin framework',
+					items: ['api-standard', 'mask-utils', 'observability-utils', 'date-utils', 'mapper-utils', 'keycloak'],
+				},
+				{
+					name: 'adaptadores',
+					note: 'un cableado por stack',
+					items: ['Spring Boot starters', 'Quarkus extensions', 'NestJS starters'],
+				},
+				{
+					name: 'tu servicio',
+					note: 'arranca ya configurado',
+					items: ['arquetipos Maven', 'templates Gradle', 'CI/CD reutilizable'],
+				},
+			],
+			highlights: [
+				'El núcleo no depende de ningún framework: el estándar de API, el enmascarado de datos sensibles, la observabilidad y Keycloak son Java puro; los starters de Spring Boot y las extensiones de Quarkus solo los cablean.',
+				'La arquitectura se verifica sola: pruebas con ArchUnit que imponen los estilos Layered, Clean y Hexagonal a quien construya sobre la plataforma.',
+				'Tres stacks desde un único BOM — Spring Boot, Quarkus y NestJS — con las versiones centralizadas en un solo sitio.',
+				'Observabilidad de primera clase: Four Golden Signals y trazas con OpenTelemetry ya cableadas en el starter, no añadidas después.',
+				'Cada decisión queda escrita como ADR, con versionado semántico y una guía de evaluación de madurez por módulo.',
+			],
+			roleLabel: 'Mi rol:',
+			roleText:
+				'diseño y construyo la plataforma entera — la arquitectura, los 28 repositorios, los pipelines reutilizables y la documentación.',
+			cta: 'Ver el caso de estudio',
+			back: 'Volver al portafolio',
+			detailMeta: {
+				title: 'Nova — Caso de estudio | Angel Hincho',
+				description:
+					'Meta-framework para microservicios empresariales: núcleo en Java puro, adaptadores para Spring Boot, Quarkus y NestJS, y arquitectura verificada con ArchUnit.',
+			},
+			links: [
+				{ href: 'https://github.com/ahincho?tab=repositories&q=nova', label: 'Los 28 repositorios' },
+				{ href: 'https://github.com/ahincho/nova-java-api-standard', label: 'Núcleo: estándar de API' },
+				{ href: 'https://github.com/ahincho/nova-java-architecture-rules', label: 'Reglas de arquitectura' },
+				{ href: 'https://github.com/ahincho/nova-docs', label: 'ADRs y documentación' },
+			],
+		},
 	},
 	experience: {
 		eyebrow: 'trayectoria',

@@ -56,59 +56,118 @@ export const en: Translations = {
 			'AI-SDLC: agent-assisted development',
 		],
 	},
-	project: {
-		eyebrow: 'featured project',
-		title: 'Spark Match',
-		tagline: 'Vocational guidance copilot powered by Generative AI',
-		badgeTfp: 'Capstone · UNI 2026',
-		badgeStatus: 'In active development',
-		description:
-			'A platform that helps students discover their career path by talking to an intelligent agent: it assesses their vocational profile, computes affinity with careers and builds action plans with real resources — not a chatbot, but an agent with multi-step reasoning, memory and delegation to subagents.',
-		figures: [
-			{ value: '550+', label: 'degree programmes analysed' },
-			{ value: '1,000+', label: 'institutions' },
-			{ value: '25', label: 'regions of Peru' },
-		],
-		figuresSource: 'Official data from Ponte en Carrera · MINEDU Peru',
-		archAria: 'Architecture: Angular talks over AG-UI to the deep agent, which uses AWS Bedrock',
-		subagentsLabel: 'subagents',
-		infraLabel: 'infra',
-		highlights: [
-			"Deep agent with 3 specialized subagents and student profile memory (langmem), grounded in Holland's RIASEC vocational model.",
-			'Serverless backend with DDD and event-driven architecture on Lambda and EventBridge; Angular 22 frontend with Signals and i18n.',
-			'Multi-environment infrastructure (dev/prod) with pure Terraform and OIDC-based CI/CD — zero access keys — plus quality gates and security scanning.',
-			'Real MLOps: datasets versioned with DVC, experiments tracked with MLflow and an academic paper with an automated LaTeX build.',
-		],
-		video: {
-			label: 'Video demo',
-			caption:
-				'Final presentation for the Generative AI & MLOps specialization at UNI, with the platform running.',
-			play: 'Play the Spark Match demo',
-			alt: 'Spark Match landing page',
-			iframeTitle: 'Spark Match demo',
-		},
-		cta: 'Read the case study',
-		back: 'Back to the portfolio',
-		detailMeta: {
-			title: 'Spark Match — Case study | Angel Hincho',
+	projects: {
+		sparkMatch: {
+			eyebrow: 'featured project',
+			title: 'Spark Match',
+			tagline: 'Vocational guidance copilot powered by Generative AI',
+			badgeTfp: 'Capstone · UNI 2026',
+			badgeStatus: 'In active development',
 			description:
-				'How I designed and built Spark Match: a career guidance agent using LangChain Deep Agents on AWS Bedrock, a serverless backend on Lambda and infrastructure managed with Terraform.',
+				'A platform that helps students discover their career path by talking to an intelligent agent: it assesses their vocational profile, computes affinity with careers and builds action plans with real resources — not a chatbot, but an agent with multi-step reasoning, memory and delegation to subagents.',
+			figures: [
+				{ value: '550+', label: 'degree programmes analysed' },
+				{ value: '1,000+', label: 'institutions' },
+				{ value: '25', label: 'regions of Peru' },
+			],
+			figuresSource: 'Official data from Ponte en Carrera · MINEDU Peru',
+			archAria: 'Architecture: Angular talks over AG-UI to the deep agent, which uses AWS Bedrock',
+			subagentsLabel: 'subagents',
+			infraLabel: 'infra',
+			highlights: [
+				"Deep agent with 3 specialized subagents and student profile memory (langmem), grounded in Holland's RIASEC vocational model.",
+				'Serverless backend with DDD and event-driven architecture on Lambda and EventBridge; Angular 22 frontend with Signals and i18n.',
+				'Multi-environment infrastructure (dev/prod) with pure Terraform and OIDC-based CI/CD — zero access keys — plus quality gates and security scanning.',
+				'Real MLOps: datasets versioned with DVC, experiments tracked with MLflow and an academic paper with an automated LaTeX build.',
+			],
+			video: {
+				label: 'Video demo',
+				caption:
+					'Final presentation for the Generative AI & MLOps specialization at UNI, with the platform running.',
+				play: 'Play the Spark Match demo',
+				alt: 'Spark Match landing page',
+				iframeTitle: 'Spark Match demo',
+			},
+			cta: 'Read the case study',
+			back: 'Back to the portfolio',
+			detailMeta: {
+				title: 'Spark Match — Case study | Angel Hincho',
+				description:
+					'How I designed and built Spark Match: a career guidance agent using LangChain Deep Agents on AWS Bedrock, a serverless backend on Lambda and infrastructure managed with Terraform.',
+			},
+			shotsLabel: 'The platform',
+			shots: [
+				'The agent delegates to specialised subagents and surfaces every step as it reasons.',
+				'Each programme is matched against official MINEDU figures: admission rate, length, annual cost and monthly starting salary.',
+				'The report is exported as a PDF detailing every recommended programme.',
+				'Automated evaluation in LangSmith: custom evaluators and model comparison.',
+			],
+			roleLabel: 'My role:',
+			roleText:
+				'I led the design and construction of the platform end to end — infrastructure, CI/CD, backend, frontend and the deep agent (400+ commits) — alongside teammates who supported the academic research.',
+			links: [
+				{ href: 'https://github.com/spark-match', label: 'GitHub organization' },
+				{ href: 'https://github.com/spark-match/spark-match-08-deep-agent', label: 'Deep agent' },
+				{ href: 'https://github.com/spark-match/spark-match-02-infrastructure', label: 'Infrastructure' },
+			],
 		},
-		shotsLabel: 'The platform',
-		shots: [
-			'The agent delegates to specialised subagents and surfaces every step as it reasons.',
-			'Each programme is matched against official MINEDU figures: admission rate, length, annual cost and monthly starting salary.',
-			'The report is exported as a PDF detailing every recommended programme.',
-			'Automated evaluation in LangSmith: custom evaluators and model comparison.',
-		],
-		roleLabel: 'My role:',
-		roleText:
-			'I led the design and construction of the platform end to end — infrastructure, CI/CD, backend, frontend and the deep agent (400+ commits) — alongside teammates who supported the academic research.',
-		links: [
-			{ href: 'https://github.com/spark-match', label: 'GitHub organization' },
-			{ href: 'https://github.com/spark-match/spark-match-08-deep-agent', label: 'Deep agent' },
-			{ href: 'https://github.com/spark-match/spark-match-02-infrastructure', label: 'Infrastructure' },
-		],
+		nova: {
+			eyebrow: 'own platform',
+			title: 'Nova',
+			tagline: 'A meta-framework for enterprise microservices',
+			badgeKind: 'Own platform',
+			badgeStatus: 'In active development',
+			description:
+				'The plumbing every company rewrites in every service — API standards, observability, security and build conventions — solved once, versioned and published. A core in plain Java with no framework dependencies, and thin adapters on top of it for Spring Boot, Quarkus and NestJS.',
+			figures: [
+				{ value: '28', label: 'public repositories' },
+				{ value: '3', label: 'stacks supported' },
+				{ value: '7', label: 'framework-free core libraries' },
+			],
+			archAria:
+				'Layered architecture: a plain Java core, per-stack adapters and the microservice that consumes them',
+			layersLabel: 'How it stacks up',
+			layers: [
+				{
+					name: 'core',
+					note: 'plain Java, no framework',
+					items: ['api-standard', 'mask-utils', 'observability-utils', 'date-utils', 'mapper-utils', 'keycloak'],
+				},
+				{
+					name: 'adapters',
+					note: 'one wiring per stack',
+					items: ['Spring Boot starters', 'Quarkus extensions', 'NestJS starters'],
+				},
+				{
+					name: 'your service',
+					note: 'starts already configured',
+					items: ['Maven archetypes', 'Gradle templates', 'reusable CI/CD'],
+				},
+			],
+			highlights: [
+				'The core depends on no framework: API standards, sensitive-data masking, observability and Keycloak are plain Java; the Spring Boot starters and Quarkus extensions only wire them in.',
+				'The architecture checks itself: ArchUnit tests that enforce Layered, Clean and Hexagonal styles on whoever builds on the platform.',
+				'Three stacks from a single BOM — Spring Boot, Quarkus and NestJS — with versions centralised in one place.',
+				'Observability as a first-class concern: Four Golden Signals and OpenTelemetry tracing wired into the starter, not bolted on later.',
+				'Every decision is written down as an ADR, with semantic versioning and a maturity assessment guide per module.',
+			],
+			roleLabel: 'My role:',
+			roleText:
+				'I design and build the whole platform — the architecture, all 28 repositories, the reusable pipelines and the documentation.',
+			cta: 'Read the case study',
+			back: 'Back to the portfolio',
+			detailMeta: {
+				title: 'Nova — Case study | Angel Hincho',
+				description:
+					'A meta-framework for enterprise microservices: a plain Java core, adapters for Spring Boot, Quarkus and NestJS, and architecture verified with ArchUnit.',
+			},
+			links: [
+				{ href: 'https://github.com/ahincho?tab=repositories&q=nova', label: 'All 28 repositories' },
+				{ href: 'https://github.com/ahincho/nova-java-api-standard', label: 'Core: API standard' },
+				{ href: 'https://github.com/ahincho/nova-java-architecture-rules', label: 'Architecture rules' },
+				{ href: 'https://github.com/ahincho/nova-docs', label: 'ADRs and documentation' },
+			],
+		},
 	},
 	experience: {
 		eyebrow: 'career',

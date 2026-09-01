@@ -3,7 +3,7 @@ import { translations, getLang, defaultLang } from '../i18n';
 import VideoDemo from './VideoDemo.astro';
 
 const lang = getLang(Astro.currentLocale);
-const t = translations[lang].project;
+const t = translations[lang].projects.sparkMatch;
 
 const caseStudyPath =
 	lang === defaultLang ? '/projects/spark-match/' : `/${lang}/projects/spark-match/`;
