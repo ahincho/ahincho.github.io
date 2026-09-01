@@ -1,0 +1,17 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import NovaCaseStudy from '../../components/NovaCaseStudy.astro';
+import { translations, getLang } from '../../i18n';
+
+const t = translations[getLang(Astro.currentLocale)].projects.nova.detailMeta;
+---
+
+<Layout title={t.title} description={t.description}>
+	<Header />
+	<main>
+		<NovaCaseStudy />
+	</main>
+	<Footer />
+</Layout>

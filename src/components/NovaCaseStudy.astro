@@ -1,0 +1,245 @@
+---
+import { translations, getLang, defaultLang } from '../i18n';
+import NovaArchitecture from './NovaArchitecture.astro';
+
+const lang = getLang(Astro.currentLocale);
+const t = translations[lang].projects.nova;
+
+const homePath = lang === defaultLang ? '/#projects' : `/${lang}/#projects`;
+---
+
+<section class="section">
+	<div class="container">
+		<a class="back" href={homePath}>
+			<span aria-hidden="true">←</span>
+			{t.back}
+		</a>
+		<p class="section-eyebrow">{t.eyebrow}</p>
+		<h1 class="section-title">{t.title}</h1>
+		<article class="card">
+			<div class="head">
+				<p class="tagline">{t.tagline}</p>
+				<div class="badges">
+					<span class="badge kind">{t.badgeKind}</span>
+					<span class="badge status">{t.badgeStatus}</span>
+				</div>
+			</div>
+			<p class="description">{t.description}</p>
+			<dl class="figures">
+				{
+					t.figures.map((figure) => (
+						<div>
+							<dt>{figure.label}</dt>
+							<dd>{figure.value}</dd>
+						</div>
+					))
+				}
+			</dl>
+			<NovaArchitecture />
+			<ul class="highlights">
+				{t.highlights.map((h) => <li>{h}</li>)}
+			</ul>
+			<p class="role">
+				<strong>{t.roleLabel}</strong>{' '}{t.roleText}
+			</p>
+			<div class="links">
+				{
+					t.links.map((link) => (
+						<a class="repo" href={link.href} target="_blank" rel="noopener noreferrer">
+							<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+								<path d="M15 3h6v6" />
+								<path d="M10 14 21 3" />
+								<path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+							</svg>
+							{link.label}
+						</a>
+					))
+				}
+			</div>
+		</article>
+	</div>
+</section>
+
+<style>
+	.back {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.4rem;
+		font-family: var(--font-mono);
+		font-size: 0.8rem;
+		color: var(--text-muted);
+		margin-bottom: 1.6rem;
+	}
+
+	.back:hover {
+		color: var(--accent);
+	}
+
+	.card {
+		background: var(--card);
+		border: 1px solid var(--border);
+		border-radius: 18px;
+		padding: 2.2rem 2.4rem;
+		box-shadow: var(--shadow);
+		position: relative;
+		overflow: hidden;
+	}
+
+	.card::before {
+		content: '';
+		position: absolute;
+		inset: 0 auto auto 0;
+		width: 100%;
+		height: 3px;
+		background: linear-gradient(90deg, var(--accent), transparent 70%);
+	}
+
+	.head {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		justify-content: space-between;
+		gap: 0.8rem;
+		margin-bottom: 1.1rem;
+	}
+
+	.tagline {
+		font-size: 1.12rem;
+		font-weight: 600;
+	}
+
+	.badges {
+		display: flex;
+		gap: 0.5rem;
+		flex-wrap: wrap;
+	}
+
+	.badge {
+		font-family: var(--font-mono);
+		font-size: 0.7rem;
+		font-weight: 600;
+		padding: 0.28rem 0.7rem;
+		border-radius: 999px;
+	}
+
+	.badge.kind {
+		color: var(--accent);
+		background: var(--accent-dim);
+		border: 1px solid var(--accent-border);
+	}
+
+	.badge.status {
+		color: var(--text-muted);
+		border: 1px solid var(--border-strong);
+	}
+
+	.description {
+		color: var(--text-muted);
+		max-width: 60rem;
+	}
+
+	/* Same stat band as the hero and the Spark Match case study. */
+	.figures {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		gap: 1rem;
+		margin: var(--space-block) 0 0;
+		padding: 1.4rem 0;
+		border-top: 1px solid var(--border);
+		border-bottom: 1px solid var(--border);
+	}
+
+	.figures div {
+		display: flex;
+		flex-direction: column-reverse;
+		justify-content: flex-end;
+	}
+
+	.figures dd {
+		margin: 0;
+		font-family: var(--font-mono);
+		font-size: clamp(1.4rem, 3vw, 1.9rem);
+		font-weight: 700;
+		color: var(--accent);
+		letter-spacing: -0.02em;
+	}
+
+	.figures dt {
+		color: var(--text-muted);
+		font-size: 0.85rem;
+		line-height: 1.4;
+	}
+
+	.highlights {
+		list-style: none;
+		margin: 0 0 var(--space-block);
+		padding: 0;
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 0.9rem 1.8rem;
+	}
+
+	.highlights li {
+		position: relative;
+		padding-left: 1.5rem;
+		color: var(--text-muted);
+		font-size: 0.94rem;
+		line-height: 1.65;
+	}
+
+	.highlights li::before {
+		content: '▸';
+		position: absolute;
+		left: 0;
+		color: var(--accent);
+	}
+
+	.role {
+		font-size: 0.94rem;
+		color: var(--text-muted);
+		border-left: 3px solid var(--accent);
+		padding-left: 1rem;
+		margin-bottom: var(--space-block);
+	}
+
+	.role strong {
+		color: var(--text);
+	}
+
+	.links {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.7rem;
+	}
+
+	.repo {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.45rem;
+		font-family: var(--font-mono);
+		font-size: 0.8rem;
+		font-weight: 600;
+		color: var(--text);
+		background: var(--bg-soft);
+		border: 1px solid var(--border-strong);
+		border-radius: 9px;
+		padding: 0.5rem 0.9rem;
+		transition: all 0.2s ease;
+	}
+
+	.repo:hover {
+		color: var(--accent);
+		border-color: var(--accent-border);
+		transform: translateY(-1px);
+	}
+
+	@media (max-width: 800px) {
+		.card {
+			padding: 1.5rem 1.3rem;
+		}
+
+		.highlights {
+			grid-template-columns: 1fr;
+		}
+	}
+</style>

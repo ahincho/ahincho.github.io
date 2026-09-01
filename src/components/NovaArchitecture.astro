@@ -1,0 +1,105 @@
+---
+import { translations, getLang } from '../i18n';
+
+const t = translations[getLang(Astro.currentLocale)].projects.nova;
+---
+
+<div class="arch" role="img" aria-label={t.archAria}>
+	<p class="arch-label">{t.layersLabel}</p>
+	{
+		t.layers.map((layer, i) => (
+			<>
+				<div class="layer">
+					<div class="head">
+						<span class="name">{layer.name}</span>
+						<span class="note">{layer.note}</span>
+					</div>
+					<div class="items">
+						{layer.items.map((item) => (
+							<span class="chip">{item}</span>
+						))}
+					</div>
+				</div>
+				{i < t.layers.length - 1 && (
+					<span class="down" aria-hidden="true">
+						↓
+					</span>
+				)}
+			</>
+		))
+	}
+</div>
+
+<style>
+	.arch {
+		margin: var(--space-block) 0;
+		padding: 1.3rem 1.4rem;
+		background: var(--bg-soft);
+		border: 1px solid var(--border);
+		border-radius: 12px;
+		display: grid;
+		gap: 0.7rem;
+		justify-items: stretch;
+	}
+
+	.arch-label {
+		font-family: var(--font-mono);
+		font-size: 0.7rem;
+		letter-spacing: 0.06em;
+		text-transform: uppercase;
+		color: var(--accent);
+		margin-bottom: 0.2rem;
+	}
+
+	.layer {
+		border: 1px solid var(--border-strong);
+		border-radius: 10px;
+		padding: 0.9rem 1rem;
+		background: var(--card);
+		display: grid;
+		gap: 0.6rem;
+	}
+
+	.head {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: baseline;
+		gap: 0.55rem;
+	}
+
+	.name {
+		font-family: var(--font-mono);
+		font-size: 0.85rem;
+		font-weight: 700;
+		color: var(--accent);
+	}
+
+	.note {
+		font-size: 0.82rem;
+		color: var(--text-faint);
+	}
+
+	.items {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.4rem;
+	}
+
+	.chip {
+		font-family: var(--font-mono);
+		font-size: 0.72rem;
+		color: var(--text-muted);
+		background: var(--bg-soft);
+		border: 1px solid var(--border);
+		border-radius: 7px;
+		padding: 0.24rem 0.6rem;
+		white-space: nowrap;
+	}
+
+	.down {
+		justify-self: center;
+		color: var(--accent);
+		font-weight: 700;
+		line-height: 1;
+	}
+</style>
