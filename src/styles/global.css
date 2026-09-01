@@ -135,6 +135,9 @@ svg {
 }
 
 .pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.38rem;
   font-family: var(--font-mono);
   font-size: 0.72rem;
   font-weight: 500;

@@ -1,5 +1,6 @@
 ---
 import { translations, getLang } from '../i18n';
+import TechPill from './TechPill.astro';
 
 const lang = getLang(Astro.currentLocale);
 const t = translations[lang].experience;
@@ -19,7 +20,7 @@ const t = translations[lang].experience;
 						{job.bullets.map((b) => <li>{b}</li>)}
 					</ul>
 					<div class="tags">
-						{job.tags.map((tag) => <span class="pill">{tag}</span>)}
+						{job.tags.map((tag) => <TechPill label={tag} />)}
 					</div>
 				</li>
 			))}

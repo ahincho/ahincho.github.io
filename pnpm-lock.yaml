@@ -33,11 +33,23 @@ importers:
       '@commitlint/config-conventional':
         specifier: ^21.2.2
         version: 21.2.2
+      '@iconify-json/devicon-plain':
+        specifier: ^1.2.57
+        version: 1.2.57
+      '@iconify/utils':
+        specifier: ^3.1.4
+        version: 3.1.4
       husky:
         specifier: ^9.1.7
         version: 9.1.7
+      simple-icons:
+        specifier: ^16.29.0
+        version: 16.29.0
 
 packages:
+
+  '@antfu/install-pkg@1.1.0':
+    resolution: {integrity: sha512-MGQsmw10ZyI+EJo45CdSER4zEb+p31LpDAFp2Z3gkSd1yqVZGi0Ebx++YTEMonJy4oChEMLsxZ64j8FH6sSqtQ==}
 
   '@astrojs/compiler-binding-darwin-arm64@0.4.0':
     resolution: {integrity: sha512-ZVUwHundaQyFNjE6uoa0usaC0WOCitDCLS/4mdb4rOiJXwVUuKJBMxI5WMzXLWmamsXtK/Z//ifLXvV5Yeh4Hw==}
@@ -522,6 +534,15 @@ packages:
 
   '@fontsource-variable/jetbrains-mono@5.3.0':
     resolution: {integrity: sha512-F32xpS2NsGYoQi2ADSkKTgpJj7ozajsGgDJ8woTnqjmIB+dxDIqImjl4pXZVEExu8UFZ2ndhmX18EBS/hdz3Lw==}
+
+  '@iconify-json/devicon-plain@1.2.57':
+    resolution: {integrity: sha512-3p8PgK63KejM1DhuL7LBslvfmPmwjx6DkO3EM+om6MGc8kpc9yX7CgOPWuM2sFSxEblzqxAwnbUlIO56fJjMRw==}
+
+  '@iconify/types@2.0.0':
+    resolution: {integrity: sha512-+wluvCrRhXrhyOmRDJ3q8mux9JkKy5SJ/v8ol2tu4FVjyYvtEzkc/3pK15ET6RKg4b4w4BmTk1+gsCUhf21Ykg==}
+
+  '@iconify/utils@3.1.4':
+    resolution: {integrity: sha512-b1S7B1k9ohZ+iNTi2ATxbRYG9fTrJmUT0rc46bvVnNxqNRGW7dyo/vRREwyniI5IRN2RSJHDcm+s3BjWrSAjHw==}
 
   '@img/colour@1.1.0':
     resolution: {integrity: sha512-Td76q7j57o/tLVdgS746cYARfSyxk8iEfRxewL9h4OMzYhbW4TAcppl0mT4eyqXddh6L/jwoM75mo7ixa/pCeQ==}
@@ -1655,6 +1676,10 @@ packages:
     resolution: {integrity: sha512-Mb/GvXPHBAXdgGIcnfU5L3ldpn1XcxrGkPHwqgRx17/I2XRfqlFKk2vGkHWINn1kdXvzJZeuO3is6I9KLPFm0g==}
     engines: {node: '>=20'}
 
+  simple-icons@16.29.0:
+    resolution: {integrity: sha512-4H94f5ZgcCcgJroc902TFlFdgPu2IU2eD7+WebN2Z14xKYrKHeJ4UQcZwzgSuH4Rgzw+jp7sbHl40NefuIEYsg==}
+    engines: {node: '>=0.12.18'}
+
   sisteransi@1.0.5:
     resolution: {integrity: sha512-bLGGlR1QxBcynn2d5YmDX4MGjlZvy2MRBDRNHLJ8VI6l6+9FUiyTFNJ0IveOSP0bcXgVDPRcfGqA0pjaqUpfVg==}
 
@@ -1917,6 +1942,11 @@ packages:
     resolution: {integrity: sha512-bXE4cR/kVZhKZX/RjPEflHaKVhUVl85noU3v6b8apfQEc1x4A+zBxjZ4lN8LqGd6WZ3dl98pY4o717VFmoPp+A==}
 
 snapshots:
+
+  '@antfu/install-pkg@1.1.0':
+    dependencies:
+      package-manager-detector: 1.8.0
+      tinyexec: 1.3.0
 
   '@astrojs/compiler-binding-darwin-arm64@0.4.0':
     optional: true
@@ -2398,6 +2428,18 @@ snapshots:
   '@fontsource-variable/inter@5.3.0': {}
 
   '@fontsource-variable/jetbrains-mono@5.3.0': {}
+
+  '@iconify-json/devicon-plain@1.2.57':
+    dependencies:
+      '@iconify/types': 2.0.0
+
+  '@iconify/types@2.0.0': {}
+
+  '@iconify/utils@3.1.4':
+    dependencies:
+      '@antfu/install-pkg': 1.1.0
+      '@iconify/types': 2.0.0
+      import-meta-resolve: 4.2.0
 
   '@img/colour@1.1.0': {}
 
@@ -3449,6 +3491,8 @@ snapshots:
       '@shikijs/types': 4.4.3
       '@shikijs/vscode-textmate': 10.0.2
       '@types/hast': 3.0.5
+
+  simple-icons@16.29.0: {}
 
   sisteransi@1.0.5: {}
 

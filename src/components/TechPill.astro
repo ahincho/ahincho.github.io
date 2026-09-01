@@ -1,0 +1,28 @@
+---
+import { techIcon } from '../lib/tech-icons';
+
+interface Props {
+	label: string;
+}
+
+const { label } = Astro.props;
+const icon = techIcon(label);
+---
+
+<span class="pill">
+	{
+		icon && (
+			<svg class="glyph" viewBox={icon.viewBox} fill="currentColor" aria-hidden="true" set:html={icon.body} />
+		)
+	}
+	{label}
+</span>
+
+<style>
+	.glyph {
+		width: 0.95em;
+		height: 0.95em;
+		flex-shrink: 0;
+		opacity: 0.75;
+	}
+</style>

@@ -1,5 +1,6 @@
 ---
 import { translations, getLang } from '../i18n';
+import TechPill from './TechPill.astro';
 
 const lang = getLang(Astro.currentLocale);
 const t = translations[lang].skills;
@@ -14,7 +15,7 @@ const t = translations[lang].skills;
 				<div class="group">
 					<h3>{group.name}</h3>
 					<div class="items">
-						{group.items.map((item) => <span class="pill">{item}</span>)}
+						{group.items.map((item) => <TechPill label={item} />)}
 					</div>
 				</div>
 			))}
