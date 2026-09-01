@@ -16,7 +16,7 @@ export const en: Translations = {
 		langSwitcher: 'Switch language',
 		links: [
 			{ href: '/en/#about', label: 'About' },
-			{ href: '/en/#project', label: 'Project' },
+			{ href: '/en/#projects', label: 'Projects' },
 			{ href: '/en/#experience', label: 'Experience' },
 			{ href: '/en/#skills', label: 'Skills' },
 			{ href: '/en/#contact', label: 'Contact' },
@@ -26,7 +26,7 @@ export const en: Translations = {
 		location: 'Arequipa, Peru',
 		role: 'Full Stack & DevSecOps Engineer',
 		lead: '5+ years building education platforms, e-commerce and multi-country systems — from architecture design to the pipeline that ships it to production. Currently focused on Generative AI and MLOps.',
-		ctaProject: 'View featured project',
+		ctaProject: 'See my projects',
 		ctaContact: 'Get in touch',
 		githubAria: "Angel Hincho's GitHub",
 		linkedinAria: "Angel Hincho's LinkedIn",
@@ -57,6 +57,9 @@ export const en: Translations = {
 		],
 	},
 	projects: {
+		eyebrow: 'what I build',
+		title: 'Featured projects',
+		lead: 'Two platforms I designed and built end to end. Each one has its own case study.',
 		sparkMatch: {
 			eyebrow: 'featured project',
 			title: 'Spark Match',
@@ -270,7 +273,7 @@ export const en: Translations = {
 		heading: 'This page does not exist',
 		lead: 'The link may be broken or the address mistyped. Everything published is reachable from the home page.',
 		home: 'Back to home',
-		project: 'See the featured project',
+		project: 'See my projects',
 	},
 	footer: {
 		rights: '© 2026 Angel Hincho — Arequipa, Peru',

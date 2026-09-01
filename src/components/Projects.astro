@@ -1,30 +1,50 @@
 ---
 import { translations, getLang, defaultLang } from '../i18n';
 import VideoDemo from './VideoDemo.astro';
+import NovaArchitecture from './NovaArchitecture.astro';
 
 const lang = getLang(Astro.currentLocale);
-const t = translations[lang].projects.sparkMatch;
+const t = translations[lang].projects;
 
-const caseStudyPath =
-	lang === defaultLang ? '/projects/spark-match/' : `/${lang}/projects/spark-match/`;
+const prefix = lang === defaultLang ? '' : `/${lang}`;
 ---
 
-<section id="project" class="section">
+<section id="projects" class="section">
 	<div class="container">
 		<p class="section-eyebrow">{t.eyebrow}</p>
 		<h2 class="section-title">{t.title}</h2>
+		<p class="section-lead">{t.lead}</p>
+
 		<article class="card">
 			<div class="head">
-				<p class="tagline">{t.tagline}</p>
+				<h3 class="name">{t.sparkMatch.title}</h3>
 				<div class="badges">
-					<span class="badge tfp">{t.badgeTfp}</span>
-					<span class="badge status">{t.badgeStatus}</span>
+					<span class="badge accent">{t.sparkMatch.badgeTfp}</span>
+					<span class="badge status">{t.sparkMatch.badgeStatus}</span>
 				</div>
 			</div>
-			<p class="description">{t.description}</p>
+			<p class="tagline">{t.sparkMatch.tagline}</p>
+			<p class="description">{t.sparkMatch.description}</p>
 			<VideoDemo />
-			<a class="cta" href={caseStudyPath}>
-				{t.cta}
+			<a class="cta" href={`${prefix}/projects/spark-match/`}>
+				{t.sparkMatch.cta}
+				<span aria-hidden="true">→</span>
+			</a>
+		</article>
+
+		<article class="card">
+			<div class="head">
+				<h3 class="name">{t.nova.title}</h3>
+				<div class="badges">
+					<span class="badge accent">{t.nova.badgeKind}</span>
+					<span class="badge status">{t.nova.badgeStatus}</span>
+				</div>
+			</div>
+			<p class="tagline">{t.nova.tagline}</p>
+			<p class="description">{t.nova.description}</p>
+			<NovaArchitecture />
+			<a class="cta" href={`${prefix}/projects/nova/`}>
+				{t.nova.cta}
 				<span aria-hidden="true">→</span>
 			</a>
 		</article>
@@ -32,6 +52,14 @@ const caseStudyPath =
 </section>
 
 <style>
+	.section-lead {
+		color: var(--text-muted);
+		max-width: 44rem;
+		/* .section-title already carries the gap below the heading. */
+		margin-top: -1.6rem;
+		margin-bottom: 2.5rem;
+	}
+
 	.card {
 		background: var(--card);
 		border: 1px solid var(--border);
@@ -40,6 +68,10 @@ const caseStudyPath =
 		box-shadow: var(--shadow);
 		position: relative;
 		overflow: hidden;
+	}
+
+	.card + .card {
+		margin-top: 2rem;
 	}
 
 	.card::before {
@@ -57,18 +89,25 @@ const caseStudyPath =
 		align-items: center;
 		justify-content: space-between;
 		gap: 0.8rem;
-		margin-bottom: 1.1rem;
+	}
+
+	.name {
+		font-size: clamp(1.5rem, 3vw, 1.9rem);
+		font-weight: 700;
+		letter-spacing: -0.02em;
 	}
 
 	.tagline {
-		font-size: 1.12rem;
+		font-size: 1.05rem;
 		font-weight: 600;
+		margin: 0.55rem 0 0.8rem;
 	}
 
 	.badges {
 		display: flex;
 		gap: 0.5rem;
 		flex-wrap: wrap;
+		margin-left: auto;
 	}
 
 	.badge {
@@ -79,7 +118,7 @@ const caseStudyPath =
 		border-radius: 999px;
 	}
 
-	.badge.tfp {
+	.badge.accent {
 		color: var(--accent);
 		background: var(--accent-dim);
 		border: 1px solid var(--accent-border);
@@ -99,7 +138,7 @@ const caseStudyPath =
 		display: inline-flex;
 		align-items: center;
 		gap: 0.45rem;
-		margin-top: 1.8rem;
+		margin-top: var(--space-block);
 		font-family: var(--font-mono);
 		font-size: 0.88rem;
 		font-weight: 600;

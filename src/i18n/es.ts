@@ -14,7 +14,7 @@ export const es = {
 		langSwitcher: 'Cambiar idioma',
 		links: [
 			{ href: '/#about', label: 'Sobre mí' },
-			{ href: '/#project', label: 'Proyecto' },
+			{ href: '/#projects', label: 'Proyectos' },
 			{ href: '/#experience', label: 'Experiencia' },
 			{ href: '/#skills', label: 'Habilidades' },
 			{ href: '/#contact', label: 'Contacto' },
@@ -24,7 +24,7 @@ export const es = {
 		location: 'Arequipa, Perú',
 		role: 'Full Stack & DevSecOps Engineer',
 		lead: 'Más de 5 años construyendo plataformas educativas, e-commerce y sistemas multi-país — del diseño de la arquitectura al pipeline que la lleva a producción. Hoy, enfocado en IA Generativa y MLOps.',
-		ctaProject: 'Ver proyecto destacado',
+		ctaProject: 'Ver mis proyectos',
 		ctaContact: 'Contáctame',
 		githubAria: 'GitHub de Angel Hincho',
 		linkedinAria: 'LinkedIn de Angel Hincho',
@@ -55,6 +55,9 @@ export const es = {
 		],
 	},
 	projects: {
+		eyebrow: 'lo que construyo',
+		title: 'Proyectos destacados',
+		lead: 'Dos plataformas que diseñé y construí de punta a punta. Cada una tiene su caso de estudio.',
 		sparkMatch: {
 			eyebrow: 'proyecto destacado',
 			title: 'Spark Match',
@@ -268,7 +271,7 @@ export const es = {
 		heading: 'Esta página no existe',
 		lead: 'El enlace puede estar roto o la dirección mal escrita. Desde el inicio llegas a todo lo que hay publicado.',
 		home: 'Volver al inicio',
-		project: 'Ver el proyecto destacado',
+		project: 'Ver mis proyectos',
 	},
 	footer: {
 		rights: '© 2026 Angel Hincho — Arequipa, Perú',
