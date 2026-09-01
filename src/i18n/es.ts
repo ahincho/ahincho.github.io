@@ -156,6 +156,17 @@ export const es = {
 				],
 				tags: ['C#', '.NET', 'Java', 'Angular', 'PostgreSQL'],
 			},
+			{
+				company: 'ByteXByte',
+				role: 'Desarrollador FullStack',
+				meta: 'Abr 2021 — Abr 2022 · Arequipa',
+				bullets: [
+					'Sistema de punto de venta (POS) para retail, con varios clientes y sus sedes operando sobre la misma plataforma.',
+					'Participé en la migración del cliente de escritorio de JavaFX a .NET Framework 4.8 con Windows Forms.',
+					'Segunda migración hacia una aplicación web con Spring Boot y React, con arquitectura multi-tenant por cliente y sede.',
+				],
+				tags: ['Java', 'JavaFX', 'C#', '.NET', 'Spring Boot', 'React', 'MySQL'],
+			},
 		],
 		educationTitle: 'Formación',
 		education: [

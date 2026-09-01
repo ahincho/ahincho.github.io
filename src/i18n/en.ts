@@ -158,6 +158,17 @@ export const en: Translations = {
 				],
 				tags: ['C#', '.NET', 'Java', 'Angular', 'PostgreSQL'],
 			},
+			{
+				company: 'ByteXByte',
+				role: 'FullStack Developer',
+				meta: 'Apr 2021 — Apr 2022 · Arequipa',
+				bullets: [
+					'Retail point-of-sale (POS) system, with several clients and their branches running on the same platform.',
+					'Took part in migrating the desktop client from JavaFX to .NET Framework 4.8 with Windows Forms.',
+					'A second migration to a web application with Spring Boot and React, multi-tenant per client and branch.',
+				],
+				tags: ['Java', 'JavaFX', 'C#', '.NET', 'Spring Boot', 'React', 'MySQL'],
+			},
 		],
 		educationTitle: 'Education',
 		education: [
