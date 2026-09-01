@@ -205,6 +205,14 @@ export const en: Translations = {
 		emailCta: 'Send email',
 		cvCta: 'Download CV',
 	},
+	notFound: {
+		title: '404 — Page not found | Angel Hincho',
+		description: 'The page you are looking for does not exist in this portfolio.',
+		heading: 'This page does not exist',
+		lead: 'The link may be broken or the address mistyped. Everything published is reachable from the home page.',
+		home: 'Back to home',
+		project: 'See the featured project',
+	},
 	footer: {
 		rights: '© 2026 Angel Hincho — Arequipa, Peru',
 		madeWith: 'Built with',

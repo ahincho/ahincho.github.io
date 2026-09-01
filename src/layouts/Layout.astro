@@ -7,12 +7,14 @@ import { translations, getLang } from '../i18n';
 interface Props {
 	title?: string;
 	description?: string;
+	/** Error pages should stay out of the index, and have no canonical or alternates to offer. */
+	noindex?: boolean;
 }
 
 const lang = getLang(Astro.currentLocale);
 const t = translations[lang];
 
-const { title = t.meta.title, description = t.meta.description } = Astro.props;
+const { title = t.meta.title, description = t.meta.description, noindex = false } = Astro.props;
 
 // Every page exists in both languages at the same path, prefixed with /en for English.
 const path = Astro.url.pathname;
@@ -46,8 +48,9 @@ const jsonLd = JSON.stringify({
 		<meta property="og:locale" content={t.meta.ogLocale} />
 		<meta property="og:site_name" content={t.meta.siteName} />
 		<meta name="twitter:card" content="summary_large_image" />
+		{noindex && <meta name="robots" content="noindex" />}
 		{
-			Astro.site && (
+			Astro.site && !noindex && (
 				<>
 					<link rel="canonical" href={new URL(path, Astro.site)} />
 					<link rel="alternate" hreflang="es" href={new URL(esPath, Astro.site)} />

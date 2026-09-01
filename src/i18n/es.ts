@@ -203,6 +203,14 @@ export const es = {
 		emailCta: 'Enviar correo',
 		cvCta: 'Descargar CV',
 	},
+	notFound: {
+		title: '404 — Página no encontrada | Angel Hincho',
+		description: 'La página que buscas no existe en este portafolio.',
+		heading: 'Esta página no existe',
+		lead: 'El enlace puede estar roto o la dirección mal escrita. Desde el inicio llegas a todo lo que hay publicado.',
+		home: 'Volver al inicio',
+		project: 'Ver el proyecto destacado',
+	},
 	footer: {
 		rights: '© 2026 Angel Hincho — Arequipa, Perú',
 		madeWith: 'Hecho con',

@@ -1,0 +1,162 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { translations } from '../i18n';
+
+// GitHub Pages serves this single file for every missing URL in either language, so
+// both versions ship and the script below picks one from the path that was requested.
+// The shared Header and Footer are deliberately absent: they render in one language at
+// build time, and pairing Spanish navigation with an English message reads as a bug.
+const variants = [
+	{ code: 'es', t: translations.es.notFound, home: '/', project: '/#project' },
+	{ code: 'en', t: translations.en.notFound, home: '/en/', project: '/en/#project' },
+];
+const meta = translations.es.notFound;
+---
+
+<Layout title={meta.title} description={meta.description} noindex>
+	<main class="wrap">
+		<div class="container">
+			<a class="logo" href="/" aria-label="Angel Hincho">ah<span>.</span></a>
+			<p class="code">404</p>
+			{
+				variants.map(({ code, t, home, project }) => (
+					<div class="variant" data-nf={code} hidden={code !== 'es'}>
+						<h1>{t.heading}</h1>
+						<p class="lead">{t.lead}</p>
+						<div class="actions">
+							<a class="btn btn-primary" href={home}>
+								{t.home}
+							</a>
+							<a class="btn btn-ghost" href={project}>
+								{t.project}
+							</a>
+						</div>
+					</div>
+				))
+			}
+			<div class="shell" aria-hidden="true">
+				<pre><code><span class="p">~ $</span> cat <span data-path>/</span>
+<span class="o">cat: <span data-path>/</span>: No such file or directory</span>
+<span class="p">~ $</span> <span class="cursor"></span></code></pre>
+			</div>
+		</div>
+	</main>
+</Layout>
+
+<script is:inline>
+	// Inline and in the body so the right language is chosen before this paints.
+	(function () {
+		var path = location.pathname;
+		var lang = path === '/en' || path.indexOf('/en/') === 0 ? 'en' : 'es';
+		document.documentElement.lang = lang;
+		var nodes = document.querySelectorAll('[data-nf]');
+		for (var i = 0; i < nodes.length; i++) {
+			nodes[i].hidden = nodes[i].getAttribute('data-nf') !== lang;
+		}
+		var slots = document.querySelectorAll('[data-path]');
+		for (var j = 0; j < slots.length; j++) {
+			slots[j].textContent = path.slice(0, 120);
+		}
+	})();
+</script>
+
+<style>
+	.wrap {
+		min-height: 100vh;
+		display: grid;
+		/* align-items centres inside the row; align-content centres the row itself. */
+		align-content: center;
+		padding-block: var(--space-section);
+	}
+
+	.logo {
+		font-family: var(--font-mono);
+		font-size: 1.15rem;
+		font-weight: 700;
+		color: var(--text);
+		letter-spacing: -0.03em;
+	}
+
+	.logo span {
+		color: var(--accent);
+	}
+
+	.code {
+		font-family: var(--font-mono);
+		font-size: clamp(4rem, 14vw, 8rem);
+		font-weight: 700;
+		line-height: 1;
+		letter-spacing: -0.04em;
+		color: var(--accent);
+		margin-top: 2rem;
+	}
+
+	h1 {
+		font-size: clamp(1.6rem, 3.5vw, 2.2rem);
+		font-weight: 700;
+		letter-spacing: -0.02em;
+		margin-top: 0.75rem;
+	}
+
+	.lead {
+		color: var(--text-muted);
+		max-width: 34rem;
+		margin-top: 1rem;
+	}
+
+	.actions {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.85rem;
+		margin-top: 2rem;
+	}
+
+	.shell {
+		margin-top: 2.5rem;
+		background: var(--card);
+		border: 1px solid var(--border);
+		border-radius: 14px;
+		box-shadow: var(--shadow);
+		overflow: hidden;
+		font-family: var(--font-mono);
+		max-width: 44rem;
+		container-type: inline-size;
+	}
+
+	pre {
+		margin: 0;
+		padding: 1.1rem 1.25rem;
+		overflow-x: auto;
+		font-size: clamp(0.62rem, 3cqw, 0.8rem);
+		line-height: 1.75;
+		scrollbar-width: none;
+	}
+
+	pre::-webkit-scrollbar {
+		display: none;
+	}
+
+	.p {
+		color: var(--accent);
+		font-weight: 600;
+	}
+
+	.o {
+		color: var(--text-muted);
+	}
+
+	.cursor {
+		display: inline-block;
+		width: 0.55em;
+		height: 1.05em;
+		background: var(--accent);
+		vertical-align: text-bottom;
+		animation: blink 2.4s ease-in-out infinite;
+	}
+
+	@keyframes blink {
+		50% {
+			opacity: 0;
+		}
+	}
+</style>
