@@ -40,6 +40,15 @@ const shots = [chatSubagents, reportCareers, reportPdf, evalsLangsmith].map((ima
 				</div>
 			</div>
 			<p class="description">{t.description}</p>
+			<dl class="figures">
+				{t.figures.map((figure) => (
+					<div>
+						<dt>{figure.label}</dt>
+						<dd>{figure.value}</dd>
+					</div>
+				))}
+			</dl>
+			<p class="source">{t.figuresSource}</p>
 			<VideoDemo />
 			<div class="arch" role="img" aria-label={t.archAria}>
 				<div class="flow">
@@ -171,6 +180,46 @@ const shots = [chatSubagents, reportCareers, reportPdf, evalsLangsmith].map((ima
 	.description {
 		color: var(--text-muted);
 		max-width: 60rem;
+	}
+
+	/* Same stat band as the hero, so the two pages read as one system. */
+	.figures {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		gap: 1rem;
+		margin: 1.8rem 0 0.7rem;
+		padding: 1.4rem 0;
+		border-top: 1px solid var(--border);
+		border-bottom: 1px solid var(--border);
+	}
+
+	.figures div {
+		display: flex;
+		flex-direction: column-reverse;
+		/* In column-reverse, flex-end is the top: it keeps the numbers on one
+		   line even when a label below them wraps to two. */
+		justify-content: flex-end;
+	}
+
+	.figures dd {
+		margin: 0;
+		font-family: var(--font-mono);
+		font-size: clamp(1.4rem, 3vw, 1.9rem);
+		font-weight: 700;
+		color: var(--accent);
+		letter-spacing: -0.02em;
+	}
+
+	.figures dt {
+		color: var(--text-muted);
+		font-size: 0.85rem;
+		line-height: 1.4;
+	}
+
+	.source {
+		font-family: var(--font-mono);
+		font-size: 0.74rem;
+		color: var(--text-faint);
 	}
 
 	.shots {

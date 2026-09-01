@@ -62,6 +62,12 @@ export const es = {
 		badgeStatus: 'En desarrollo activo',
 		description:
 			'Una plataforma que acompaña a estudiantes a descubrir su camino profesional conversando con un agente inteligente: evalúa su perfil vocacional, calcula la afinidad con carreras y construye planes de acción con recursos reales — no un chatbot, sino un agente con razonamiento multi-paso, memoria y delegación a subagentes.',
+		figures: [
+			{ value: '550+', label: 'carreras analizadas' },
+			{ value: '1.000+', label: 'instituciones' },
+			{ value: '25', label: 'regiones del Perú' },
+		],
+		figuresSource: 'Datos oficiales de Ponte en Carrera · MINEDU Perú',
 		archAria: 'Arquitectura: Angular se comunica por AG-UI con el deep agent, que usa AWS Bedrock',
 		subagentsLabel: 'subagentes',
 		infraLabel: 'infra',
@@ -89,7 +95,7 @@ export const es = {
 		shotsLabel: 'La plataforma',
 		shots: [
 			'El agente delega en subagentes especializados y muestra cada paso mientras razona.',
-			'Cada carrera se contrasta con cifras oficiales: tasa de admisión, duración, costo e ingreso al egresar.',
+			'Cada carrera se contrasta con cifras oficiales del MINEDU: tasa de admisión, duración, costo anual e ingreso mensual al egresar.',
 			'El informe se exporta en PDF con el detalle de cada programa recomendado.',
 			'Evaluación automatizada en LangSmith: evaluadores propios y comparación entre modelos.',
 		],

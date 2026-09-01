@@ -64,6 +64,12 @@ export const en: Translations = {
 		badgeStatus: 'In active development',
 		description:
 			'A platform that helps students discover their career path by talking to an intelligent agent: it assesses their vocational profile, computes affinity with careers and builds action plans with real resources — not a chatbot, but an agent with multi-step reasoning, memory and delegation to subagents.',
+		figures: [
+			{ value: '550+', label: 'degree programmes analysed' },
+			{ value: '1,000+', label: 'institutions' },
+			{ value: '25', label: 'regions of Peru' },
+		],
+		figuresSource: 'Official data from Ponte en Carrera · MINEDU Peru',
 		archAria: 'Architecture: Angular talks over AG-UI to the deep agent, which uses AWS Bedrock',
 		subagentsLabel: 'subagents',
 		infraLabel: 'infra',
@@ -91,7 +97,7 @@ export const en: Translations = {
 		shotsLabel: 'The platform',
 		shots: [
 			'The agent delegates to specialised subagents and surfaces every step as it reasons.',
-			'Each programme is matched against official figures: admission rate, length, cost and starting salary.',
+			'Each programme is matched against official MINEDU figures: admission rate, length, annual cost and monthly starting salary.',
 			'The report is exported as a PDF detailing every recommended programme.',
 			'Automated evaluation in LangSmith: custom evaluators and model comparison.',
 		],
