@@ -275,6 +275,9 @@ const stackJson = `{
 	.stats div {
 		display: flex;
 		flex-direction: column-reverse;
+		/* In column-reverse, flex-end is the top: it keeps the numbers on one
+		   line even when a label below them wraps to two. */
+		justify-content: flex-end;
 	}
 
 	.stats dd {
