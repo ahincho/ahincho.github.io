@@ -4,10 +4,13 @@ export const es = {
 		description:
 			'Portafolio de Angel Hincho: más de 5 años construyendo plataformas educativas, e-commerce y sistemas multi-país con Spring Boot, NestJS, React, Angular y AWS. Enfocado en IA Generativa y MLOps.',
 		ogLocale: 'es_PE',
+		ogImageAlt: 'Angel Hincho — Full Stack & DevSecOps Engineer, Arequipa, Perú',
+		siteName: 'Portafolio de Angel Hincho',
 	},
 	nav: {
 		ariaSections: 'Secciones del portafolio',
 		themeToggle: 'Cambiar tema claro/oscuro',
+		menuToggle: 'Abrir el menú de secciones',
 		langSwitcher: 'Cambiar idioma',
 		links: [
 			{ href: '/#about', label: 'Sobre mí' },

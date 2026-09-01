@@ -6,10 +6,13 @@ export const en: Translations = {
 		description:
 			"Angel Hincho's portfolio: 5+ years building education platforms, e-commerce and multi-country systems with Spring Boot, NestJS, React, Angular and AWS. Focused on Generative AI and MLOps.",
 		ogLocale: 'en_US',
+		ogImageAlt: 'Angel Hincho — Full Stack & DevSecOps Engineer, Arequipa, Peru',
+		siteName: "Angel Hincho's portfolio",
 	},
 	nav: {
 		ariaSections: 'Portfolio sections',
 		themeToggle: 'Toggle light/dark theme',
+		menuToggle: 'Open the sections menu',
 		langSwitcher: 'Switch language',
 		links: [
 			{ href: '/en/#about', label: 'About' },
