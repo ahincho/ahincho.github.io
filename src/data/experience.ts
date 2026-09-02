@@ -43,6 +43,7 @@ export const jobs = [
 		industry: 'retail',
 		start: '2024-03',
 		end: '2024-08',
+		city: 'Santiago',
 		countries: ['CL'],
 		markets: ['PE', 'CO', 'CL'],
 		tags: ['Java', 'Spring Boot', 'FastAPI', 'React', 'Angular', 'GCP', 'Kubernetes'],
