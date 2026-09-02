@@ -1,9 +1,26 @@
 ---
 import { translations, getLang } from '../i18n';
+import { jobs, studies } from '../data/experience';
+import { formatCountries, formatPeriod, formatPlace } from '../lib/format';
 import TechPill from './TechPill.astro';
 
 const lang = getLang(Astro.currentLocale);
 const t = translations[lang].experience;
+
+// Facts come from the data layer, prose from the dictionary, and the meta line
+// is derived rather than written out — which is what kept the Spanish and
+// English versions of a date from agreeing.
+const entries = jobs.map((job) => ({
+	job,
+	copy: t.jobs[job.id],
+	// Empty segments are dropped rather than rendered as a stray separator.
+	meta: [
+		formatPeriod(job.start, job.end, lang, t.present),
+		formatPlace(job.city, job.countries, lang, t.cities),
+		t.modality[job.modality],
+	].filter(Boolean),
+	markets: job.markets ? formatCountries(job.markets, lang) : null,
+}));
 ---
 
 <section id="experience" class="section">
@@ -12,13 +29,35 @@ const t = translations[lang].experience;
 		<h2 class="section-title">{t.title}</h2>
 		<ol class="timeline">
 			{
-				t.jobs.map((job) => (
+				entries.map(({ job, copy, meta, markets }) => (
 					<li>
-						<div class="meta">{job.meta}</div>
-						<h3>{job.role}</h3>
-						<p class="company">{job.company}</p>
+						<div class="meta">
+							{meta.map((part, i) => (
+								<>
+									{i > 0 && (
+										<span class="dot" aria-hidden="true">
+											·
+										</span>
+									)}
+									{i === 0 ? <time datetime={job.start}>{part}</time> : <span>{part}</span>}
+								</>
+							))}
+						</div>
+						<h3>{copy.role}</h3>
+						<p class="company">
+							{job.company}
+							<span class="chips">
+								<span class="chip">{t.employment[job.employment]}</span>
+								<span class="chip">{t.industry[job.industry]}</span>
+							</span>
+						</p>
+						{markets && (
+							<p class="markets">
+								<span class="markets-label">{t.marketsLabel}</span> {markets}
+							</p>
+						)}
 						<ul class="bullets">
-							{job.bullets.map((b) => (
+							{copy.bullets.map((b) => (
 								<li>{b}</li>
 							))}
 						</ul>
@@ -34,11 +73,14 @@ const t = translations[lang].experience;
 		<h3 class="edu-title">{t.educationTitle}</h3>
 		<div class="education">
 			{
-				t.education.map((e) => (
+				studies.map((study) => (
 					<div class="edu-card">
-						<p class="school">{e.school}</p>
-						<p class="degree">{e.degree}</p>
-						<p class="edu-meta">{e.meta}</p>
+						<p class="school">{study.school}</p>
+						<p class="degree">{t.studies[study.id].degree}</p>
+						<p class="edu-meta">
+							{study.end ? `${study.start} — ${study.end}` : study.start}
+							{study.note ? ` · ${study.note}` : ''}
+						</p>
 					</div>
 				))
 			}
@@ -83,6 +125,44 @@ const t = translations[lang].experience;
 		border-radius: 50%;
 		background: var(--bg);
 		border: 2.5px solid var(--accent);
+	}
+
+	.markets {
+		font-size: 0.85rem;
+		color: var(--text-muted);
+		margin: 0.5rem 0 0;
+	}
+
+	.markets-label {
+		font-family: var(--font-mono);
+		font-size: 0.75rem;
+		text-transform: uppercase;
+		letter-spacing: 0.04em;
+		color: var(--accent);
+	}
+
+	.meta .dot {
+		opacity: 0.5;
+		margin: 0 0.15rem;
+	}
+
+	.chips {
+		display: inline-flex;
+		flex-wrap: wrap;
+		gap: 0.35rem;
+		margin-left: 0.6rem;
+		vertical-align: middle;
+	}
+
+	.chip {
+		font-family: var(--font-mono);
+		font-size: 0.66rem;
+		font-weight: 600;
+		color: var(--text-muted);
+		border: 1px solid var(--border-strong);
+		border-radius: 999px;
+		padding: 0.16rem 0.55rem;
+		white-space: nowrap;
 	}
 
 	.meta {
