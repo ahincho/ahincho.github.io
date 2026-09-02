@@ -345,7 +345,7 @@ export const en: Translations = {
 		open: 'Ask the AI',
 		close: 'Close the assistant',
 		title: 'AI assistant',
-		subtitle: "Designed and built by me. It answers only from this portfolio's content.",
+		subtitle: 'Built by me. It answers only from this site.',
 		greeting:
 			"Hi! I am Angel's assistant. I can answer questions about his experience, his projects and his stack. What would you like to know?",
 		suggestions: [
@@ -361,7 +361,7 @@ export const en: Translations = {
 		exhausted: 'I have hit my daily question limit. Reach him directly from the contact section.',
 		preview:
 			'I am still being built: my answering engine is not connected yet. In the meantime you can reach him directly from the contact section.',
-		disclaimer: 'AI-generated answers, based on the content of this site.',
+		disclaimer: 'AI-generated answers.',
 	},
 	footer: {
 		rights: '© 2026 Angel Hincho — Arequipa, Peru',

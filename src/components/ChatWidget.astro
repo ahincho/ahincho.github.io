@@ -12,6 +12,9 @@ const endpoint = import.meta.env.PUBLIC_CHAT_URL ?? '';
 // Shared by the header and every answer, and handed to the client script so
 // messages created at runtime carry the same mark.
 const AVATAR = `<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2.5 13.9 8l5.6 1.9-5.6 1.9L12 17.4 10.1 11.8 4.5 9.9 10.1 8 12 2.5Z" /><path d="M18.5 14.5l.9 2.6 2.6.9-2.6.9-.9 2.6-.9-2.6-2.6-.9 2.6-.9.9-2.6Z" /></svg>`;
+
+// The reader gets a mark too, so a glance down the column tells who spoke.
+const READER = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" /><circle cx="12" cy="7" r="4" /></svg>`;
 ---
 
 <div
@@ -25,6 +28,7 @@ const AVATAR = `<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
 		preview: t.preview,
 	})}
 	data-avatar={AVATAR}
+	data-reader={READER}
 >
 	<button class="launcher" type="button" aria-expanded="false" aria-controls="chat-panel">
 		<svg
@@ -163,6 +167,7 @@ const AVATAR = `<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
 		}
 
 		const avatar = root.dataset.avatar ?? '';
+		const reader = root.dataset.reader ?? '';
 		const clock = new Intl.DateTimeFormat(lang, { hour: '2-digit', minute: '2-digit' });
 
 		/** Stamps a message with the time it appeared. */
@@ -184,13 +189,11 @@ const AVATAR = `<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
 			const row = document.createElement('div');
 			row.className = `row ${who === 'user' ? 'user' : 'bot'}`;
 
-			if (who !== 'user') {
-				const mark = document.createElement('span');
-				mark.className = 'avatar';
-				mark.setAttribute('aria-hidden', 'true');
-				mark.innerHTML = avatar;
-				row.append(mark);
-			}
+			const mark = document.createElement('span');
+			mark.className = who === 'user' ? 'avatar reader' : 'avatar';
+			mark.setAttribute('aria-hidden', 'true');
+			mark.innerHTML = who === 'user' ? reader : avatar;
+			if (who !== 'user') row.append(mark);
 
 			const stack = document.createElement('div');
 			stack.className = 'stack';
@@ -202,6 +205,7 @@ const AVATAR = `<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
 			stack.append(p);
 			stamp(stack);
 			row.append(stack);
+			if (who === 'user') row.append(mark);
 			log.append(row);
 			log.scrollTop = log.scrollHeight;
 			return p;
@@ -332,7 +336,7 @@ const AVATAR = `<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
 
 	.panel {
 		width: min(27rem, calc(100vw - 1.6rem));
-		height: min(30rem, calc(100vh - 8rem));
+		height: min(34rem, calc(100vh - 6.5rem));
 		display: flex;
 		flex-direction: column;
 		background: var(--card);
@@ -346,7 +350,7 @@ const AVATAR = `<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
 		display: flex;
 		align-items: flex-start;
 		gap: 0.7rem;
-		padding: 0.9rem 1rem;
+		padding: 0.8rem 0.9rem;
 		border-bottom: 1px solid var(--border);
 	}
 
@@ -355,6 +359,7 @@ const AVATAR = `<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
 		min-width: 0;
 	}
 
+	.log :global(.avatar),
 	.avatar {
 		flex-shrink: 0;
 		display: grid;
@@ -367,6 +372,7 @@ const AVATAR = `<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
 		color: var(--accent);
 	}
 
+	.log :global(.avatar svg),
 	.avatar :global(svg) {
 		width: 0.95rem;
 		height: 0.95rem;
@@ -423,6 +429,12 @@ const AVATAR = `<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
 
 	.log :global(.row.user) {
 		justify-content: flex-end;
+	}
+
+	.log :global(.avatar.reader) {
+		background: var(--bg-soft);
+		border-color: var(--border-strong);
+		color: var(--text-muted);
 	}
 
 	.log :global(.stack) {
@@ -544,7 +556,7 @@ const AVATAR = `<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
 		font-size: 0.68rem;
 		color: var(--text-faint);
 		text-align: center;
-		padding: 0 0.8rem 0.7rem;
+		padding: 0 0.8rem 0.6rem;
 	}
 
 	.sr-only {

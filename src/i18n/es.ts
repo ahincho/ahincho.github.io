@@ -348,7 +348,7 @@ export const es = {
 		open: 'Pregúntale a la IA',
 		close: 'Cerrar el asistente',
 		title: 'Asistente con IA',
-		subtitle: 'Lo diseñé y construí yo. Responde solo con el contenido de este portafolio.',
+		subtitle: 'Hecho por mí. Responde solo con lo que hay en esta web.',
 		greeting:
 			'¡Hola! Soy el asistente de Angel. Puedo responderte sobre su experiencia, sus proyectos y su stack. ¿Qué necesitas saber?',
 		suggestions: [
@@ -365,7 +365,7 @@ export const es = {
 			'He alcanzado mi límite de consultas por hoy. Escríbele directamente desde la sección de contacto.',
 		preview:
 			'Todavía estoy en construcción: mi motor de respuestas aún no está conectado. Mientras tanto puedes escribirle directamente desde la sección de contacto.',
-		disclaimer: 'Respuestas generadas por IA a partir del contenido de esta web.',
+		disclaimer: 'Respuestas generadas por IA.',
 	},
 	footer: {
 		rights: '© 2026 Angel Hincho — Arequipa, Perú',
