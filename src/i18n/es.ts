@@ -344,6 +344,26 @@ export const es = {
 		home: 'Volver al inicio',
 		project: 'Ver mis proyectos',
 	},
+	chat: {
+		open: 'Preguntar sobre mi perfil',
+		close: 'Cerrar el chat',
+		title: 'Pregúntame',
+		subtitle: 'Respondo solo con lo que hay en este portafolio.',
+		greeting:
+			'¡Hola! Puedo contarte sobre la experiencia, los proyectos o el stack de Angel. ¿Qué quieres saber?',
+		suggestions: [
+			'¿Qué experiencia tiene con AWS?',
+			'Cuéntame sobre Spark Match',
+			'¿En qué países ha trabajado?',
+		],
+		placeholder: 'Escribe tu pregunta…',
+		send: 'Enviar',
+		thinking: 'Pensando…',
+		error: 'Algo falló al responder. Vuelve a intentarlo en un momento.',
+		exhausted:
+			'He alcanzado mi límite de consultas por hoy. Escríbele directamente desde la sección de contacto.',
+		disclaimer: 'Respuestas generadas por IA a partir del contenido de esta web.',
+	},
 	footer: {
 		rights: '© 2026 Angel Hincho — Arequipa, Perú',
 		madeWith: 'Hecho con',

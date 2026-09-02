@@ -3,6 +3,7 @@ import '@fontsource-variable/inter';
 import '@fontsource-variable/jetbrains-mono';
 import '../styles/global.css';
 import { translations, getLang } from '../i18n';
+import ChatWidget from '../components/ChatWidget.astro';
 
 interface Props {
 	title?: string;
@@ -94,5 +95,6 @@ const jsonLd = JSON.stringify({
 	<body>
 		<a class="skip-link" href="#main">{t.nav.skipToContent}</a>
 		<slot />
+		<ChatWidget />
 	</body>
 </html>
