@@ -233,3 +233,35 @@ One consequence left alone deliberately: the per-visitor cap still counts a
 question that was answered from cache, even though such an answer costs no
 quota. Refunding it would mean unwinding a row already written, and twelve an
 hour is generous enough that nobody will meet the edge.
+
+## Asking two models at once
+
+Added 2 September 2026. Measuring the endpoint again a few hours after it went
+live gave a mean of 8.27s and a median of 11.84s across eight fresh questions,
+against the two to five seconds seen earlier. The logs named the cause without
+ambiguity: `gateway stalled on google-ai-studio/gemini-3.1-flash-lite`. Those
+eleven-second answers were ten seconds of deadline spent on a stalled model
+followed by a second model answering in one.
+
+Shortening the deadline looked like the fix and was not. Measured alone that
+afternoon, `gemini-3.1-flash-lite` failed three requests in five and
+`gemini-3.5-flash-lite` two in five, and among the successes were answers at
+6.47s and 9.23s. Any deadline short enough to help the stalls would have thrown
+those away.
+
+So the second model is now started **alongside** the first rather than instead
+of it. Four seconds in, if nothing has come back, the next model on the list
+joins the first, and whichever answers first wins; the rest are cancelled. Over
+eight fresh questions the mean fell from 8.27s to 3.78s and the worst case from
+13.04s to 5.77s.
+
+The spare call is only made when someone is already waiting, which matters on a
+tier that allows five requests a minute. That limit did show up during testing —
+a batch fired every five seconds failed twice — but at any pace a portfolio will
+ever see, four questions in a row all succeeded and only one of them reached far
+enough to start the second model.
+
+One thing the first version got wrong: cancelling the losing model logged as
+`gateway stalled`, which is exactly what a real stall logs. A flag now
+distinguishes a deliberate cancellation from a provider that failed, because a
+log that cries wolf is worse than no log.

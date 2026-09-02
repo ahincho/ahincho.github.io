@@ -25,9 +25,14 @@ const WINDOW_SECONDS = 60 * 60;
 const PER_WINDOW = 12;
 const GLOBAL_PER_WINDOW = 90;
 const CORPUS_TTL_MS = 10 * 60 * 1000;
-// Two of these back to back is already a long wait in a chat bubble, so the
-// deadline is what bounds the worst case, not the provider's patience.
-const UPSTREAM_TIMEOUT_MS = 10_000;
+// A hard stop per attempt, not the thing that paces the fallback: with the two
+// running alongside each other, a long deadline no longer costs the reader
+// anything and a legitimate nine-second answer is not thrown away.
+const UPSTREAM_TIMEOUT_MS = 15_000;
+// How long the first model gets alone before the next one joins it. Measured
+// good answers land between 1.4s and 9.2s, so this sits under the median and
+// above the fast path: most requests never make the second call at all.
+const HEDGE_AFTER_MS = 4_000;
 // The cache key is a hash of the whole request body, and the body carries the
 // corpus, so publishing the site invalidates every entry by itself. That makes
 // a long life safe, and a long life is what a portfolio needs: its readers are
@@ -180,6 +185,115 @@ async function* deltas(upstream: Response): AsyncGenerator<string> {
 	}
 }
 
+/** The first attempt that produced an answer, or null once all of them failed. */
+function firstAnswer(attempts: Promise<Response | null>[]): Promise<Response | null> {
+	return new Promise((resolve) => {
+		let left = attempts.length;
+		let settled = false;
+		for (const attempt of attempts) {
+			void attempt.then((response) => {
+				left -= 1;
+				if (settled) return;
+				if (response) {
+					settled = true;
+					resolve(response);
+				} else if (left === 0) {
+					settled = true;
+					resolve(null);
+				}
+			});
+		}
+	});
+}
+
+/**
+ * Both free-tier models stall often enough that waiting a whole deadline out
+ * before trying the next one is what the reader actually feels: a stall used to
+ * cost ten seconds before the second model was even asked.
+ *
+ * So the models on the list are started in turn rather than in sequence. The
+ * second joins the first if the first is late, and whichever answers first
+ * wins. The spare call only ever happens when someone is already waiting.
+ */
+async function hedged(env: Env, messages: unknown[]): Promise<Response | null> {
+	const models = env.MODEL.split(',')
+		.map((name) => name.trim())
+		.filter(Boolean);
+	const running = new Set<AbortController>();
+	let answered = false;
+	// Set once someone has won, so cancelling the others is not logged as though
+	// the provider had failed: from inside the catch the two look identical.
+	let decided = false;
+
+	const ask = async (model: string): Promise<Response | null> => {
+		const controller = new AbortController();
+		running.add(controller);
+		const deadline = setTimeout(() => controller.abort(), UPSTREAM_TIMEOUT_MS);
+		try {
+			const response = await fetch(
+				`https://gateway.ai.cloudflare.com/v1/${env.ACCOUNT_ID}/${env.GATEWAY_ID}/compat/chat/completions`,
+				{
+					method: 'POST',
+					headers: {
+						'cf-aig-authorization': `Bearer ${env.CF_AIG_TOKEN}`,
+						'cf-aig-cache-ttl': String(CACHE_TTL_SECONDS),
+						Authorization: `Bearer ${env.GEMINI_API_KEY}`,
+						'Content-Type': 'application/json',
+					},
+					body: JSON.stringify({
+						model,
+						temperature: 0.2,
+						// Gemini 3 models always reason and cannot be told not to, and the
+						// budget below is shared between thinking and the answer, so a tight
+						// cap spends itself before the first word. Keep the effort low and
+						// leave headroom; brevity is the prompt's job, not the cap's.
+						reasoning_effort: env.REASONING,
+						max_tokens: 1600,
+						stream: true,
+						messages,
+					}),
+					signal: controller.signal,
+				},
+			);
+			if (response.ok) {
+				answered = true;
+				// Its body is about to be read, so this one must not be aborted below.
+				running.delete(controller);
+				// HIT means the answer never reached the provider, which is the whole
+				// point: it costs no quota and arrives without the model thinking.
+				const cache = response.headers.get('cf-aig-cache-status') ?? 'unknown';
+				console.log(`${model} answered, cache ${cache}`);
+				return response;
+			}
+			// The reader gets nothing actionable, so the reason belongs in the logs:
+			// a wrong model name and a spent quota look identical from outside.
+			console.error(
+				`gateway ${response.status} on ${model}: ${(await response.text()).slice(0, 300)}`,
+			);
+			return null;
+		} catch (cause) {
+			if (!decided) console.error(`gateway stalled on ${model}: ${cause}`);
+			return null;
+		} finally {
+			clearTimeout(deadline);
+		}
+	};
+
+	const attempts = models.map((model, position) =>
+		position === 0
+			? ask(model)
+			: new Promise<Response | null>((resolve) => {
+					setTimeout(() => resolve(answered ? null : ask(model)), HEDGE_AFTER_MS * position);
+				}),
+	);
+
+	const winner = await firstAnswer(attempts);
+	decided = true;
+	// Nothing will read the losers, and holding them open helps no one.
+	for (const controller of running) controller.abort();
+	return winner;
+}
+
 export default {
 	async fetch(request: Request, env: Env): Promise<Response> {
 		const headers = cors(request, env);
@@ -239,75 +353,8 @@ export default {
 			{ role: 'user', content: question },
 		];
 
-		// MODEL is a preference order, not a single name. Free tiers are thin and
-		// the newest model is the most contended, so a spent minute or an overloaded
-		// model becomes a second attempt elsewhere instead of an error bubble.
-		let upstream: Response | undefined;
-		for (const model of env.MODEL.split(',')
-			.map((name) => name.trim())
-			.filter(Boolean)) {
-			upstream = undefined;
-			// The deadline covers reaching the model, not the answer it then writes:
-			// once the headers are in, a fallback is no longer possible anyway, and
-			// cutting a stream that is already flowing would only lose good text.
-			const abort = new AbortController();
-			const deadline = setTimeout(() => abort.abort(), UPSTREAM_TIMEOUT_MS);
-			try {
-				upstream = await fetch(
-					`https://gateway.ai.cloudflare.com/v1/${env.ACCOUNT_ID}/${env.GATEWAY_ID}/compat/chat/completions`,
-					{
-						method: 'POST',
-						headers: {
-							'cf-aig-authorization': `Bearer ${env.CF_AIG_TOKEN}`,
-							'cf-aig-cache-ttl': String(CACHE_TTL_SECONDS),
-							Authorization: `Bearer ${env.GEMINI_API_KEY}`,
-							'Content-Type': 'application/json',
-						},
-						body: JSON.stringify({
-							model,
-							temperature: 0.2,
-							// Gemini 3 models always reason and cannot be told not to, and the
-							// budget below is shared between thinking and the answer, so a tight
-							// cap spends itself before the first word. Keep the effort low and
-							// leave headroom; brevity is the prompt's job, not the cap's.
-							reasoning_effort: env.REASONING,
-							max_tokens: 1600,
-							stream: true,
-							messages,
-						}),
-						signal: abort.signal,
-					},
-				);
-			} catch (cause) {
-				// A model that keeps someone waiting has already failed them, so the
-				// deadline is short and the next one on the list gets the turn.
-				console.error(`gateway stalled on ${model}: ${cause}`);
-				continue;
-			} finally {
-				clearTimeout(deadline);
-			}
-			if (upstream.ok) {
-				// HIT means the answer never reached the provider, which is the whole
-				// point: it costs no quota and arrives without the model thinking.
-				console.log(`cache ${upstream.headers.get('cf-aig-cache-status') ?? 'unknown'}`);
-				break;
-			}
-
-			// The reader gets nothing actionable, so the reason belongs in the logs:
-			// a wrong model name and a spent quota look identical from outside.
-			console.error(
-				`gateway ${upstream.status} on ${model}: ${(await upstream.text()).slice(0, 300)}`,
-			);
-
-			// Only a busy provider is worth asking again; a malformed request would
-			// be malformed for every model on the list.
-			if (upstream.status !== 429 && upstream.status !== 503) break;
-		}
-
-		if (!upstream || !upstream.ok) {
-			const status = upstream?.status === 429 ? 429 : 502;
-			return json({ error: status === 429 ? 'rate_limited' : 'upstream' }, status, corsHeaders);
-		}
+		const upstream = await hedged(env, messages);
+		if (!upstream) return json({ error: 'upstream' }, 502, corsHeaders);
 
 		// A page cached before this endpoint learned to stream is still out there
 		// expecting one JSON object, so the caller says which shape it wants and
