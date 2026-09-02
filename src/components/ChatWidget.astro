@@ -124,11 +124,31 @@ const endpoint = import.meta.env.PUBLIC_CHAT_URL ?? '';
 		// grounds the answer, and a growing transcript would only cost quota.
 		const history: { role: 'user' | 'assistant'; content: string }[] = [];
 
+		const SEEN = 'chat-opened';
+
+		// The launcher draws attention until it has been opened once. Someone who
+		// has already used it should not be nagged on every visit, so the fact is
+		// remembered — and a browser that refuses storage simply keeps the pulse.
+		try {
+			if (!localStorage.getItem(SEEN)) root.dataset.idle = 'true';
+		} catch {
+			root.dataset.idle = 'true';
+		}
+
 		function open(next: boolean) {
 			panel.hidden = !next;
 			launcher.setAttribute('aria-expanded', String(next));
-			if (next) input.focus();
-			else launcher.focus();
+			if (next) {
+				delete root.dataset.idle;
+				try {
+					localStorage.setItem(SEEN, '1');
+				} catch {
+					/* private browsing; the pulse just stays */
+				}
+				input.focus();
+			} else {
+				launcher.focus();
+			}
 		}
 
 		function bubble(text: string, who: 'user' | 'bot' | 'error') {
@@ -214,6 +234,7 @@ const endpoint = import.meta.env.PUBLIC_CHAT_URL ?? '';
 	}
 
 	.launcher {
+		position: relative;
 		display: inline-flex;
 		align-items: center;
 		gap: 0.5rem;
@@ -232,6 +253,34 @@ const endpoint = import.meta.env.PUBLIC_CHAT_URL ?? '';
 
 	.launcher:hover {
 		transform: translateY(-2px);
+	}
+
+	/* A ring that breathes out of the launcher until the panel is first opened. */
+	.launcher::after {
+		content: '';
+		position: absolute;
+		inset: -3px;
+		border-radius: 999px;
+		border: 2px solid var(--accent);
+		opacity: 0;
+		pointer-events: none;
+	}
+
+	.chat[data-idle] .launcher::after {
+		animation: chat-pulse 2.8s ease-out infinite;
+	}
+
+	@keyframes chat-pulse {
+		0% {
+			opacity: 0.6;
+			transform: scale(1);
+		}
+
+		70%,
+		100% {
+			opacity: 0;
+			transform: scale(1.32);
+		}
 	}
 
 	.panel {
