@@ -1,16 +1,15 @@
 import { DurableObject } from 'cloudflare:workers';
+import { cors, fingerprint, isBot, keys, route, today } from './counters';
 
 export interface Env {
 	COUNTERS: DurableObjectNamespace<Counters>;
 	ALLOWED_ORIGINS: string;
 	COUNTER_KEYS: string;
+	REACTION_KEYS: string;
 	HASH_SALT: string;
 }
 
 const VISITOR_TTL_SECONDS = 60 * 60 * 24;
-const BOT_PATTERN =
-	/bot|crawler|spider|slurp|facebookexternalhit|headless|preview|monitor|curl|wget/i;
-const ROUTE = /^\/v1\/counters(?:\/([a-z0-9-]{1,64}))?$/;
 
 export class Counters extends DurableObject<Env> {
 	constructor(ctx: DurableObjectState, env: Env) {
@@ -26,6 +25,14 @@ export class Counters extends DurableObject<Env> {
 				expires INTEGER NOT NULL,
 				PRIMARY KEY (token, key)
 			);
+			-- One row per reaction rather than a running total: the count is a
+			-- COUNT(*) over these rows, so taking a like back cannot leave the
+			-- number and the rows disagreeing.
+			CREATE TABLE IF NOT EXISTS reactions (
+				key   TEXT NOT NULL,
+				token TEXT NOT NULL,
+				PRIMARY KEY (key, token)
+			);
 		`);
 	}
 
@@ -36,14 +43,14 @@ export class Counters extends DurableObject<Env> {
 		return row?.value ?? 0;
 	}
 
-	readAll(keys: string[]): Record<string, number> {
+	readAll(wanted: string[]): Record<string, number> {
 		const stored = new Map(
 			this.ctx.storage.sql
 				.exec<{ key: string; value: number }>('SELECT key, value FROM counters')
 				.toArray()
 				.map((row) => [row.key, row.value] as const),
 		);
-		return Object.fromEntries(keys.map((key) => [key, stored.get(key) ?? 0]));
+		return Object.fromEntries(wanted.map((key) => [key, stored.get(key) ?? 0]));
 	}
 
 	increment(key: string, token: string): { value: number; counted: boolean } {
@@ -78,37 +85,52 @@ export class Counters extends DurableObject<Env> {
 			.toArray()[0];
 		return { value: row.value, counted: true };
 	}
-}
 
-function resolveCors(request: Request, env: Env): Record<string, string> | 'forbidden' | null {
-	const origin = request.headers.get('Origin');
-	if (!origin) return null;
-	const allowed = env.ALLOWED_ORIGINS.split(',').map((value) => value.trim());
-	if (!allowed.includes(origin)) return 'forbidden';
-	return {
-		'Access-Control-Allow-Origin': origin,
-		'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
-		'Access-Control-Max-Age': '86400',
-		Vary: 'Origin',
-	};
-}
+	reactionCount(key: string): number {
+		return (
+			this.ctx.storage.sql
+				.exec<{ total: number }>('SELECT COUNT(*) AS total FROM reactions WHERE key = ?', key)
+				.toArray()[0]?.total ?? 0
+		);
+	}
 
-/**
- * Salted hash of IP + user agent + day. The salt makes it impossible to check
- * whether a given IP visited, so no personal data is ever stored.
- */
-async function visitorToken(request: Request, salt: string): Promise<string> {
-	const ip = request.headers.get('CF-Connecting-IP') ?? 'unknown';
-	const userAgent = request.headers.get('User-Agent') ?? 'unknown';
-	const day = new Date().toISOString().slice(0, 10);
-	const digest = await crypto.subtle.digest(
-		'SHA-256',
-		new TextEncoder().encode(`${salt}:${ip}:${userAgent}:${day}`),
-	);
-	return [...new Uint8Array(digest)]
-		.map((byte) => byte.toString(16).padStart(2, '0'))
-		.join('')
-		.slice(0, 32);
+	/**
+	 * Every count plus the ones this caller gave. The page needs both: a button
+	 * that does not know it is already pressed would take the like back on the
+	 * next click, which is the opposite of what the visitor asked for.
+	 */
+	reactions(wanted: string[], token: string): { values: Record<string, number>; mine: string[] } {
+		const counts = new Map(
+			this.ctx.storage.sql
+				.exec<{
+					key: string;
+					total: number;
+				}>('SELECT key, COUNT(*) AS total FROM reactions GROUP BY key')
+				.toArray()
+				.map((row) => [row.key, row.total] as const),
+		);
+		const mine = this.ctx.storage.sql
+			.exec<{ key: string }>('SELECT key FROM reactions WHERE token = ?', token)
+			.toArray()
+			.map((row) => row.key);
+		return {
+			values: Object.fromEntries(wanted.map((key) => [key, counts.get(key) ?? 0])),
+			mine: mine.filter((key) => wanted.includes(key)),
+		};
+	}
+
+	toggle(key: string, token: string): { value: number; mine: boolean } {
+		const had =
+			this.ctx.storage.sql
+				.exec('SELECT 1 FROM reactions WHERE key = ? AND token = ?', key, token)
+				.toArray().length > 0;
+		if (had) {
+			this.ctx.storage.sql.exec('DELETE FROM reactions WHERE key = ? AND token = ?', key, token);
+		} else {
+			this.ctx.storage.sql.exec('INSERT INTO reactions (key, token) VALUES (?, ?)', key, token);
+		}
+		return { value: this.reactionCount(key), mine: !had };
+	}
 }
 
 function json(body: unknown, status: number, headers: Record<string, string>): Response {
@@ -120,44 +142,67 @@ function json(body: unknown, status: number, headers: Record<string, string>): R
 
 export default {
 	async fetch(request: Request, env: Env): Promise<Response> {
-		const cors = resolveCors(request, env);
-		if (cors === 'forbidden') {
+		const allowed = cors(request.headers.get('Origin'), env.ALLOWED_ORIGINS);
+		if (allowed === 'forbidden') {
 			return new Response('Forbidden origin', { status: 403 });
 		}
-		const headers = cors ?? {};
+		const headers = allowed ?? {};
 
 		if (request.method === 'OPTIONS') {
 			return new Response(null, { status: 204, headers });
 		}
 
-		const match = ROUTE.exec(new URL(request.url).pathname);
-		if (!match) {
+		const target = route(new URL(request.url).pathname);
+		if (!target) {
 			return json({ error: 'not_found' }, 404, headers);
 		}
+		if (request.method !== 'GET' && request.method !== 'POST') {
+			return json({ error: 'method_not_allowed' }, 405, headers);
+		}
 
-		const key = match[1];
-		const allowedKeys = env.COUNTER_KEYS.split(',').map((value) => value.trim());
-		if (key && !allowedKeys.includes(key)) {
+		const { family, key } = target;
+		const wanted = keys(family === 'counters' ? env.COUNTER_KEYS : env.REACTION_KEYS);
+		if (key && !wanted.includes(key)) {
 			return json({ error: 'unknown_key' }, 404, headers);
+		}
+		if (request.method === 'POST' && !key) {
+			return json({ error: 'method_not_allowed' }, 405, headers);
 		}
 
 		const stub = env.COUNTERS.get(env.COUNTERS.idFromName('global'));
+		const agent = request.headers.get('User-Agent');
+		const address = request.headers.get('CF-Connecting-IP') ?? 'unknown';
+		// A visit is unique per day, so its token carries the date and expires on
+		// its own at midnight. A reaction has to outlive the night.
+		const who = () =>
+			family === 'counters'
+				? fingerprint(env.HASH_SALT, address, agent ?? 'unknown', today())
+				: fingerprint(env.HASH_SALT, address, agent ?? 'unknown');
+
+		if (family === 'reactions') {
+			if (request.method === 'GET') {
+				return key
+					? json({ key, value: await stub.reactionCount(key) }, 200, headers)
+					: json(await stub.reactions(wanted, await who()), 200, headers);
+			}
+			// Nothing to gain from a crawler flipping likes, and it would only
+			// inflate a number nobody chose.
+			if (isBot(agent)) {
+				return json({ key, value: await stub.reactionCount(key!), mine: false }, 200, headers);
+			}
+			return json({ key, ...(await stub.toggle(key!, await who())) }, 200, headers);
+		}
 
 		if (request.method === 'GET') {
 			return key
 				? json({ key, value: await stub.read(key) }, 200, headers)
-				: json(await stub.readAll(allowedKeys), 200, headers);
+				: json(await stub.readAll(wanted), 200, headers);
 		}
 
-		if (request.method === 'POST' && key) {
-			if (BOT_PATTERN.test(request.headers.get('User-Agent') ?? '')) {
-				return json({ key, value: await stub.read(key), counted: false }, 200, headers);
-			}
-			const token = await visitorToken(request, env.HASH_SALT);
-			const { value, counted } = await stub.increment(key, token);
-			return json({ key, value, counted }, 200, headers);
+		if (isBot(agent)) {
+			return json({ key, value: await stub.read(key!), counted: false }, 200, headers);
 		}
-
-		return json({ error: 'method_not_allowed' }, 405, headers);
+		const { value, counted } = await stub.increment(key!, await who());
+		return json({ key, value, counted }, 200, headers);
 	},
 } satisfies ExportedHandler<Env>;

@@ -6,6 +6,12 @@
       "runtimeExecutable": "pnpm",
       "runtimeArgs": ["dev"],
       "port": 4321
+    },
+    {
+      "name": "counter-worker",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": ["--dir", "worker", "dev", "--port", "8787", "--ip", "127.0.0.1"],
+      "port": 8787
     }
   ]
 }
