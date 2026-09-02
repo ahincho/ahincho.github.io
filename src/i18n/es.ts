@@ -366,6 +366,20 @@ export const es = {
 		preview:
 			'Todavía estoy en construcción: mi motor de respuestas aún no está conectado. Mientras tanto puedes escribirle directamente desde la sección de contacto.',
 		disclaimer: 'Respuestas generadas por IA.',
+		status: {
+			online: 'En línea',
+			offline: 'Sin conectar',
+			trouble: 'Con problemas',
+		},
+		privacy: {
+			summary: 'Privacidad',
+			body: [
+				'Lo que escribes aquí y lo que responde el asistente quedan registrados en Cloudflare AI Gateway. Los reviso cada semana para detectar anomalías y mejorar el servicio, y los más antiguos se borran automáticamente.',
+				'El modelo lo provee Google en su capa gratuita, y eso implica que Google usa lo que escribes para mejorar sus productos y que sus revisores humanos pueden leerlo. No escribas datos personales, confidenciales ni de terceros.',
+				'No guardo tu nombre ni se crea ninguna cuenta. Para limitar el abuso uso un código derivado de tu dirección y tu navegador con una clave secreta, del que no se puede volver a la dirección original.',
+				'Tratamiento conforme a la Ley N.º 29733 de Protección de Datos Personales. Para acceder, rectificar, cancelar u oponerte, escribe a ahincho@unsa.edu.pe.',
+			],
+		},
 	},
 	footer: {
 		rights: '© 2026 Angel Hincho — Arequipa, Perú',

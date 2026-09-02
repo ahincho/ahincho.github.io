@@ -26,6 +26,8 @@ const READER = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strok
 		error: t.error,
 		exhausted: t.exhausted,
 		preview: t.preview,
+		online: t.status.online,
+		trouble: t.status.trouble,
 	})}
 	data-avatar={AVATAR}
 	data-reader={READER}
@@ -55,6 +57,10 @@ const READER = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strok
 			<div>
 				<p class="panel-title">{t.title}</p>
 				<p class="panel-sub">{t.subtitle}</p>
+				<p class="status" data-state={endpoint ? 'online' : 'offline'}>
+					<span class="dot" aria-hidden="true"></span>
+					<span class="status-label">{endpoint ? t.status.online : t.status.offline}</span>
+				</p>
 			</div>
 			<button class="close" type="button" aria-label={t.close}>
 				<svg
@@ -118,7 +124,13 @@ const READER = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strok
 				</svg>
 			</button>
 		</form>
-		<p class="disclaimer">{t.disclaimer}</p>
+		<details class="privacy">
+			<summary>
+				{t.disclaimer}{' '}
+				<span class="more">{t.privacy.summary}</span>
+			</summary>
+			{t.privacy.body.map((line) => <p>{line}</p>)}
+		</details>
 	</section>
 </div>
 
@@ -134,6 +146,16 @@ const READER = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strok
 		const form = root.querySelector<HTMLFormElement>('.composer')!;
 		const input = root.querySelector<HTMLInputElement>('#chat-input')!;
 		const strings = JSON.parse(root.dataset.strings ?? '{}');
+		const status = root.querySelector<HTMLElement>('.status')!;
+		const statusLabel = status.querySelector<HTMLElement>('.status-label')!;
+
+		// The header claims the assistant is up, so a failed turn has to take that
+		// claim back rather than leave a green dot over an error bubble.
+		function setStatus(state: 'online' | 'trouble') {
+			if (!endpoint) return;
+			status.dataset.state = state;
+			statusLabel.textContent = state === 'online' ? strings.online : strings.trouble;
+		}
 
 		// Only the last few turns travel with each question: the corpus is what
 		// grounds the answer, and a growing transcript would only cost quota.
@@ -243,12 +265,14 @@ const READER = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strok
 				const payload: { answer: string } = await response.json();
 				pending.classList.remove('pending');
 				pending.textContent = payload.answer;
+				setStatus('online');
 				history.push({ role: 'user', content: question });
 				history.push({ role: 'assistant', content: payload.answer });
 			} catch {
 				pending.classList.remove('pending');
 				pending.className = 'msg error';
 				pending.textContent = strings.error;
+				setStatus('trouble');
 			} finally {
 				input.disabled = false;
 				input.focus();
@@ -397,6 +421,30 @@ const READER = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strok
 		color: var(--text-faint);
 		font-size: 0.76rem;
 		margin-top: 0.15rem;
+	}
+
+	.status {
+		display: flex;
+		align-items: center;
+		gap: 0.35rem;
+		margin-top: 0.3rem;
+		font-family: var(--font-mono);
+		font-size: 0.68rem;
+		color: var(--text-faint);
+	}
+
+	/* Only "online" earns a colour. The error bubble is deliberately neutral
+	 * too, so a failing turn reads as a state, not an alarm. */
+	.dot {
+		width: 0.4rem;
+		height: 0.4rem;
+		border-radius: 50%;
+		background: var(--text-faint);
+	}
+
+	.status[data-state='online'] .dot {
+		background: var(--accent);
+		box-shadow: 0 0 0 0.15rem var(--accent-dim);
 	}
 
 	.close {
@@ -552,11 +600,40 @@ const READER = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strok
 		cursor: pointer;
 	}
 
-	.disclaimer {
+	.privacy {
 		font-size: 0.68rem;
 		color: var(--text-faint);
-		text-align: center;
 		padding: 0 0.8rem 0.6rem;
+	}
+
+	.privacy summary {
+		cursor: pointer;
+		text-align: center;
+		list-style: none;
+	}
+
+	.privacy summary::-webkit-details-marker {
+		display: none;
+	}
+
+	.privacy .more {
+		text-decoration: underline;
+		text-underline-offset: 0.2em;
+	}
+
+	.privacy summary:hover .more {
+		color: var(--text);
+	}
+
+	/* The note is long enough to need its own scroll on a short screen. */
+	.privacy p {
+		margin-top: 0.5rem;
+		line-height: 1.55;
+	}
+
+	.privacy[open] {
+		max-height: 14rem;
+		overflow-y: auto;
 	}
 
 	.sr-only {
