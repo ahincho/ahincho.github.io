@@ -1,5 +1,23 @@
 # ahincho-portfolio
 
+## 0.4.0
+
+### Minor Changes
+
+- 573aaed: Connect the assistant to a live model. The chat endpoint runs on Cloudflare
+  Workers, reads the corpus the site publishes at build time, and answers in the
+  reader's language. It caps what one visitor and what everyone together may ask
+  in an hour, keeps its answers inside the portfolio's own content, and strips any
+  link or address that is not Angel's before the answer reaches the page.
+
+### Patch Changes
+
+- 5bf04e6: Tell readers what happens to what they type. The chat panel carries a privacy
+  note: the conversation is logged and reviewed weekly, the model runs on Google's
+  free tier where human reviewers may read it, and nobody should write personal
+  data there. The header also shows whether the assistant is actually reachable,
+  and says so when a turn fails.
+
 ## 0.3.4
 
 ### Patch Changes
