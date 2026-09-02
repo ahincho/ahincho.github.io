@@ -8,6 +8,10 @@ const t = translations[lang].chat;
 // under construction, which is honest; an unanswered request or a raw error is
 // not. Set PUBLIC_CHAT_URL to connect it.
 const endpoint = import.meta.env.PUBLIC_CHAT_URL ?? '';
+
+// Shared by the header and every answer, and handed to the client script so
+// messages created at runtime carry the same mark.
+const AVATAR = `<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2.5 13.9 8l5.6 1.9-5.6 1.9L12 17.4 10.1 11.8 4.5 9.9 10.1 8 12 2.5Z" /><path d="M18.5 14.5l.9 2.6 2.6.9-2.6.9-.9 2.6-.9-2.6-2.6-.9 2.6-.9.9-2.6Z" /></svg>`;
 ---
 
 <div
@@ -20,6 +24,7 @@ const endpoint = import.meta.env.PUBLIC_CHAT_URL ?? '';
 		exhausted: t.exhausted,
 		preview: t.preview,
 	})}
+	data-avatar={AVATAR}
 >
 	<button class="launcher" type="button" aria-expanded="false" aria-controls="chat-panel">
 		<svg
@@ -42,6 +47,7 @@ const endpoint = import.meta.env.PUBLIC_CHAT_URL ?? '';
 
 	<section id="chat-panel" class="panel" hidden aria-label={t.title}>
 		<header class="panel-head">
+			<span class="avatar avatar-lg" aria-hidden="true" set:html={AVATAR} />
 			<div>
 				<p class="panel-title">{t.title}</p>
 				<p class="panel-sub">{t.subtitle}</p>
@@ -63,7 +69,12 @@ const endpoint = import.meta.env.PUBLIC_CHAT_URL ?? '';
 		</header>
 
 		<div class="log" role="log" aria-live="polite">
-			<p class="msg bot">{t.greeting}</p>
+			<div class="row bot">
+				<span class="avatar" aria-hidden="true" set:html={AVATAR} />
+				<div class="stack">
+					<p class="msg bot">{t.greeting}</p>
+				</div>
+			</div>
 			<div class="suggestions">
 				{
 					t.suggestions.map((s) => (
@@ -151,11 +162,47 @@ const endpoint = import.meta.env.PUBLIC_CHAT_URL ?? '';
 			}
 		}
 
+		const avatar = root.dataset.avatar ?? '';
+		const clock = new Intl.DateTimeFormat(lang, { hour: '2-digit', minute: '2-digit' });
+
+		/** Stamps a message with the time it appeared. */
+		function stamp(parent: Element) {
+			const time = document.createElement('time');
+			const now = new Date();
+			time.className = 'stamp';
+			time.dateTime = now.toISOString();
+			time.textContent = clock.format(now);
+			parent.append(time);
+		}
+
+		// The greeting is written in the template, so it has no time of its own
+		// until the page is opened.
+		stamp(root.querySelector('.row.bot .stack')!);
+
+		/** Builds the row and returns the bubble, which is what callers rewrite. */
 		function bubble(text: string, who: 'user' | 'bot' | 'error') {
+			const row = document.createElement('div');
+			row.className = `row ${who === 'user' ? 'user' : 'bot'}`;
+
+			if (who !== 'user') {
+				const mark = document.createElement('span');
+				mark.className = 'avatar';
+				mark.setAttribute('aria-hidden', 'true');
+				mark.innerHTML = avatar;
+				row.append(mark);
+			}
+
+			const stack = document.createElement('div');
+			stack.className = 'stack';
+
 			const p = document.createElement('p');
 			p.className = `msg ${who}`;
 			p.textContent = text;
-			log.append(p);
+
+			stack.append(p);
+			stamp(stack);
+			row.append(stack);
+			log.append(row);
 			log.scrollTop = log.scrollHeight;
 			return p;
 		}
@@ -284,7 +331,7 @@ const endpoint = import.meta.env.PUBLIC_CHAT_URL ?? '';
 	}
 
 	.panel {
-		width: min(23rem, calc(100vw - 2.4rem));
+		width: min(27rem, calc(100vw - 1.6rem));
 		height: min(30rem, calc(100vh - 8rem));
 		display: flex;
 		flex-direction: column;
@@ -298,10 +345,41 @@ const endpoint = import.meta.env.PUBLIC_CHAT_URL ?? '';
 	.panel-head {
 		display: flex;
 		align-items: flex-start;
-		justify-content: space-between;
-		gap: 0.8rem;
+		gap: 0.7rem;
 		padding: 0.9rem 1rem;
 		border-bottom: 1px solid var(--border);
+	}
+
+	.panel-head div {
+		flex: 1;
+		min-width: 0;
+	}
+
+	.avatar {
+		flex-shrink: 0;
+		display: grid;
+		place-items: center;
+		width: 1.6rem;
+		height: 1.6rem;
+		border-radius: 50%;
+		background: var(--accent-dim);
+		border: 1px solid var(--accent-border);
+		color: var(--accent);
+	}
+
+	.avatar :global(svg) {
+		width: 0.95rem;
+		height: 0.95rem;
+	}
+
+	.avatar-lg {
+		width: 2.2rem;
+		height: 2.2rem;
+	}
+
+	.avatar-lg :global(svg) {
+		width: 1.25rem;
+		height: 1.25rem;
 	}
 
 	.panel-title {
@@ -333,7 +411,37 @@ const endpoint = import.meta.env.PUBLIC_CHAT_URL ?? '';
 		padding: 1rem;
 		display: flex;
 		flex-direction: column;
-		gap: 0.6rem;
+		gap: 0.85rem;
+	}
+
+	.log :global(.row) {
+		display: flex;
+		align-items: flex-start;
+		gap: 0.5rem;
+		max-width: 100%;
+	}
+
+	.log :global(.row.user) {
+		justify-content: flex-end;
+	}
+
+	.log :global(.stack) {
+		display: flex;
+		flex-direction: column;
+		min-width: 0;
+		max-width: 100%;
+	}
+
+	.log :global(.row.user .stack) {
+		align-items: flex-end;
+	}
+
+	.log :global(.stamp) {
+		font-family: var(--font-mono);
+		font-size: 0.64rem;
+		color: var(--text-faint);
+		margin-top: 0.25rem;
+		padding: 0 0.2rem;
 	}
 
 	/*
@@ -347,8 +455,8 @@ const endpoint = import.meta.env.PUBLIC_CHAT_URL ?? '';
 		font-size: 0.88rem;
 		line-height: 1.55;
 		padding: 0.6rem 0.85rem;
-		max-width: 85%;
 		width: fit-content;
+		max-width: 100%;
 	}
 
 	/* The flat corner marks who is speaking even before the colour registers. */
@@ -357,14 +465,12 @@ const endpoint = import.meta.env.PUBLIC_CHAT_URL ?? '';
 		background: var(--bg-soft);
 		border: 1px solid var(--border);
 		border-radius: 12px 12px 12px 3px;
-		align-self: flex-start;
 	}
 
 	.log :global(.msg.user) {
 		background: var(--accent-dim);
 		border: 1px solid var(--accent-border);
 		border-radius: 12px 12px 3px 12px;
-		align-self: flex-end;
 		color: var(--text);
 	}
 
@@ -378,6 +484,7 @@ const endpoint = import.meta.env.PUBLIC_CHAT_URL ?? '';
 	}
 
 	.suggestions {
+		margin-left: 2.1rem;
 		display: flex;
 		flex-wrap: wrap;
 		gap: 0.35rem;
