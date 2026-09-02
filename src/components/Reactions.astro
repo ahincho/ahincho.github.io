@@ -1,0 +1,147 @@
+---
+import { translations, getLang } from '../i18n';
+
+interface Props {
+	/** One of the REACTION_KEYS the counter Worker accepts. */
+	project: string;
+}
+
+const { project } = Astro.props;
+const t = translations[getLang(Astro.currentLocale)].reactions;
+
+const endpoint = import.meta.env.PUBLIC_COUNTER_URL;
+---
+
+{
+	/*
+	 * Hidden and disabled until the endpoint has said how many likes there are and
+	 * whether this visitor already gave one. A button that does not know it is
+	 * pressed would take the like back on the next click, so it is better to show
+	 * nothing at all than to show it guessing.
+	 */
+	endpoint && (
+		<button class="react" type="button" data-react={project} aria-pressed="false" hidden disabled>
+			<svg
+				width="15"
+				height="15"
+				viewBox="0 0 24 24"
+				fill="none"
+				stroke="currentColor"
+				stroke-width="2"
+				stroke-linecap="round"
+				stroke-linejoin="round"
+				aria-hidden="true"
+			>
+				<path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l8.8 8.7 8.8-8.7a5.5 5.5 0 0 0 0-7.8Z" />
+			</svg>
+			{t.label}
+			<span class="count" data-count hidden />
+		</button>
+	)
+}
+
+<script>
+	const endpoint = import.meta.env.PUBLIC_COUNTER_URL;
+
+	// The query lives inside the check so that a build without the variable
+	// leaves nothing behind at all, not even a script that finds no buttons.
+	if (endpoint) {
+		const buttons = [...document.querySelectorAll<HTMLButtonElement>('[data-react]')];
+		const format = new Intl.NumberFormat(document.documentElement.lang);
+
+		const paint = (button: HTMLButtonElement, value: number, mine: boolean) => {
+			const count = button.querySelector<HTMLElement>('[data-count]');
+			if (count) {
+				count.textContent = format.format(value);
+				// A lone zero on a project reads worse than no number at all.
+				count.hidden = value === 0;
+			}
+			button.setAttribute('aria-pressed', String(mine));
+		};
+
+		const json = (response: Response) =>
+			response.ok ? response.json() : Promise.reject(response.status);
+
+		fetch(`${endpoint}/v1/reactions`)
+			.then(json)
+			.then((payload: { values: Record<string, number>; mine: string[] }) => {
+				for (const button of buttons) {
+					const key = button.dataset.react ?? '';
+					paint(button, payload.values[key] ?? 0, payload.mine.includes(key));
+					button.hidden = false;
+					button.disabled = false;
+				}
+			})
+			.catch(() => {});
+
+		for (const button of buttons) {
+			button.addEventListener('click', () => {
+				button.disabled = true;
+				fetch(`${endpoint}/v1/reactions/${button.dataset.react}`, { method: 'POST' })
+					.then(json)
+					.then((payload: { value: number; mine: boolean }) =>
+						paint(button, payload.value, payload.mine),
+					)
+					.catch(() => {})
+					.finally(() => {
+						button.disabled = false;
+					});
+			});
+		}
+	}
+</script>
+
+<style>
+	.react {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.45rem;
+		/* Matches the height of the .repo pills it stands beside on a case study. */
+		padding: 0.45rem 0.9rem;
+		background: transparent;
+		border: 1px solid var(--border);
+		border-radius: 999px;
+		color: var(--text-muted);
+		font: inherit;
+		font-size: 0.85rem;
+		cursor: pointer;
+		transition:
+			color 0.15s ease,
+			border-color 0.15s ease,
+			background 0.15s ease;
+	}
+
+	.react[hidden] {
+		display: none;
+	}
+
+	.react:hover:not(:disabled) {
+		color: var(--accent);
+		border-color: var(--accent-border);
+	}
+
+	.react[aria-pressed='true'] {
+		color: var(--accent);
+		background: var(--accent-dim);
+		border-color: var(--accent-border);
+	}
+
+	.react[aria-pressed='true'] svg {
+		fill: currentColor;
+	}
+
+	.react:disabled {
+		cursor: default;
+	}
+
+	.count {
+		font-family: var(--font-mono);
+		font-size: 0.78rem;
+		/* Its own line box, so appearing does not nudge the label sideways. */
+		font-variant-numeric: tabular-nums;
+	}
+
+	.count[hidden] {
+		display: none;
+	}
+</style>

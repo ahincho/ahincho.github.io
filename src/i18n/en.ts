@@ -452,8 +452,12 @@ export const en: Translations = {
 			],
 		},
 	},
+	reactions: {
+		label: 'Like',
+	},
 	footer: {
 		rights: '© 2026 Angel Hincho — Arequipa, Peru',
 		madeWith: 'Built with',
+		privacy: 'Visits and reactions are counted without cookies or personal data.',
 	},
 };

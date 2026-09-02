@@ -457,8 +457,12 @@ export const es = {
 			],
 		},
 	},
+	reactions: {
+		label: 'Me gusta',
+	},
 	footer: {
 		rights: '© 2026 Angel Hincho — Arequipa, Perú',
 		madeWith: 'Hecho con',
+		privacy: 'Las visitas y las reacciones se cuentan sin cookies ni datos personales.',
 	},
 };

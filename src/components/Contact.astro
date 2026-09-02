@@ -41,7 +41,7 @@ const t = translations[lang].contact;
 					target="_blank"
 					rel="noopener noreferrer">GitHub</a
 				>
-				<a class="btn btn-ghost" href="/Angel-Hincho-CV.pdf" download>
+				<a class="btn btn-ghost" href="/Angel-Hincho-CV.pdf" download data-cv>
 					<svg
 						width="17"
 						height="17"
@@ -63,6 +63,22 @@ const t = translations[lang].contact;
 		</div>
 	</div>
 </section>
+
+<script>
+	const endpoint = import.meta.env.PUBLIC_COUNTER_URL;
+
+	// Counted, never displayed: how often the CV is taken is worth knowing,
+	// but it is not a number that belongs on the page. keepalive lets the
+	// request outlive the click that starts the download.
+	if (endpoint) {
+		document.querySelector('[data-cv]')?.addEventListener('click', () => {
+			fetch(`${endpoint}/v1/counters/cv-downloads`, {
+				method: 'POST',
+				keepalive: true,
+			}).catch(() => {});
+		});
+	}
+</script>
 
 <style>
 	.box {

@@ -86,20 +86,24 @@ const stackJson = `{
 
 <script>
 	const endpoint = import.meta.env.PUBLIC_COUNTER_URL;
-	const wrapper = document.querySelector<HTMLElement>('.visits');
-	const target = wrapper?.querySelector('[data-visits]');
 
-	if (endpoint && wrapper && target) {
-		fetch(`${endpoint}/v1/counters/site-visits`, { method: 'POST' })
-			.then((response) => (response.ok ? response.json() : Promise.reject(response.status)))
-			.then((payload: { value: number }) => {
-				const formatted = new Intl.NumberFormat(document.documentElement.lang).format(
-					payload.value,
-				);
-				target.textContent = `${formatted} ${wrapper.dataset.label}`;
-				wrapper.hidden = false;
-			})
-			.catch(() => {});
+	// Inside the check, so a build without the variable emits no script at all.
+	if (endpoint) {
+		const wrapper = document.querySelector<HTMLElement>('.visits');
+		const target = wrapper?.querySelector('[data-visits]');
+
+		if (wrapper && target) {
+			fetch(`${endpoint}/v1/counters/site-visits`, { method: 'POST' })
+				.then((response) => (response.ok ? response.json() : Promise.reject(response.status)))
+				.then((payload: { value: number }) => {
+					const formatted = new Intl.NumberFormat(document.documentElement.lang).format(
+						payload.value,
+					);
+					target.textContent = `${formatted} ${wrapper.dataset.label}`;
+					wrapper.hidden = false;
+				})
+				.catch(() => {});
+		}
 	}
 </script>
 
