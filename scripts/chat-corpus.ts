@@ -94,6 +94,7 @@ function document(t: Dictionary, lang: string): string {
 		`## ${t.projects.title}`,
 		projectSection(t.projects.sparkMatch),
 		projectSection(t.projects.nova),
+		projectSection(t.projects.assistant),
 		`## ${t.skills.title}`,
 		...t.skills.groups.map((g) => `- ${g.name}: ${g.items.join(', ')}`),
 		'',
