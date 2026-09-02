@@ -1,5 +1,13 @@
 # ahincho-portfolio
 
+## 0.1.1
+
+### Patch Changes
+
+- 9392afc: Start the Spark Match demo at the walkthrough. The recording is a 14:34 course presentation whose first nine minutes are slides, so anyone who pressed play landed on theory and left before the platform ever appeared. It now opens at 9:35, where the walkthrough begins.
+- 37d0d19: Show the Java mark for JavaFX in the ByteXByte experience, where the tag was rendering with no icon at all. Neither icon set ships a JavaFX logo, and it is Java's UI toolkit, so it borrows the Java mark the same way Amazon Bedrock borrows the AWS one.
+- 18f2ef0: Point the Spark Match demo at the copy on my own channel. The embed pulled from a teammate's account, so the demo could vanish without warning — and since `rel=0` limits suggestions to the video's own channel, the player ended by advertising someone else's videos from inside the portfolio.
+
 ## 0.1.0
 
 ### Minor Changes
