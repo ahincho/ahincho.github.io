@@ -172,3 +172,33 @@ content "to provide, improve, and develop Google products and services", that
 Services". A reader cannot consent to that without being told, so the note says
 it plainly and asks them not to write personal data. Cloudflare's own logging is
 the smaller half of the disclosure.
+
+## Streaming, and what it was worth
+
+Added 2 September 2026. The endpoint streams the answer, and the honest result
+is that on these models it buys less than it sounds like.
+
+Measured in the browser, the answer bubble grew in seven steps — 115, 216, 311,
+427, 576, 594, 601 characters — but the first of those landed at **3.9 seconds**
+and the last at 4.3. The model spends the wait thinking and then writes the
+whole answer in under half a second. `reasoning_effort` barely moves it: over
+three samples each, `low` gave 2.65–3.54s to the first character and `minimal`
+2.57–7.36s, which is the same number with a worse tail.
+
+It was still worth building. Nothing is paid at runtime for it, the gain grows
+with the length of the answer, and the day a model with a shorter time to first
+token becomes reachable the improvement arrives without another change. What it
+is not is the fix for the three-second wait.
+
+The fix for that is probably **AI Gateway's cache**. The four suggested
+questions are asked from an empty history against an identical corpus, so they
+produce a byte-identical prompt every time — the best possible cache key. That
+would make the most-clicked path close to instant, and it is a gateway setting
+rather than code.
+
+Streaming did force one thing to be built properly. The output filter can only
+judge a link once all of it has arrived, so nothing is released until the word
+after it has begun, and whitespace travels with the word that follows it. The
+property that matters — that the reader cannot tell where the network cut the
+response — is checked against every possible cut of six different answers rather
+than a chosen one.

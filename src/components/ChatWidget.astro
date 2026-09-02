@@ -253,7 +253,7 @@ const READER = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strok
 				const response = await fetch(endpoint, {
 					method: 'POST',
 					headers: { 'Content-Type': 'application/json' },
-					body: JSON.stringify({ question, lang, history: history.slice(-4) }),
+					body: JSON.stringify({ question, lang, stream: true, history: history.slice(-4) }),
 				});
 				if (response.status === 429) {
 					pending.classList.remove('pending');
@@ -262,12 +262,51 @@ const READER = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strok
 					return;
 				}
 				if (!response.ok) throw new Error(String(response.status));
-				const payload: { answer: string } = await response.json();
-				pending.classList.remove('pending');
-				pending.textContent = payload.answer;
+
+				// The body is one JSON object per line, arriving as the model writes.
+				const reader = response.body!.getReader();
+				const decoder = new TextDecoder();
+				let rest = '';
+				let answer = '';
+				let broke = '';
+
+				for (;;) {
+					const { value, done } = await reader.read();
+					if (done) break;
+					rest += decoder.decode(value, { stream: true });
+
+					const lines = rest.split('\n');
+					rest = lines.pop() ?? '';
+					for (const line of lines) {
+						if (!line.trim()) continue;
+						let event: { delta?: string; error?: string };
+						try {
+							event = JSON.parse(line);
+						} catch {
+							continue;
+						}
+						if (event.error) {
+							broke = event.error;
+							continue;
+						}
+						if (!event.delta) continue;
+						if (!answer) pending.classList.remove('pending');
+						answer += event.delta;
+						pending.textContent = answer;
+						log.scrollTop = log.scrollHeight;
+					}
+				}
+
+				if (!answer) throw new Error(broke || 'empty');
+				if (broke) {
+					// The answer stopped rather than finished, so it stays on screen but
+					// out of the history: the next question should not build on half of it.
+					setStatus('trouble');
+					return;
+				}
 				setStatus('online');
 				history.push({ role: 'user', content: question });
-				history.push({ role: 'assistant', content: payload.answer });
+				history.push({ role: 'assistant', content: answer });
 			} catch {
 				pending.classList.remove('pending');
 				pending.className = 'msg error';
