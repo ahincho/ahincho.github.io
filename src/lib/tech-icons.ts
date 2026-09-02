@@ -18,6 +18,8 @@ const FROM_DEVICON: Record<string, string> = {
 	// Both are AWS and Azure services; their own marks are not in either set.
 	'Amazon Bedrock': 'amazonwebservices',
 	'Azure OpenAI': 'azure',
+	// JavaFX has no mark of its own in either set; it is Java's UI toolkit.
+	JavaFX: 'java',
 };
 
 /**
