@@ -3,11 +3,11 @@ import type { JobId, StudyId } from '../data/experience';
 
 export const es = {
 	meta: {
-		title: 'Angel Hincho — Full Stack & DevSecOps Engineer',
+		title: 'Angel Hincho — Full Stack, DevSecOps & AI Engineer',
 		description:
 			'Portafolio de Angel Hincho: más de 5 años construyendo plataformas educativas, e-commerce y sistemas multi-país con Spring Boot, NestJS, React, Angular y AWS. Enfocado en IA Generativa y MLOps.',
 		ogLocale: 'es_PE',
-		ogImageAlt: 'Angel Hincho — Full Stack & DevSecOps Engineer, Arequipa, Perú',
+		ogImageAlt: 'Angel Hincho — Full Stack, DevSecOps & AI Engineer, Arequipa, Perú',
 		siteName: 'Portafolio de Angel Hincho',
 	},
 	nav: {
@@ -26,7 +26,7 @@ export const es = {
 	},
 	hero: {
 		location: 'Arequipa, Perú',
-		role: 'Full Stack & DevSecOps Engineer',
+		role: 'Full Stack, DevSecOps & AI Engineer',
 		lead: 'Más de 5 años construyendo plataformas educativas, e-commerce y sistemas multi-país — del diseño de la arquitectura al pipeline que la lleva a producción. Hoy, enfocado en IA Generativa y MLOps.',
 		ctaProject: 'Ver mis proyectos',
 		ctaContact: 'Contáctame',
@@ -62,7 +62,7 @@ export const es = {
 		index: {
 			title: 'Proyectos | Angel Hincho',
 			description:
-				'Proyectos de Angel Hincho: Spark Match, un agente de orientación vocacional con IA Generativa, y Nova, un meta-framework para microservicios empresariales.',
+				'Proyectos de Angel Hincho: Spark Match, un agente de orientación vocacional con IA Generativa; Nova, un meta-framework para microservicios empresariales; y el asistente con IA de este portafolio.',
 			heading: 'Proyectos',
 			back: 'Volver al portafolio',
 			read: 'Leer el caso de estudio',
@@ -70,7 +70,7 @@ export const es = {
 		all: 'Todos los proyectos',
 		eyebrow: 'lo que construyo',
 		title: 'Proyectos destacados',
-		lead: 'Dos plataformas que diseñé y construí de punta a punta. Cada una tiene su caso de estudio.',
+		lead: 'Tres cosas que diseñé y construí de punta a punta. Una de ellas está funcionando en esta misma página.',
 		sparkMatch: {
 			eyebrow: 'proyecto destacado',
 			title: 'Spark Match',
@@ -200,6 +200,82 @@ export const es = {
 					label: 'Reglas de arquitectura',
 				},
 				{ href: 'https://github.com/ahincho/nova-docs', label: 'ADRs y documentación' },
+			],
+		},
+		assistant: {
+			eyebrow: 'herramienta propia',
+			title: 'Asistente del portafolio',
+			tagline: 'Un chatbot que no puede inventarse mi experiencia',
+			badgeKind: 'En producción',
+			badgeStatus: 'Vivo en esta web',
+			description:
+				'El chat que espera en la esquina de esta página. Responde únicamente con lo que dice este portafolio: el corpus se genera en cada build desde las mismas fuentes que renderizan la web, viaja entero en el prompt y no hay nada más. Corre sobre un Worker de Cloudflare con límites de abuso, guardarraíles contra inyección de prompts y dos modelos compitiendo por contestar primero.',
+			figures: [
+				{ value: '0,9 s', label: 'pregunta repetida' },
+				{ value: '3,8 s', label: 'pregunta nueva' },
+				{ value: '$0', label: 'coste al mes' },
+			],
+			archAria:
+				'El camino de una pregunta: del navegador al Worker, de ahí a la pasarela y al modelo',
+			flowLabel: 'El camino de una pregunta',
+			flow: [
+				{
+					name: 'el navegador',
+					note: 'widget propio, sin framework',
+					items: ['la pregunta', '4 turnos de contexto', 'lee la respuesta a trozos'],
+				},
+				{
+					name: 'el Worker',
+					note: 'Cloudflare, en el borde',
+					items: [
+						'12 por visitante/hora',
+						'90 en total/hora',
+						'arma el prompt',
+						'filtra la salida',
+					],
+				},
+				{
+					name: 'la pasarela',
+					note: 'AI Gateway',
+					items: ['caché de una semana', 'registro para revisión', 'dos modelos a la vez'],
+				},
+				{
+					name: 'el modelo',
+					note: 'Gemini Flash-Lite, capa gratuita',
+					items: ['prosa anclada al documento'],
+				},
+			],
+			highlights: [
+				'No puede afirmar nada que esta web ya no diga: el corpus se genera en el build desde las mismas fuentes que renderizan el sitio, así que publicar es la única manera de cambiar lo que el asistente sabe.',
+				'Dos capas contra la inyección de prompts. El sistema ignora las instrucciones que vengan dentro de la pregunta, y un filtro de salida borra cualquier enlace o correo que no sea mío antes de llegar a la pantalla — aunque el modelo se haya dejado convencer.',
+				'Ese filtro sobrevive al streaming, que es la parte difícil: un enlace solo se puede juzgar entero, así que nada se publica hasta que ha empezado la palabra siguiente. La propiedad se verifica contra todos los cortes posibles del texto, no contra uno elegido.',
+				'Cuando el primer modelo tarda más de 4 segundos, el segundo arranca en paralelo y gana el que conteste antes. La media bajó de 8,3 s a 3,8 s y el peor caso de 13,0 s a 5,8 s.',
+				'Una pregunta repetida vuelve de la caché en menos de un segundo sin gastar cuota del proveedor, y publicar el sitio invalida las entradas por sí solo porque el corpus forma parte de la clave.',
+				'Coste cero y sin tarjeta: Workers, Durable Objects con SQLite, AI Gateway y la capa gratuita de Google AI Studio.',
+			],
+			roleLabel: 'Mi rol:',
+			roleText:
+				'lo diseñé y construí entero — el widget, el endpoint, los guardarraíles, las mediciones que decidieron cada ajuste y el ADR que explica por qué.',
+			cta: 'Ver el caso de estudio',
+			back: 'Volver al portafolio',
+			detailMeta: {
+				title: 'Asistente del portafolio — Caso de estudio | Angel Hincho',
+				description:
+					'Chatbot anclado al contenido del portafolio: corpus generado en el build, guardarraíles contra inyección de prompts, dos modelos en paralelo y caché. Sobre Cloudflare Workers, coste cero.',
+			},
+			links: [
+				{
+					href: 'https://github.com/ahincho/ahincho.github.io/blob/main/docs/adr/0002-portfolio-chatbot.md',
+					label: 'La decisión escrita (ADR)',
+				},
+				{
+					href: 'https://github.com/ahincho/ahincho.github.io/tree/main/chat',
+					label: 'El Worker del asistente',
+				},
+				{
+					href: 'https://github.com/ahincho/ahincho.github.io/blob/main/chat/src/answer.ts',
+					label: 'El filtro de salida y sus pruebas',
+				},
 			],
 		},
 	},
