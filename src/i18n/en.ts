@@ -120,7 +120,10 @@ export const en: Translations = {
 			links: [
 				{ href: 'https://github.com/spark-match', label: 'GitHub organization' },
 				{ href: 'https://github.com/spark-match/spark-match-08-deep-agent', label: 'Deep agent' },
-				{ href: 'https://github.com/spark-match/spark-match-02-infrastructure', label: 'Infrastructure' },
+				{
+					href: 'https://github.com/spark-match/spark-match-02-infrastructure',
+					label: 'Infrastructure',
+				},
 			],
 		},
 		nova: {
@@ -143,7 +146,15 @@ export const en: Translations = {
 				{
 					name: 'core',
 					note: 'plain Java, no framework',
-					items: ['api-standard', 'mask-utils', 'observability-utils', 'date-utils', 'mapper-utils', 'keycloak', 'architecture-rules'],
+					items: [
+						'api-standard',
+						'mask-utils',
+						'observability-utils',
+						'date-utils',
+						'mapper-utils',
+						'keycloak',
+						'architecture-rules',
+					],
 				},
 				{
 					name: 'adapters',
@@ -174,9 +185,15 @@ export const en: Translations = {
 					'A meta-framework for enterprise microservices: a plain Java core, adapters for Spring Boot, Quarkus and NestJS, and architecture verified with ArchUnit.',
 			},
 			links: [
-				{ href: 'https://github.com/ahincho?tab=repositories&q=nova', label: 'All 28 repositories' },
+				{
+					href: 'https://github.com/ahincho?tab=repositories&q=nova',
+					label: 'All 28 repositories',
+				},
 				{ href: 'https://github.com/ahincho/nova-java-api-standard', label: 'Core: API standard' },
-				{ href: 'https://github.com/ahincho/nova-java-architecture-rules', label: 'Architecture rules' },
+				{
+					href: 'https://github.com/ahincho/nova-java-architecture-rules',
+					label: 'Architecture rules',
+				},
 				{ href: 'https://github.com/ahincho/nova-docs', label: 'ADRs and documentation' },
 			],
 		},
@@ -252,21 +269,73 @@ export const en: Translations = {
 		],
 		educationTitle: 'Education',
 		education: [
-			{ school: 'UNSA', degree: "Bachelor's in Systems Engineering", meta: '2020 — 2024 · GPA 3.7/4.0' },
+			{
+				school: 'UNSA',
+				degree: "Bachelor's in Systems Engineering",
+				meta: '2020 — 2024 · GPA 3.7/4.0',
+			},
 			{ school: 'UNI', degree: 'Generative AI & MLOps specialization', meta: '2026' },
-			{ school: 'UNSA Language Center', degree: 'English — intermediate level', meta: '2021 — 2022' },
+			{
+				school: 'UNSA Language Center',
+				degree: 'English — intermediate level',
+				meta: '2021 — 2022',
+			},
 		],
 	},
 	skills: {
 		eyebrow: 'stack',
 		title: 'Skills',
 		groups: [
-			{ name: 'Backend', items: ['Java', 'Spring Boot', 'Kotlin', 'Quarkus', 'Node.js', 'NestJS', 'Python', 'FastAPI', '.NET'] },
+			{
+				name: 'Backend',
+				items: [
+					'Java',
+					'Spring Boot',
+					'Kotlin',
+					'Quarkus',
+					'Node.js',
+					'NestJS',
+					'Python',
+					'FastAPI',
+					'.NET',
+				],
+			},
 			{ name: 'Frontend', items: ['TypeScript', 'React', 'Angular', 'Vue', 'Ionic', 'Astro'] },
-			{ name: 'DevSecOps & Cloud', items: ['AWS', 'Azure', 'GCP', 'Docker', 'Kubernetes', 'Terraform', 'GitHub Actions', 'SonarCloud', 'SAST/DAST', 'OpenTelemetry', 'Keycloak'] },
-			{ name: 'AI & MLOps', items: ['LangChain', 'LangGraph', 'Deep Agents', 'RAG', 'Amazon Bedrock', 'Azure OpenAI', 'MLflow', 'DVC', 'Hugging Face'] },
+			{
+				name: 'DevSecOps & Cloud',
+				items: [
+					'AWS',
+					'Azure',
+					'GCP',
+					'Docker',
+					'Kubernetes',
+					'Terraform',
+					'GitHub Actions',
+					'SonarCloud',
+					'SAST/DAST',
+					'OpenTelemetry',
+					'Keycloak',
+				],
+			},
+			{
+				name: 'AI & MLOps',
+				items: [
+					'LangChain',
+					'LangGraph',
+					'Deep Agents',
+					'RAG',
+					'Amazon Bedrock',
+					'Azure OpenAI',
+					'MLflow',
+					'DVC',
+					'Hugging Face',
+				],
+			},
 			{ name: 'Databases', items: ['PostgreSQL', 'MySQL', 'DynamoDB', 'SQLite'] },
-			{ name: 'Practices', items: ['Scrum', 'DDD', 'Event-Driven', 'Micro-frontends', 'AI-SDLC', 'OpenAPI'] },
+			{
+				name: 'Practices',
+				items: ['Scrum', 'DDD', 'Event-Driven', 'Micro-frontends', 'AI-SDLC', 'OpenAPI'],
+			},
 		],
 	},
 	contact: {

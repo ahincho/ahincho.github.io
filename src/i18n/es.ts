@@ -82,7 +82,8 @@ export const es = {
 				{ value: '25', label: 'regiones del Perú' },
 			],
 			figuresSource: 'Datos oficiales de Ponte en Carrera · MINEDU Perú',
-			archAria: 'Arquitectura: Angular se comunica por AG-UI con el deep agent, que usa AWS Bedrock',
+			archAria:
+				'Arquitectura: Angular se comunica por AG-UI con el deep agent, que usa AWS Bedrock',
 			subagentsLabel: 'subagentes',
 			infraLabel: 'infra',
 			highlights: [
@@ -118,7 +119,10 @@ export const es = {
 			links: [
 				{ href: 'https://github.com/spark-match', label: 'Organización en GitHub' },
 				{ href: 'https://github.com/spark-match/spark-match-08-deep-agent', label: 'Deep agent' },
-				{ href: 'https://github.com/spark-match/spark-match-02-infrastructure', label: 'Infraestructura' },
+				{
+					href: 'https://github.com/spark-match/spark-match-02-infrastructure',
+					label: 'Infraestructura',
+				},
 			],
 		},
 		nova: {
@@ -141,7 +145,15 @@ export const es = {
 				{
 					name: 'núcleo',
 					note: 'Java puro, sin framework',
-					items: ['api-standard', 'mask-utils', 'observability-utils', 'date-utils', 'mapper-utils', 'keycloak', 'architecture-rules'],
+					items: [
+						'api-standard',
+						'mask-utils',
+						'observability-utils',
+						'date-utils',
+						'mapper-utils',
+						'keycloak',
+						'architecture-rules',
+					],
 				},
 				{
 					name: 'adaptadores',
@@ -172,9 +184,18 @@ export const es = {
 					'Meta-framework para microservicios empresariales: núcleo en Java puro, adaptadores para Spring Boot, Quarkus y NestJS, y arquitectura verificada con ArchUnit.',
 			},
 			links: [
-				{ href: 'https://github.com/ahincho?tab=repositories&q=nova', label: 'Los 28 repositorios' },
-				{ href: 'https://github.com/ahincho/nova-java-api-standard', label: 'Núcleo: estándar de API' },
-				{ href: 'https://github.com/ahincho/nova-java-architecture-rules', label: 'Reglas de arquitectura' },
+				{
+					href: 'https://github.com/ahincho?tab=repositories&q=nova',
+					label: 'Los 28 repositorios',
+				},
+				{
+					href: 'https://github.com/ahincho/nova-java-api-standard',
+					label: 'Núcleo: estándar de API',
+				},
+				{
+					href: 'https://github.com/ahincho/nova-java-architecture-rules',
+					label: 'Reglas de arquitectura',
+				},
 				{ href: 'https://github.com/ahincho/nova-docs', label: 'ADRs y documentación' },
 			],
 		},
@@ -250,21 +271,73 @@ export const es = {
 		],
 		educationTitle: 'Formación',
 		education: [
-			{ school: 'UNSA', degree: 'Bachiller en Ingeniería de Sistemas', meta: '2020 — 2024 · GPA 3.7/4.0' },
+			{
+				school: 'UNSA',
+				degree: 'Bachiller en Ingeniería de Sistemas',
+				meta: '2020 — 2024 · GPA 3.7/4.0',
+			},
 			{ school: 'UNI', degree: 'Especialización en IA Generativa & MLOps', meta: '2026' },
-			{ school: 'Centro de Idiomas UNSA', degree: 'Inglés — nivel intermedio', meta: '2021 — 2022' },
+			{
+				school: 'Centro de Idiomas UNSA',
+				degree: 'Inglés — nivel intermedio',
+				meta: '2021 — 2022',
+			},
 		],
 	},
 	skills: {
 		eyebrow: 'stack',
 		title: 'Habilidades',
 		groups: [
-			{ name: 'Backend', items: ['Java', 'Spring Boot', 'Kotlin', 'Quarkus', 'Node.js', 'NestJS', 'Python', 'FastAPI', '.NET'] },
+			{
+				name: 'Backend',
+				items: [
+					'Java',
+					'Spring Boot',
+					'Kotlin',
+					'Quarkus',
+					'Node.js',
+					'NestJS',
+					'Python',
+					'FastAPI',
+					'.NET',
+				],
+			},
 			{ name: 'Frontend', items: ['TypeScript', 'React', 'Angular', 'Vue', 'Ionic', 'Astro'] },
-			{ name: 'DevSecOps & Cloud', items: ['AWS', 'Azure', 'GCP', 'Docker', 'Kubernetes', 'Terraform', 'GitHub Actions', 'SonarCloud', 'SAST/DAST', 'OpenTelemetry', 'Keycloak'] },
-			{ name: 'IA & MLOps', items: ['LangChain', 'LangGraph', 'Deep Agents', 'RAG', 'Amazon Bedrock', 'Azure OpenAI', 'MLflow', 'DVC', 'Hugging Face'] },
+			{
+				name: 'DevSecOps & Cloud',
+				items: [
+					'AWS',
+					'Azure',
+					'GCP',
+					'Docker',
+					'Kubernetes',
+					'Terraform',
+					'GitHub Actions',
+					'SonarCloud',
+					'SAST/DAST',
+					'OpenTelemetry',
+					'Keycloak',
+				],
+			},
+			{
+				name: 'IA & MLOps',
+				items: [
+					'LangChain',
+					'LangGraph',
+					'Deep Agents',
+					'RAG',
+					'Amazon Bedrock',
+					'Azure OpenAI',
+					'MLflow',
+					'DVC',
+					'Hugging Face',
+				],
+			},
 			{ name: 'Bases de datos', items: ['PostgreSQL', 'MySQL', 'DynamoDB', 'SQLite'] },
-			{ name: 'Prácticas', items: ['Scrum', 'DDD', 'Event-Driven', 'Micro-frontends', 'AI-SDLC', 'OpenAPI'] },
+			{
+				name: 'Prácticas',
+				items: ['Scrum', 'DDD', 'Event-Driven', 'Micro-frontends', 'AI-SDLC', 'OpenAPI'],
+			},
 		],
 	},
 	contact: {

@@ -23,8 +23,8 @@ const TEXT = '#e8ebf2';
 const MUTED = '#96a0b5';
 const ACCENT = '#34d399';
 
-const SANS = "Segoe UI, Inter, Helvetica Neue, Arial, sans-serif";
-const MONO = "JetBrains Mono, Cascadia Code, Consolas, DejaVu Sans Mono, monospace";
+const SANS = 'Segoe UI, Inter, Helvetica Neue, Arial, sans-serif';
+const MONO = 'JetBrains Mono, Cascadia Code, Consolas, DejaVu Sans Mono, monospace';
 
 const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${WIDTH}" height="${HEIGHT}" viewBox="0 0 ${WIDTH} ${HEIGHT}">
   <defs>

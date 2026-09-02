@@ -41,23 +41,31 @@ const shots = [chatSubagents, reportCareers, reportPdf, evalsLangsmith].map((ima
 			</div>
 			<p class="description">{t.description}</p>
 			<dl class="figures">
-				{t.figures.map((figure) => (
-					<div>
-						<dt>{figure.label}</dt>
-						<dd>{figure.value}</dd>
-					</div>
-				))}
+				{
+					t.figures.map((figure) => (
+						<div>
+							<dt>{figure.label}</dt>
+							<dd>{figure.value}</dd>
+						</div>
+					))
+				}
 			</dl>
 			<p class="source">{t.figuresSource}</p>
 			<VideoDemo />
 			<div class="arch" role="img" aria-label={t.archAria}>
 				<div class="flow">
-					{flow.map((step, i) => (
-						<>
-							<span class="chip">{step}</span>
-							{i < flow.length - 1 && <span class="arrow" aria-hidden="true">→</span>}
-						</>
-					))}
+					{
+						flow.map((step, i) => (
+							<>
+								<span class="chip">{step}</span>
+								{i < flow.length - 1 && (
+									<span class="arrow" aria-hidden="true">
+										→
+									</span>
+								)}
+							</>
+						))
+					}
 				</div>
 				<div class="subflow">
 					<span class="label">{t.subagentsLabel}</span>
@@ -72,33 +80,49 @@ const shots = [chatSubagents, reportCareers, reportPdf, evalsLangsmith].map((ima
 			</ul>
 			<section class="shots" aria-label={t.shotsLabel}>
 				<p class="shots-label">{t.shotsLabel}</p>
-				{shots.map(({ image, caption, portrait }) => (
-					<figure class:list={['shot', { portrait }]}>
-						<Image
-							src={image}
-							alt=""
-							widths={portrait ? [420, 539] : [760, 1100, 1536]}
-							sizes={portrait ? '(min-width: 56rem) 26rem, 92vw' : '(min-width: 70rem) 62rem, 92vw'}
-							loading="lazy"
-						/>
-						<figcaption>{caption}</figcaption>
-					</figure>
-				))}
+				{
+					shots.map(({ image, caption, portrait }) => (
+						<figure class:list={['shot', { portrait }]}>
+							<Image
+								src={image}
+								alt=""
+								widths={portrait ? [420, 539] : [760, 1100, 1536]}
+								sizes={
+									portrait ? '(min-width: 56rem) 26rem, 92vw' : '(min-width: 70rem) 62rem, 92vw'
+								}
+								loading="lazy"
+							/>
+							<figcaption>{caption}</figcaption>
+						</figure>
+					))
+				}
 			</section>
 			<p class="role">
 				<strong>{t.roleLabel}</strong>{' '}{t.roleText}
 			</p>
 			<div class="links">
-				{t.links.map((link) => (
-					<a class="repo" href={link.href} target="_blank" rel="noopener noreferrer">
-						<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-							<path d="M15 3h6v6"></path>
-							<path d="M10 14 21 3"></path>
-							<path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
-						</svg>
-						{link.label}
-					</a>
-				))}
+				{
+					t.links.map((link) => (
+						<a class="repo" href={link.href} target="_blank" rel="noopener noreferrer">
+							<svg
+								width="15"
+								height="15"
+								viewBox="0 0 24 24"
+								fill="none"
+								stroke="currentColor"
+								stroke-width="2"
+								stroke-linecap="round"
+								stroke-linejoin="round"
+								aria-hidden="true"
+							>
+								<path d="M15 3h6v6" />
+								<path d="M10 14 21 3" />
+								<path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+							</svg>
+							{link.label}
+						</a>
+					))
+				}
 			</div>
 		</article>
 	</div>
@@ -400,6 +424,5 @@ const shots = [chatSubagents, reportCareers, reportPdf, evalsLangsmith].map((ima
 		.highlights {
 			grid-template-columns: 1fr;
 		}
-
 	}
 </style>

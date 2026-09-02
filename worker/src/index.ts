@@ -8,7 +8,8 @@ export interface Env {
 }
 
 const VISITOR_TTL_SECONDS = 60 * 60 * 24;
-const BOT_PATTERN = /bot|crawler|spider|slurp|facebookexternalhit|headless|preview|monitor|curl|wget/i;
+const BOT_PATTERN =
+	/bot|crawler|spider|slurp|facebookexternalhit|headless|preview|monitor|curl|wget/i;
 const ROUTE = /^\/v1\/counters(?:\/([a-z0-9-]{1,64}))?$/;
 
 export class Counters extends DurableObject<Env> {

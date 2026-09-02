@@ -7,11 +7,11 @@ its free tier caps at 1,000 writes per day.
 
 ## API
 
-| Method | Path                  | Behaviour                                       |
-| ------ | --------------------- | ----------------------------------------------- |
-| `GET`  | `/v1/counters`        | Every allowed counter and its value              |
-| `GET`  | `/v1/counters/:key`   | A single counter, without incrementing           |
-| `POST` | `/v1/counters/:key`   | Increments once per visitor per key per 24 hours |
+| Method | Path                | Behaviour                                        |
+| ------ | ------------------- | ------------------------------------------------ |
+| `GET`  | `/v1/counters`      | Every allowed counter and its value              |
+| `GET`  | `/v1/counters/:key` | A single counter, without incrementing           |
+| `POST` | `/v1/counters/:key` | Increments once per visitor per key per 24 hours |
 
 Keys are restricted to the `COUNTER_KEYS` list in `wrangler.jsonc`, so nobody
 can create arbitrary counters. Visitors are identified by a salted SHA-256 hash

@@ -1,0 +1,6 @@
+dist
+.astro
+pnpm-lock.yaml
+CHANGELOG.md
+worker/node_modules
+worker/.wrangler

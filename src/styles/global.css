@@ -1,243 +1,245 @@
 :root {
-  --bg: #0b0e14;
-  --bg-soft: #10141d;
-  --card: #131826;
-  --border: #1e2536;
-  --border-strong: #2a3348;
-  --text: #e8ebf2;
-  --text-muted: #96a0b5;
-  --text-faint: #7b8499;
-  --accent: #34d399;
-  --accent-strong: #6ee7b7;
-  --accent-dim: rgba(52, 211, 153, 0.12);
-  --accent-border: rgba(52, 211, 153, 0.35);
-  /* Text drawn on top of --accent. Dark ink on the bright green. */
-  --accent-contrast: #06281c;
-  --shadow: 0 16px 48px rgba(0, 0, 0, 0.35);
-  /* Vertical rhythm. --space-section shrinks on narrow screens; --space-block
+	--bg: #0b0e14;
+	--bg-soft: #10141d;
+	--card: #131826;
+	--border: #1e2536;
+	--border-strong: #2a3348;
+	--text: #e8ebf2;
+	--text-muted: #96a0b5;
+	--text-faint: #7b8499;
+	--accent: #34d399;
+	--accent-strong: #6ee7b7;
+	--accent-dim: rgba(52, 211, 153, 0.12);
+	--accent-border: rgba(52, 211, 153, 0.35);
+	/* Text drawn on top of --accent. Dark ink on the bright green. */
+	--accent-contrast: #06281c;
+	--shadow: 0 16px 48px rgba(0, 0, 0, 0.35);
+	/* Vertical rhythm. --space-section shrinks on narrow screens; --space-block
      is the gap between sibling blocks inside a card. */
-  --space-section: 5.5rem;
-  --space-block: 1.8rem;
-  --font-sans: 'Inter Variable', system-ui, -apple-system, 'Segoe UI', sans-serif;
-  --font-mono: 'JetBrains Mono Variable', 'Cascadia Code', Consolas, monospace;
-  color-scheme: dark;
+	--space-section: 5.5rem;
+	--space-block: 1.8rem;
+	--font-sans: 'Inter Variable', system-ui, -apple-system, 'Segoe UI', sans-serif;
+	--font-mono: 'JetBrains Mono Variable', 'Cascadia Code', Consolas, monospace;
+	color-scheme: dark;
 }
 
 :root[data-theme='light'] {
-  --bg: #fafaf9;
-  --bg-soft: #f2f3f5;
-  --card: #ffffff;
-  --border: #e5e8ee;
-  --border-strong: #d2d8e2;
-  --text: #16202e;
-  --text-muted: #4f5b73;
-  --text-faint: #646d81;
-  --accent: #0a7d59;
-  --accent-strong: #086e4c;
-  --accent-dim: rgba(10, 125, 89, 0.09);
-  --accent-border: rgba(10, 125, 89, 0.35);
-  /* The light accent is dark enough that the label on it must be white. */
-  --accent-contrast: #ffffff;
-  --shadow: 0 16px 48px rgba(22, 32, 46, 0.08);
-  color-scheme: light;
+	--bg: #fafaf9;
+	--bg-soft: #f2f3f5;
+	--card: #ffffff;
+	--border: #e5e8ee;
+	--border-strong: #d2d8e2;
+	--text: #16202e;
+	--text-muted: #4f5b73;
+	--text-faint: #646d81;
+	--accent: #0a7d59;
+	--accent-strong: #086e4c;
+	--accent-dim: rgba(10, 125, 89, 0.09);
+	--accent-border: rgba(10, 125, 89, 0.35);
+	/* The light accent is dark enough that the label on it must be white. */
+	--accent-contrast: #ffffff;
+	--shadow: 0 16px 48px rgba(22, 32, 46, 0.08);
+	color-scheme: light;
 }
 
 *,
 *::before,
 *::after {
-  box-sizing: border-box;
+	box-sizing: border-box;
 }
 
 html {
-  scroll-behavior: smooth;
+	scroll-behavior: smooth;
 }
 
 body {
-  margin: 0;
-  /* Keeps the footer at the bottom on short pages such as the project index. */
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  background: var(--bg);
-  color: var(--text);
-  font-family: var(--font-sans);
-  font-size: 1rem;
-  line-height: 1.7;
-  -webkit-font-smoothing: antialiased;
-  transition: background-color 0.25s ease, color 0.25s ease;
+	margin: 0;
+	/* Keeps the footer at the bottom on short pages such as the project index. */
+	min-height: 100vh;
+	display: flex;
+	flex-direction: column;
+	background: var(--bg);
+	color: var(--text);
+	font-family: var(--font-sans);
+	font-size: 1rem;
+	line-height: 1.7;
+	-webkit-font-smoothing: antialiased;
+	transition:
+		background-color 0.25s ease,
+		color 0.25s ease;
 }
 
 h1,
 h2,
 h3,
 h4 {
-  line-height: 1.2;
-  margin: 0;
-  text-wrap: balance;
+	line-height: 1.2;
+	margin: 0;
+	text-wrap: balance;
 }
 
 p {
-  margin: 0;
+	margin: 0;
 }
 
 a {
-  color: var(--accent);
-  text-decoration: none;
+	color: var(--accent);
+	text-decoration: none;
 }
 
 a:hover {
-  color: var(--accent-strong);
+	color: var(--accent-strong);
 }
 
 img,
 svg {
-  max-width: 100%;
-  display: block;
+	max-width: 100%;
+	display: block;
 }
 
 ::selection {
-  background: var(--accent);
-  color: var(--bg);
+	background: var(--accent);
+	color: var(--bg);
 }
 
 :focus-visible {
-  outline: 2px solid var(--accent);
-  outline-offset: 3px;
-  border-radius: 4px;
+	outline: 2px solid var(--accent);
+	outline-offset: 3px;
+	border-radius: 4px;
 }
 
 main {
-  flex: 1;
+	flex: 1;
 }
 
 /* The skip link is only reachable by keyboard, and only shows once focused. */
 .skip-link {
-  position: fixed;
-  top: 0;
-  left: 0.75rem;
-  z-index: 100;
-  transform: translateY(-110%);
-  padding: 0.6rem 1.1rem;
-  border-radius: 0 0 10px 10px;
-  background: var(--accent);
-  color: var(--accent-contrast);
-  font-family: var(--font-mono);
-  font-size: 0.85rem;
-  font-weight: 600;
-  transition: transform 0.15s ease;
+	position: fixed;
+	top: 0;
+	left: 0.75rem;
+	z-index: 100;
+	transform: translateY(-110%);
+	padding: 0.6rem 1.1rem;
+	border-radius: 0 0 10px 10px;
+	background: var(--accent);
+	color: var(--accent-contrast);
+	font-family: var(--font-mono);
+	font-size: 0.85rem;
+	font-weight: 600;
+	transition: transform 0.15s ease;
 }
 
 .skip-link:focus {
-  transform: translateY(0);
-  color: var(--accent-contrast);
+	transform: translateY(0);
+	color: var(--accent-contrast);
 }
 
 /* main only takes focus as the skip link's destination, so it needs no ring. */
 main:focus {
-  outline: none;
+	outline: none;
 }
 
 .container {
-  width: min(1100px, 100% - 3rem);
-  margin-inline: auto;
+	width: min(1100px, 100% - 3rem);
+	margin-inline: auto;
 }
 
 .section {
-  padding-block: var(--space-section);
-  scroll-margin-top: 5rem;
+	padding-block: var(--space-section);
+	scroll-margin-top: 5rem;
 }
 
 .section-eyebrow {
-  font-family: var(--font-mono);
-  font-size: 0.8rem;
-  font-weight: 500;
-  letter-spacing: 0.08em;
-  color: var(--accent);
-  text-transform: uppercase;
-  margin-bottom: 0.75rem;
+	font-family: var(--font-mono);
+	font-size: 0.8rem;
+	font-weight: 500;
+	letter-spacing: 0.08em;
+	color: var(--accent);
+	text-transform: uppercase;
+	margin-bottom: 0.75rem;
 }
 
 .section-eyebrow::before {
-  content: '// ';
-  color: var(--text-faint);
+	content: '// ';
+	color: var(--text-faint);
 }
 
 .section-title {
-  font-size: clamp(1.6rem, 3.5vw, 2.2rem);
-  font-weight: 700;
-  letter-spacing: -0.02em;
-  margin-bottom: 2.5rem;
+	font-size: clamp(1.6rem, 3.5vw, 2.2rem);
+	font-weight: 700;
+	letter-spacing: -0.02em;
+	margin-bottom: 2.5rem;
 }
 
 .pill {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.38rem;
-  font-family: var(--font-mono);
-  font-size: 0.72rem;
-  font-weight: 500;
-  color: var(--text-muted);
-  background: var(--bg-soft);
-  border: 1px solid var(--border);
-  border-radius: 999px;
-  padding: 0.25rem 0.7rem;
-  white-space: nowrap;
+	display: inline-flex;
+	align-items: center;
+	gap: 0.38rem;
+	font-family: var(--font-mono);
+	font-size: 0.72rem;
+	font-weight: 500;
+	color: var(--text-muted);
+	background: var(--bg-soft);
+	border: 1px solid var(--border);
+	border-radius: 999px;
+	padding: 0.25rem 0.7rem;
+	white-space: nowrap;
 }
 
 .btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-family: var(--font-sans);
-  font-size: 0.92rem;
-  font-weight: 600;
-  padding: 0.7rem 1.35rem;
-  border-radius: 10px;
-  border: 1px solid transparent;
-  cursor: pointer;
-  transition: all 0.2s ease;
+	display: inline-flex;
+	align-items: center;
+	gap: 0.5rem;
+	font-family: var(--font-sans);
+	font-size: 0.92rem;
+	font-weight: 600;
+	padding: 0.7rem 1.35rem;
+	border-radius: 10px;
+	border: 1px solid transparent;
+	cursor: pointer;
+	transition: all 0.2s ease;
 }
 
 .btn-primary {
-  background: var(--accent);
-  color: var(--accent-contrast);
+	background: var(--accent);
+	color: var(--accent-contrast);
 }
 
 .btn-primary:hover {
-  background: var(--accent-strong);
-  color: var(--accent-contrast);
-  transform: translateY(-1px);
+	background: var(--accent-strong);
+	color: var(--accent-contrast);
+	transform: translateY(-1px);
 }
 
 .btn-ghost {
-  background: transparent;
-  color: var(--text);
-  border-color: var(--border-strong);
+	background: transparent;
+	color: var(--text);
+	border-color: var(--border-strong);
 }
 
 .btn-ghost:hover {
-  border-color: var(--accent-border);
-  color: var(--accent);
-  transform: translateY(-1px);
+	border-color: var(--accent-border);
+	color: var(--accent);
+	transform: translateY(-1px);
 }
 
 @media (max-width: 800px) {
-  :root {
-    --space-section: 3.5rem;
-  }
+	:root {
+		--space-section: 3.5rem;
+	}
 }
 
 @media (prefers-reduced-motion: reduce) {
-  html {
-    scroll-behavior: auto;
-  }
+	html {
+		scroll-behavior: auto;
+	}
 
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    /* Without this, an infinite animation becomes a strobe instead of stopping. */
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-  }
+	*,
+	*::before,
+	*::after {
+		animation-duration: 0.01ms !important;
+		/* Without this, an infinite animation becomes a strobe instead of stopping. */
+		animation-iteration-count: 1 !important;
+		transition-duration: 0.01ms !important;
+	}
 }
