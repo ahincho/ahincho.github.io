@@ -15,7 +15,12 @@
     "og": "node scripts/og-image.mjs",
     "prepare": "husky",
     "changeset": "changeset",
-    "version": "changeset version"
+    "version": "changeset version",
+    "check": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.3",
@@ -33,6 +38,10 @@
     "@commitlint/config-conventional": "^21.2.2",
     "@iconify-json/devicon-plain": "^1.2.57",
     "husky": "^9.1.7",
-    "simple-icons": "^16.29.0"
+    "prettier": "^3.9.6",
+    "prettier-plugin-astro": "^0.14.1",
+    "simple-icons": "^16.29.0",
+    "typescript": "^7.0.2",
+    "vitest": "^4.1.11"
   }
 }
