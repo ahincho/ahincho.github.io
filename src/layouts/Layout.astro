@@ -10,12 +10,19 @@ interface Props {
 	description?: string;
 	/** Error pages should stay out of the index, and have no canonical or alternates to offer. */
 	noindex?: boolean;
+	/** The assistant belongs on the portfolio itself, not on an error page. */
+	chat?: boolean;
 }
 
 const lang = getLang(Astro.currentLocale);
 const t = translations[lang];
 
-const { title = t.meta.title, description = t.meta.description, noindex = false } = Astro.props;
+const {
+	title = t.meta.title,
+	description = t.meta.description,
+	noindex = false,
+	chat = true,
+} = Astro.props;
 
 // Every page exists in both languages at the same path, prefixed with /en for English.
 const path = Astro.url.pathname;
@@ -95,6 +102,6 @@ const jsonLd = JSON.stringify({
 	<body>
 		<a class="skip-link" href="#main">{t.nav.skipToContent}</a>
 		<slot />
-		<ChatWidget />
+		{chat && <ChatWidget />}
 	</body>
 </html>
