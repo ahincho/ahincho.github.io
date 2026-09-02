@@ -143,7 +143,7 @@ export const en: Translations = {
 				{
 					name: 'core',
 					note: 'plain Java, no framework',
-					items: ['api-standard', 'mask-utils', 'observability-utils', 'date-utils', 'mapper-utils', 'keycloak'],
+					items: ['api-standard', 'mask-utils', 'observability-utils', 'date-utils', 'mapper-utils', 'keycloak', 'architecture-rules'],
 				},
 				{
 					name: 'adapters',

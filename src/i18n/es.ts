@@ -141,7 +141,7 @@ export const es = {
 				{
 					name: 'núcleo',
 					note: 'Java puro, sin framework',
-					items: ['api-standard', 'mask-utils', 'observability-utils', 'date-utils', 'mapper-utils', 'keycloak'],
+					items: ['api-standard', 'mask-utils', 'observability-utils', 'date-utils', 'mapper-utils', 'keycloak', 'architecture-rules'],
 				},
 				{
 					name: 'adaptadores',
