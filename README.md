@@ -48,6 +48,7 @@ pnpm dev
 | `pnpm preview` | Serve the build locally |
 | `pnpm og` | Regenerate `public/og.png` |
 | `pnpm changeset` | Record a user-facing change |
+| `pnpm run version` | Apply the pending changesets and write the changelog |
 
 ## Conventions
 
