@@ -342,22 +342,25 @@ export const en: Translations = {
 		project: 'See my projects',
 	},
 	chat: {
-		open: 'Ask about my profile',
-		close: 'Close the chat',
-		title: 'Ask me',
-		subtitle: 'I answer only from what is on this portfolio.',
+		open: 'Ask the AI',
+		close: 'Close the assistant',
+		title: 'AI assistant',
+		subtitle: "Designed and built by me. It answers only from this portfolio's content.",
 		greeting:
-			'Hi! I can tell you about Angel’s experience, projects or stack. What would you like to know?',
+			"Hi! I am Angel's assistant. I can answer questions about his experience, his projects and his stack. What would you like to know?",
 		suggestions: [
-			'What experience does he have with AWS?',
-			'Tell me about Spark Match',
-			'Which countries has he worked in?',
+			'What experience does he have leading migrations?',
+			'Has he worked remotely for other countries?',
+			'What exactly did he do on Spark Match?',
+			'What is his level of English?',
 		],
 		placeholder: 'Type your question…',
 		send: 'Send',
 		thinking: 'Thinking…',
 		error: 'Something went wrong. Please try again in a moment.',
 		exhausted: 'I have hit my daily question limit. Reach him directly from the contact section.',
+		preview:
+			'I am still being built: my answering engine is not connected yet. In the meantime you can reach him directly from the contact section.',
 		disclaimer: 'AI-generated answers, based on the content of this site.',
 	},
 	footer: {

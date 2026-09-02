@@ -345,16 +345,17 @@ export const es = {
 		project: 'Ver mis proyectos',
 	},
 	chat: {
-		open: 'Preguntar sobre mi perfil',
-		close: 'Cerrar el chat',
-		title: 'Pregúntame',
-		subtitle: 'Respondo solo con lo que hay en este portafolio.',
+		open: 'Pregúntale a la IA',
+		close: 'Cerrar el asistente',
+		title: 'Asistente con IA',
+		subtitle: 'Lo diseñé y construí yo. Responde solo con el contenido de este portafolio.',
 		greeting:
-			'¡Hola! Puedo contarte sobre la experiencia, los proyectos o el stack de Angel. ¿Qué quieres saber?',
+			'¡Hola! Soy el asistente de Angel. Puedo responderte sobre su experiencia, sus proyectos y su stack. ¿Qué necesitas saber?',
 		suggestions: [
-			'¿Qué experiencia tiene con AWS?',
-			'Cuéntame sobre Spark Match',
-			'¿En qué países ha trabajado?',
+			'¿Qué experiencia tiene liderando migraciones?',
+			'¿Ha trabajado en remoto para otros países?',
+			'¿Qué hizo exactamente en Spark Match?',
+			'¿Cuál es su nivel de inglés?',
 		],
 		placeholder: 'Escribe tu pregunta…',
 		send: 'Enviar',
@@ -362,6 +363,8 @@ export const es = {
 		error: 'Algo falló al responder. Vuelve a intentarlo en un momento.',
 		exhausted:
 			'He alcanzado mi límite de consultas por hoy. Escríbele directamente desde la sección de contacto.',
+		preview:
+			'Todavía estoy en construcción: mi motor de respuestas aún no está conectado. Mientras tanto puedes escribirle directamente desde la sección de contacto.',
 		disclaimer: 'Respuestas generadas por IA a partir del contenido de esta web.',
 	},
 	footer: {
