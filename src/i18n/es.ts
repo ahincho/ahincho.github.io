@@ -1,3 +1,6 @@
+import type { JobCopy, StudyCopy } from '../domain/experience';
+import type { JobId, StudyId } from '../data/experience';
+
 export const es = {
 	meta: {
 		title: 'Angel Hincho — Full Stack & DevSecOps Engineer',
@@ -203,86 +206,72 @@ export const es = {
 	experience: {
 		eyebrow: 'trayectoria',
 		title: 'Experiencia',
-		jobs: [
-			{
-				company: 'Universidad Tecnológica del Perú (UTP)',
+		present: 'Actualidad',
+		marketsLabel: 'Mercados:',
+		cities: {} as Record<string, string>,
+		modality: { onsite: 'Presencial', hybrid: 'Híbrido', remote: 'Remoto' },
+		employment: { staff: 'Planilla', freelance: 'Freelance', internship: 'Prácticas' },
+		industry: {
+			education: 'Educación',
+			telecom: 'Telecomunicaciones',
+			retail: 'Retail',
+			hr: 'Recursos Humanos',
+			academia: 'Academia',
+		},
+		jobs: {
+			utp: {
 				role: 'FullStack & DevSecOps Engineer',
-				meta: 'Ene 2024 — Mar 2026 · Lima',
 				bullets: [
 					'Desarrollo de UTP+Class, la plataforma de aprendizaje oficial usada por más de 300 000 alumnos, sobre 20+ microservicios orientados a eventos.',
 					'Estandaricé pipelines de CI/CD con pruebas SAST/DAST y lideré la migración integral de Azure DevOps a GitHub sin interrupciones operativas.',
 					'Implanté desarrollo asistido por agentes de codificación (AI-SDLC), reduciendo un 30% los tiempos de análisis, desarrollo y pruebas.',
 				],
-				tags: ['Java', 'Spring Boot', 'React', 'NestJS', 'AWS', 'Azure', 'SonarCloud'],
 			},
-			{
-				company: 'Claro (Centroamérica)',
-				role: 'Senior FullStack Engineer · Freelance',
-				meta: 'May 2025 — Mar 2026 · Remoto',
+			claro: {
+				role: 'Senior FullStack Engineer',
 				bullets: [
 					'Plataforma de ventas convergente multi-país: 30+ microservicios serverless desplegados en 4 países y 12 ambientes.',
 					'Lideré la migración de la arquitectura mono-país a multi-país y la modernización hacia NestJS, micro-frontends en Angular e Ionic.',
 					'Pipelines centralizados y reutilizables con GitHub Actions, escaneo con CodeQL y despliegues automatizados con Terraform y AWS SAM.',
 				],
-				tags: ['TypeScript', 'NestJS', 'Angular', 'Ionic', 'AWS', 'Terraform', 'DynamoDB'],
 			},
-			{
-				company: 'Falabella',
-				role: 'Fullstack Engineer · Freelance',
-				meta: 'Mar 2024 — Ago 2024 · Remoto, Chile',
+			falabella: {
+				role: 'Fullstack Engineer',
 				bullets: [
 					'Funcionalidades para Pantalla Única y Servicio Técnico (SerTec), con usuarios en Perú, Colombia y Chile.',
 					'Integré Salesforce y sistemas back office propietarios para una gestión centralizada de ventas en una sola interfaz.',
 				],
-				tags: ['Java', 'Spring Boot', 'FastAPI', 'React', 'Angular', 'GCP', 'Kubernetes'],
 			},
-			{
-				company: 'JoyIt',
+			joyit: {
 				role: 'Desarrollador Backend',
-				meta: 'Mar 2023 — Dic 2023 · Lima',
 				bullets: [
 					'Applicant Tracking System: gestión de ofertas, postulaciones y recomendación de candidatos para las vacantes.',
 					'Microservicios con DDD, mensajería y colas de eventos; autenticación y autorización con Keycloak.',
 					'Facilité Scrum para un equipo de 10 personas, liderando ceremonias y documentación de onboarding.',
 				],
-				tags: ['Java', 'Kotlin', 'Spring Boot', 'Quarkus', 'AWS', 'Keycloak'],
 			},
-			{
-				company: 'Universidad Nacional de San Agustín (UNSA)',
-				role: 'Investigador y Desarrollador · Prácticas',
-				meta: 'Abr 2022 — Abr 2023 · Arequipa',
+			unsa: {
+				role: 'Investigador y Desarrollador',
 				bullets: [
 					'Software de escritorio y videojuegos en C#/.NET; aplicaciones web y APIs REST con Spring Boot.',
 					'Investigación en Ingeniería de Software con producción de artículos técnicos.',
 				],
-				tags: ['C#', '.NET', 'Java', 'Angular', 'PostgreSQL'],
 			},
-			{
-				company: 'ByteXByte',
+			bytexbyte: {
 				role: 'Desarrollador FullStack',
-				meta: 'Abr 2021 — Abr 2022 · Arequipa',
 				bullets: [
 					'Sistema de punto de venta (POS) para retail, con varios clientes y sus sedes operando sobre la misma plataforma.',
 					'Participé en la migración del cliente de escritorio de JavaFX a .NET Framework 4.8 con Windows Forms.',
 					'Segunda migración hacia una aplicación web con Spring Boot y React, con arquitectura multi-tenant por cliente y sede.',
 				],
-				tags: ['Java', 'JavaFX', 'C#', '.NET', 'Spring Boot', 'React', 'MySQL'],
 			},
-		],
+		} satisfies Record<JobId, JobCopy>,
 		educationTitle: 'Formación',
-		education: [
-			{
-				school: 'UNSA',
-				degree: 'Bachiller en Ingeniería de Sistemas',
-				meta: '2020 — 2024 · GPA 3.7/4.0',
-			},
-			{ school: 'UNI', degree: 'Especialización en IA Generativa & MLOps', meta: '2026' },
-			{
-				school: 'Centro de Idiomas UNSA',
-				degree: 'Inglés — nivel intermedio',
-				meta: '2021 — 2022',
-			},
-		],
+		studies: {
+			'unsa-degree': { degree: 'Bachiller en Ingeniería de Sistemas' },
+			'uni-specialization': { degree: 'Especialización en IA Generativa & MLOps' },
+			'unsa-language-centre': { degree: 'Inglés — nivel intermedio' },
+		} satisfies Record<StudyId, StudyCopy>,
 	},
 	skills: {
 		eyebrow: 'stack',

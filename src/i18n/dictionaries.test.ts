@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { es } from './es';
 import { en } from './en';
 import { techIcon } from '../lib/tech-icons';
+import { jobs } from '../data/experience';
 
 /**
  * Technologies that are deliberately shown as text. Practices have no logo, and
@@ -30,10 +31,7 @@ const TEXT_ONLY = new Set([
  * the data layer would bring them in.
  */
 function pillLabels(): string[] {
-	return [
-		...es.skills.groups.flatMap((group) => group.items),
-		...es.experience.jobs.flatMap((job) => job.tags),
-	];
+	return [...es.skills.groups.flatMap((group) => group.items), ...jobs.flatMap((job) => job.tags)];
 }
 
 /** Every array in the tree, keyed by its path, so both dictionaries can be compared. */

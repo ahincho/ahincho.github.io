@@ -1,4 +1,6 @@
 import type { Translations } from './index';
+import type { JobCopy, StudyCopy } from '../domain/experience';
+import type { JobId, StudyId } from '../data/experience';
 
 export const en: Translations = {
 	meta: {
@@ -201,86 +203,72 @@ export const en: Translations = {
 	experience: {
 		eyebrow: 'career',
 		title: 'Experience',
-		jobs: [
-			{
-				company: 'Universidad Tecnológica del Perú (UTP)',
+		present: 'Present',
+		marketsLabel: 'Markets:',
+		cities: { 'Ciudad de Guatemala': 'Guatemala City' },
+		modality: { onsite: 'On-site', hybrid: 'Hybrid', remote: 'Remote' },
+		employment: { staff: 'Staff', freelance: 'Freelance', internship: 'Internship' },
+		industry: {
+			education: 'Education',
+			telecom: 'Telecommunications',
+			retail: 'Retail',
+			hr: 'Human Resources',
+			academia: 'Academia',
+		},
+		jobs: {
+			utp: {
 				role: 'FullStack & DevSecOps Engineer',
-				meta: 'Jan 2024 — Mar 2026 · Lima',
 				bullets: [
 					'Built features for UTP+Class, the official learning platform serving 300,000+ students, on top of 20+ event-driven microservices.',
 					'Standardized CI/CD pipelines with SAST/DAST testing and led the full migration from Azure DevOps to GitHub with zero operational downtime.',
 					'Introduced agent-assisted development (AI-SDLC), cutting analysis, development and testing times by 30%.',
 				],
-				tags: ['Java', 'Spring Boot', 'React', 'NestJS', 'AWS', 'Azure', 'SonarCloud'],
 			},
-			{
-				company: 'Claro (Central America)',
-				role: 'Senior FullStack Engineer · Freelance',
-				meta: 'May 2025 — Mar 2026 · Remote',
+			claro: {
+				role: 'Senior FullStack Engineer',
 				bullets: [
 					'Multi-country convergent sales platform: 30+ serverless microservices deployed across 4 countries and 12 environments.',
 					'Led the migration from a single-country to a multi-country architecture and the modernization to NestJS, Angular micro-frontends and Ionic.',
 					'Centralized, reusable pipelines with GitHub Actions, CodeQL scanning and automated deployments with Terraform and AWS SAM.',
 				],
-				tags: ['TypeScript', 'NestJS', 'Angular', 'Ionic', 'AWS', 'Terraform', 'DynamoDB'],
 			},
-			{
-				company: 'Falabella',
-				role: 'Fullstack Engineer · Freelance',
-				meta: 'Mar 2024 — Aug 2024 · Remote, Chile',
+			falabella: {
+				role: 'Fullstack Engineer',
 				bullets: [
 					'Features for the Pantalla Única and Technical Service (SerTec) platforms, serving users in Peru, Colombia and Chile.',
 					'Integrated Salesforce and proprietary back-office systems for centralized sales management in a single interface.',
 				],
-				tags: ['Java', 'Spring Boot', 'FastAPI', 'React', 'Angular', 'GCP', 'Kubernetes'],
 			},
-			{
-				company: 'JoyIt',
+			joyit: {
 				role: 'Backend Developer',
-				meta: 'Mar 2023 — Dec 2023 · Lima',
 				bullets: [
 					'Applicant Tracking System: job posting management, applications and candidate recommendation for open positions.',
 					'Microservices with DDD, messaging and event queues; authentication and authorization with Keycloak.',
 					'Facilitated Scrum for a 10-person team, leading ceremonies and onboarding documentation.',
 				],
-				tags: ['Java', 'Kotlin', 'Spring Boot', 'Quarkus', 'AWS', 'Keycloak'],
 			},
-			{
-				company: 'Universidad Nacional de San Agustín (UNSA)',
-				role: 'Researcher & Developer · Internship',
-				meta: 'Apr 2022 — Apr 2023 · Arequipa',
+			unsa: {
+				role: 'Researcher & Developer',
 				bullets: [
 					'Desktop software and games in C#/.NET; web applications and REST APIs with Spring Boot.',
 					'Software Engineering research with published technical articles.',
 				],
-				tags: ['C#', '.NET', 'Java', 'Angular', 'PostgreSQL'],
 			},
-			{
-				company: 'ByteXByte',
+			bytexbyte: {
 				role: 'FullStack Developer',
-				meta: 'Apr 2021 — Apr 2022 · Arequipa',
 				bullets: [
 					'Retail point-of-sale (POS) system, with several clients and their branches running on the same platform.',
 					'Took part in migrating the desktop client from JavaFX to .NET Framework 4.8 with Windows Forms.',
 					'A second migration to a web application with Spring Boot and React, multi-tenant per client and branch.',
 				],
-				tags: ['Java', 'JavaFX', 'C#', '.NET', 'Spring Boot', 'React', 'MySQL'],
 			},
-		],
+		} satisfies Record<JobId, JobCopy>,
 		educationTitle: 'Education',
-		education: [
-			{
-				school: 'UNSA',
-				degree: "Bachelor's in Systems Engineering",
-				meta: '2020 — 2024 · GPA 3.7/4.0',
-			},
-			{ school: 'UNI', degree: 'Generative AI & MLOps specialization', meta: '2026' },
-			{
-				school: 'UNSA Language Center',
-				degree: 'English — intermediate level',
-				meta: '2021 — 2022',
-			},
-		],
+		studies: {
+			'unsa-degree': { degree: "Bachelor's in Systems Engineering" },
+			'uni-specialization': { degree: 'Generative AI & MLOps specialization' },
+			'unsa-language-centre': { degree: 'English — intermediate level' },
+		} satisfies Record<StudyId, StudyCopy>,
 	},
 	skills: {
 		eyebrow: 'stack',
