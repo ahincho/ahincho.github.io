@@ -110,6 +110,33 @@ main {
   flex: 1;
 }
 
+/* The skip link is only reachable by keyboard, and only shows once focused. */
+.skip-link {
+  position: fixed;
+  top: 0;
+  left: 0.75rem;
+  z-index: 100;
+  transform: translateY(-110%);
+  padding: 0.6rem 1.1rem;
+  border-radius: 0 0 10px 10px;
+  background: var(--accent);
+  color: var(--accent-contrast);
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  font-weight: 600;
+  transition: transform 0.15s ease;
+}
+
+.skip-link:focus {
+  transform: translateY(0);
+  color: var(--accent-contrast);
+}
+
+/* main only takes focus as the skip link's destination, so it needs no ring. */
+main:focus {
+  outline: none;
+}
+
 .container {
   width: min(1100px, 100% - 3rem);
   margin-inline: auto;

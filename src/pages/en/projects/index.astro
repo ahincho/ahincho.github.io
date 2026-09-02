@@ -10,7 +10,7 @@ const t = translations[getLang(Astro.currentLocale)].projects.index;
 
 <Layout title={t.title} description={t.description}>
 	<Header />
-	<main>
+	<main id="main" tabindex="-1">
 		<ProjectIndex />
 	</main>
 	<Footer />

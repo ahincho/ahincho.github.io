@@ -8,6 +8,7 @@ export const es = {
 		siteName: 'Portafolio de Angel Hincho',
 	},
 	nav: {
+		skipToContent: 'Saltar al contenido',
 		ariaSections: 'Secciones del portafolio',
 		themeToggle: 'Cambiar tema claro/oscuro',
 		menuToggle: 'Abrir el menú de secciones',

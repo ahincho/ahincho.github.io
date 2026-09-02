@@ -10,6 +10,7 @@ export const en: Translations = {
 		siteName: "Angel Hincho's portfolio",
 	},
 	nav: {
+		skipToContent: 'Skip to content',
 		ariaSections: 'Portfolio sections',
 		themeToggle: 'Toggle light/dark theme',
 		menuToggle: 'Open the sections menu',

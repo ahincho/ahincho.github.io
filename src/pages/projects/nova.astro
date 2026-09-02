@@ -10,7 +10,7 @@ const t = translations[getLang(Astro.currentLocale)].projects.nova.detailMeta;
 
 <Layout title={t.title} description={t.description}>
 	<Header />
-	<main>
+	<main id="main" tabindex="-1">
 		<NovaCaseStudy />
 	</main>
 	<Footer />

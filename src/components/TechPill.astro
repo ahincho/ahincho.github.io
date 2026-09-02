@@ -25,4 +25,9 @@ const icon = techIcon(label);
 		flex-shrink: 0;
 		opacity: 0.75;
 	}
+
+	/* The light theme washes the marks out, so they need a touch more weight there. */
+	:global(:root[data-theme='light']) .glyph {
+		opacity: 0.9;
+	}
 </style>

@@ -25,10 +25,23 @@ const jsonLd = JSON.stringify({
 	'@context': 'https://schema.org',
 	'@type': 'Person',
 	name: 'Angel Eduardo Hincho Jove',
+	alternateName: 'Angel Hincho',
 	jobTitle: 'Full Stack & DevSecOps Engineer',
+	description: t.meta.description,
+	email: 'ahincho@unsa.edu.pe',
+	knowsLanguage: ['es', 'en'],
+	// Read off the Skills section so the two can never drift apart.
+	knowsAbout: t.skills.groups.flatMap((group) => group.items),
 	address: { '@type': 'PostalAddress', addressLocality: 'Arequipa', addressCountry: 'PE' },
-	alumniOf: 'Universidad Nacional de San Agustín',
+	alumniOf: {
+		'@type': 'CollegeOrUniversity',
+		name: 'Universidad Nacional de San Agustín',
+		address: { '@type': 'PostalAddress', addressLocality: 'Arequipa', addressCountry: 'PE' },
+	},
 	sameAs: ['https://github.com/ahincho', 'https://www.linkedin.com/in/ahincho'],
+	...(Astro.site
+		? { url: new URL('/', Astro.site).href, image: new URL('/og.png', Astro.site).href }
+		: {}),
 });
 ---
 
@@ -78,6 +91,7 @@ const jsonLd = JSON.stringify({
 		</script>
 	</head>
 	<body>
+		<a class="skip-link" href="#main">{t.nav.skipToContent}</a>
 		<slot />
 	</body>
 </html>
