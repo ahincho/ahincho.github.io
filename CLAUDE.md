@@ -2,9 +2,10 @@
 
 - **Commits**: Conventional Commits, enforced by commitlint (husky `commit-msg` hook). Never add AI co-author trailers (`Co-Authored-By: Claude ...`) — commits are authored solely by the repo owner.
 - **Versioning**: semver managed with changesets. Run `pnpm changeset` to record user-facing changes; `pnpm run version` applies bumps and updates the changelog (`pnpm version` hits pnpm's own command instead). Default to `patch` — fixes, copy tweaks, styling. Use `minor` only for a new feature or a genuinely notable addition. Do not release a `major`: it is reserved for when the owner considers the portfolio actually useful and to his liking.
-- **Branching**: trunk-based development — commit to `main`; no long-lived branches.
+- **Branching**: work on a short-lived branch and integrate through a pull request; no direct commits to `main`. CI (`.github/workflows/ci.yml`) must be green before merging. Since this is a one-person repository, branch protection requires status checks but **zero approvals** — GitHub does not let an author approve their own pull request, so requiring one would deadlock the branch.
 - **Dependencies**: always target the latest stable version — GitHub Actions included; never leave an action on a deprecated major. Dependabot (`.github/dependabot.yml`) opens weekly PRs for actions, the site and `worker/`. Workflow actions are pinned to a full commit SHA with the version in a trailing comment — a moving tag like `@v7` can be repointed at other code by whoever controls the action; Dependabot keeps both the SHA and the comment current.
 - **Language**: all code, routes, anchors/IDs, file names and identifiers in English. Visible content is bilingual via `src/i18n/` dictionaries (`es.ts` is the source of truth, `en.ts` is type-checked against it) — never hardcode visible strings in components.
+- **Quality gates**: `pnpm run check` (tsc), `pnpm run test` (vitest) and `pnpm run format:check` (prettier) all run in CI. `astro build` does not type-check `.ts`, so `tsc` is what actually enforces the i18n contract. Astro templates are whitespace-sensitive HTML — when a formatter or a refactor touches markup, compare the built output before trusting it.
 
 ## Development
 

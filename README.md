@@ -10,14 +10,14 @@ mobile menu and the click-to-load video.
 
 ## Stack
 
-| | |
-|---|---|
-| Framework | Astro 7 (static output) |
-| Styling | Plain CSS with custom properties, one stylesheet plus scoped component styles |
-| i18n | Astro's native routing — Spanish at `/`, English at `/en/` |
-| Images | `astro:assets`, AVIF and WebP at several widths |
-| Icons | Simple Icons, with Devicon covering the marks Simple Icons dropped |
-| Deploy | GitHub Actions → GitHub Pages |
+|           |                                                                               |
+| --------- | ----------------------------------------------------------------------------- |
+| Framework | Astro 7 (static output)                                                       |
+| Styling   | Plain CSS with custom properties, one stylesheet plus scoped component styles |
+| i18n      | Astro's native routing — Spanish at `/`, English at `/en/`                    |
+| Images    | `astro:assets`, AVIF and WebP at several widths                               |
+| Icons     | Simple Icons, with Devicon covering the marks Simple Icons dropped            |
+| Deploy    | GitHub Actions → GitHub Pages                                                 |
 
 ## Structure
 
@@ -32,6 +32,7 @@ src/
 scripts/
 └── og-image.mjs     renders the social card; run it, commit the PNG
 worker/              Cloudflare Worker for the visit counter (not deployed yet)
+docs/adr/            architecture decisions, and why the alternatives were dropped
 ```
 
 ## Develop
@@ -41,14 +42,17 @@ pnpm install
 pnpm dev
 ```
 
-| Command | Does |
-|---|---|
-| `pnpm dev` | Dev server on `localhost:4321` |
-| `pnpm build` | Static build into `dist/` |
-| `pnpm preview` | Serve the build locally |
-| `pnpm og` | Regenerate `public/og.png` |
-| `pnpm changeset` | Record a user-facing change |
+| Command            | Does                                                 |
+| ------------------ | ---------------------------------------------------- |
+| `pnpm dev`         | Dev server on `localhost:4321`                       |
+| `pnpm build`       | Static build into `dist/`                            |
+| `pnpm preview`     | Serve the build locally                              |
+| `pnpm og`          | Regenerate `public/og.png`                           |
+| `pnpm changeset`   | Record a user-facing change                          |
 | `pnpm run version` | Apply the pending changesets and write the changelog |
+| `pnpm run check`   | Type-check, including the i18n contract              |
+| `pnpm run test`    | Run the test suite                                   |
+| `pnpm run format`  | Format with Prettier                                 |
 
 ## Conventions
 
