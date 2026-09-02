@@ -108,6 +108,15 @@ svg {
 	border-radius: 4px;
 }
 
+/*
+ * The hidden attribute is only a `display: none` from the user-agent sheet, so
+ * any component that sets its own display silently overrides it. Making it
+ * !important means `el.hidden = true` always means hidden.
+ */
+[hidden] {
+	display: none !important;
+}
+
 main {
 	flex: 1;
 }
