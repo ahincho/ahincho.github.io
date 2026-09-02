@@ -1,5 +1,5 @@
 import { DurableObject } from 'cloudflare:workers';
-import { ANSWER_MAX, sanitise, systemPrompt } from './answer';
+import { ANSWER_MAX, StreamedAnswer, systemPrompt } from './answer';
 
 export interface Env {
 	LIMITS: DurableObjectNamespace<Limits>;
@@ -10,6 +10,8 @@ export interface Env {
 	GATEWAY_ID: string;
 	/** `provider/model`, comma separated: the order they are tried in. */
 	MODEL: string;
+	/** How hard the model may think before writing. See the note at the call. */
+	REASONING: string;
 	HASH_SALT: string;
 	/** Gateway authentication — set with `wrangler secret put`. */
 	CF_AIG_TOKEN: string;
@@ -131,6 +133,46 @@ interface Ask {
 	question?: unknown;
 	lang?: unknown;
 	history?: unknown;
+	stream?: unknown;
+}
+
+/**
+ * The provider speaks server-sent events; this yields the text out of them and
+ * leaves both response shapes below reading from the same place.
+ */
+async function* deltas(upstream: Response): AsyncGenerator<string> {
+	const reader = upstream.body!.getReader();
+	const decoder = new TextDecoder();
+	let pending = '';
+
+	for (;;) {
+		const { value, done } = await reader.read();
+		if (done) return;
+		pending += decoder.decode(value, { stream: true });
+
+		const lines = pending.split('\n');
+		pending = lines.pop() ?? '';
+		for (const line of lines) {
+			const data = line.trim();
+			if (!data.startsWith('data:')) continue;
+			const frame = data.slice(5).trim();
+			if (!frame || frame === '[DONE]') continue;
+
+			let event: { choices?: { delta?: { content?: string }; finish_reason?: string }[] };
+			try {
+				event = JSON.parse(frame);
+			} catch {
+				// A frame that will not parse has not failed the answer; the rest of
+				// the stream is still worth reading.
+				continue;
+			}
+			if (event.choices?.[0]?.finish_reason === 'length') {
+				console.warn('truncated: the token budget ran out mid-answer');
+			}
+			const piece = event.choices?.[0]?.delta?.content;
+			if (piece) yield piece;
+		}
+	}
 }
 
 export default {
@@ -200,6 +242,11 @@ export default {
 			.map((name) => name.trim())
 			.filter(Boolean)) {
 			upstream = undefined;
+			// The deadline covers reaching the model, not the answer it then writes:
+			// once the headers are in, a fallback is no longer possible anyway, and
+			// cutting a stream that is already flowing would only lose good text.
+			const abort = new AbortController();
+			const deadline = setTimeout(() => abort.abort(), UPSTREAM_TIMEOUT_MS);
 			try {
 				upstream = await fetch(
 					`https://gateway.ai.cloudflare.com/v1/${env.ACCOUNT_ID}/${env.GATEWAY_ID}/compat/chat/completions`,
@@ -217,11 +264,12 @@ export default {
 							// budget below is shared between thinking and the answer, so a tight
 							// cap spends itself before the first word. Keep the effort low and
 							// leave headroom; brevity is the prompt's job, not the cap's.
-							reasoning_effort: 'low',
+							reasoning_effort: env.REASONING,
 							max_tokens: 1600,
+							stream: true,
 							messages,
 						}),
-						signal: AbortSignal.timeout(UPSTREAM_TIMEOUT_MS),
+						signal: abort.signal,
 					},
 				);
 			} catch (cause) {
@@ -229,6 +277,8 @@ export default {
 				// deadline is short and the next one on the list gets the turn.
 				console.error(`gateway stalled on ${model}: ${cause}`);
 				continue;
+			} finally {
+				clearTimeout(deadline);
 			}
 			if (upstream.ok) break;
 
@@ -248,17 +298,66 @@ export default {
 			return json({ error: status === 429 ? 'rate_limited' : 'upstream' }, status, corsHeaders);
 		}
 
-		const payload = (await upstream.json()) as {
-			choices?: { message?: { content?: string }; finish_reason?: string }[];
-			usage?: unknown;
-		};
-		if (payload.choices?.[0]?.finish_reason === 'length') {
-			// The answer was cut mid-sentence: the budget above needs raising.
-			console.warn(`truncated: ${JSON.stringify(payload.usage ?? {})}`);
+		// A page cached before this endpoint learned to stream is still out there
+		// expecting one JSON object, so the caller says which shape it wants and
+		// both are served from the same upstream read.
+		if (body.stream !== true) {
+			const answer = new StreamedAnswer();
+			let whole = '';
+			try {
+				for await (const piece of deltas(upstream)) whole += answer.push(piece);
+				whole += answer.end();
+			} catch (cause) {
+				console.error(`stream broke: ${cause}`);
+				return json({ error: 'upstream' }, 502, corsHeaders);
+			}
+			if (!whole) return json({ error: 'empty' }, 502, corsHeaders);
+			return json({ answer: whole, remaining }, 200, corsHeaders);
 		}
-		const answer = sanitise(payload.choices?.[0]?.message?.content ?? '');
-		if (!answer) return json({ error: 'empty' }, 502, corsHeaders);
 
-		return json({ answer, remaining }, 200, corsHeaders);
+		// One JSON object per line rather than server-sent events: the widget reads
+		// the body with fetch either way, and this keeps the failure envelope the
+		// same shape as the errors above.
+		const answers = new ReadableStream<Uint8Array>({
+			async start(controller) {
+				const encoder = new TextEncoder();
+				const answer = new StreamedAnswer();
+				const send = (value: unknown) =>
+					controller.enqueue(encoder.encode(`${JSON.stringify(value)}\n`));
+
+				let shown = 0;
+				try {
+					for await (const piece of deltas(upstream!)) {
+						const ready = answer.push(piece);
+						if (ready) {
+							shown += ready.length;
+							send({ delta: ready });
+						}
+					}
+					const tail = answer.end();
+					if (tail) {
+						shown += tail.length;
+						send({ delta: tail });
+					}
+					send(shown ? { done: true, remaining } : { error: 'empty' });
+				} catch (cause) {
+					// The reader already has whatever arrived before this; all that is
+					// left is to say the answer stopped rather than finished.
+					console.error(`stream broke: ${cause}`);
+					send({ error: 'upstream' });
+				} finally {
+					controller.close();
+				}
+			},
+		});
+
+		return new Response(answers, {
+			status: 200,
+			headers: {
+				...corsHeaders,
+				'Content-Type': 'application/x-ndjson; charset=utf-8',
+				'Cache-Control': 'no-store',
+			},
+		});
 	},
 } satisfies ExportedHandler<Env>;

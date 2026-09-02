@@ -26,6 +26,10 @@
 		"CORPUS_URL": "https://ahincho.github.io/chat-corpus.json",
 		"ACCOUNT_ID": "5d0285adb93b9e9e4d56d0a436ce1c33",
 		"GATEWAY_ID": "ahincho-portfolio",
+		// Gemini 3 cannot be told to stop thinking, only to think less, and the
+		// thinking is what the reader waits through: the answer itself takes well
+		// under a second to write.
+		"REASONING": "low",
 		// Preference order, tried left to right. Measured on 2026-09-02: every Flash
 		// model answered 503 "high demand" on the free tier, while both Flash-Lite
 		// models answered in seconds. Reliability first; the corpus is small enough

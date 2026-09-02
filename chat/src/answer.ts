@@ -53,17 +53,80 @@ export function systemPrompt(document: string, lang: string): string {
  * having behaved. A successful injection still cannot publish someone else's
  * link or address on this site.
  */
-export function sanitise(answer: string): string {
-	let out = answer.slice(0, ANSWER_MAX);
-	out = out.replace(/https?:\/\/[^\s)\]]+/g, (url) =>
+export function filter(text: string): string {
+	let out = text.replace(/https?:\/\/[^\s)\]]+/g, (url) =>
 		ALLOWED_LINKS.some((allowed) => url.startsWith(allowed)) ? url : '',
 	);
 	out = out.replace(/[\w.+-]+@[\w-]+\.[\w.]+/g, (mail) => (mail === OWN_EMAIL ? mail : ''));
 	// Close the gap a removal leaves, but only where the punctuation ends a
 	// word: requiring a space or the end after it keeps names that open with
 	// a dot, such as .NET, from being glued to the word before them.
-	return out
-		.replace(/[ \t]{2,}/g, ' ')
-		.replace(/ +([.,;:!?])(\s|$)/g, '$1$2')
-		.trim();
+	return out.replace(/[ \t]{2,}/g, ' ').replace(/ +([.,;:!?])(\s|$)/g, '$1$2');
+}
+
+function isSpace(character: string): boolean {
+	return /\s/.test(character);
+}
+
+/**
+ * Streaming asks the filter a question the batch path never had to answer: a
+ * link can only be judged once all of it has arrived, and by the last character
+ * of `https://phishing.example` the first twenty are already on the reader's
+ * screen.
+ *
+ * Links and addresses contain no whitespace, so nothing is released until the
+ * word after it has begun. The answer arrives a word behind the model and the
+ * guarantee survives intact. Whitespace travels with the word that follows it,
+ * which is what keeps a run of spaces from being split across two releases and
+ * surviving the rule that collapses it.
+ */
+export class StreamedAnswer {
+	/** Bounded by the model's own token cap, which is what stops it growing. */
+	private held = '';
+	/**
+	 * Whitespace left at the end of a release, usually the gap where a link used
+	 * to be. It waits for the next release because the rule that closes the gap
+	 * has to see what follows the space to know whether to close it.
+	 */
+	private carry = '';
+	private sent = 0;
+
+	/** Whatever of `chunk` can now be shown. Usually a word behind, often empty. */
+	push(chunk: string): string {
+		this.held += chunk;
+
+		let cut = this.held.length;
+		while (cut > 0 && !isSpace(this.held[cut - 1]!)) cut -= 1;
+		while (cut > 0 && isSpace(this.held[cut - 1]!)) cut -= 1;
+		if (cut === 0) return '';
+
+		const ready = this.held.slice(0, cut);
+		this.held = this.held.slice(cut);
+		return this.release(ready);
+	}
+
+	/** The tail, once the model has stopped and the last word can be judged. */
+	end(): string {
+		const rest = this.release(this.held);
+		this.held = '';
+		this.carry = '';
+		return rest.replace(/\s+$/, '');
+	}
+
+	private release(text: string): string {
+		if (!text || this.sent >= ANSWER_MAX) return '';
+		let out = filter(this.carry + text);
+		this.carry = '';
+		if (this.sent === 0) out = out.replace(/^\s+/, '');
+
+		const trailing = /\s+$/.exec(out);
+		if (trailing) {
+			this.carry = trailing[0];
+			out = out.slice(0, out.length - trailing[0].length);
+		}
+
+		out = out.slice(0, ANSWER_MAX - this.sent);
+		this.sent += out.length;
+		return out;
+	}
 }
