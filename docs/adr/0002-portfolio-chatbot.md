@@ -163,3 +163,12 @@ counted in single-digit requests per minute, that is the one that matters.
 The capacity estimate in **Consequences** was calculated from the Flash row and
 should be read as unverified until the same measurement is repeated against
 Flash-Lite.
+
+The privacy note in the widget exists because of what the free tier costs in
+another currency. Google's API terms for unpaid use say it uses submitted
+content "to provide, improve, and develop Google products and services", that
+"human reviewers may read, annotate, and process your API input and output", and
+"do not submit sensitive, confidential, or personal information to the Unpaid
+Services". A reader cannot consent to that without being told, so the note says
+it plainly and asks them not to write personal data. Cloudflare's own logging is
+the smaller half of the disclosure.
