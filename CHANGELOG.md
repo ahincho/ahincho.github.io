@@ -1,5 +1,15 @@
 # ahincho-portfolio
 
+## 0.3.0
+
+### Minor Changes
+
+- 6d9870c: Add a floating chat widget that answers questions about the portfolio. Its knowledge is generated at build time from the same dictionaries and data the pages render from, so a deploy is the only step that updates it and it cannot claim something the site no longer says. Like the visit counter, it is opt-in: with no `PUBLIC_CHAT_URL` configured the widget is not rendered and the site builds exactly as before.
+
+### Patch Changes
+
+- 576b9be: Record the ByteXByte engagement as freelance. It was inferred as staff when the timeline was modelled — the freelance and internship roles all carried the type in their title and this one did not — but it was a contractor engagement, billed by invoice.
+
 ## 0.2.0
 
 ### Minor Changes
