@@ -2,6 +2,7 @@
 import { translations, getLang, defaultLang } from '../i18n';
 import VideoDemo from './VideoDemo.astro';
 import NovaArchitecture from './NovaArchitecture.astro';
+import AssistantFlow from './AssistantFlow.astro';
 
 const lang = getLang(Astro.currentLocale);
 const t = translations[lang].projects;
@@ -45,6 +46,23 @@ const prefix = lang === defaultLang ? '' : `/${lang}`;
 			<NovaArchitecture />
 			<a class="cta" href={`${prefix}/projects/nova/`}>
 				{t.nova.cta}
+				<span aria-hidden="true">→</span>
+			</a>
+		</article>
+
+		<article class="card">
+			<div class="head">
+				<h3 class="name">{t.assistant.title}</h3>
+				<div class="badges">
+					<span class="badge accent">{t.assistant.badgeKind}</span>
+					<span class="badge status">{t.assistant.badgeStatus}</span>
+				</div>
+			</div>
+			<p class="tagline">{t.assistant.tagline}</p>
+			<p class="description">{t.assistant.description}</p>
+			<AssistantFlow />
+			<a class="cta" href={`${prefix}/projects/assistant/`}>
+				{t.assistant.cta}
 				<span aria-hidden="true">→</span>
 			</a>
 		</article>
