@@ -16,6 +16,7 @@ const t = translations[lang].footer;
 				>LinkedIn</a
 			>
 		</p>
+		<p class="note">{t.privacy}</p>
 	</div>
 </footer>
 
@@ -33,6 +34,12 @@ const t = translations[lang].footer;
 		gap: 0.5rem;
 		font-size: 0.85rem;
 		color: var(--text-faint);
+	}
+
+	.note {
+		/* Its own line under the two columns, whether or not they wrapped. */
+		flex-basis: 100%;
+		font-size: 0.78rem;
 	}
 
 	.made a {

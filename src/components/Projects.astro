@@ -3,6 +3,7 @@ import { translations, getLang, defaultLang } from '../i18n';
 import VideoDemo from './VideoDemo.astro';
 import NovaArchitecture from './NovaArchitecture.astro';
 import AssistantFlow from './AssistantFlow.astro';
+import Reactions from './Reactions.astro';
 
 const lang = getLang(Astro.currentLocale);
 const t = translations[lang].projects;
@@ -27,10 +28,13 @@ const prefix = lang === defaultLang ? '' : `/${lang}`;
 			<p class="tagline">{t.sparkMatch.tagline}</p>
 			<p class="description">{t.sparkMatch.description}</p>
 			<VideoDemo />
-			<a class="cta" href={`${prefix}/projects/spark-match/`}>
-				{t.sparkMatch.cta}
-				<span aria-hidden="true">→</span>
-			</a>
+			<div class="foot">
+				<a class="cta" href={`${prefix}/projects/spark-match/`}>
+					{t.sparkMatch.cta}
+					<span aria-hidden="true">→</span>
+				</a>
+				<Reactions project="spark-match" />
+			</div>
 		</article>
 
 		<article class="card">
@@ -44,10 +48,13 @@ const prefix = lang === defaultLang ? '' : `/${lang}`;
 			<p class="tagline">{t.nova.tagline}</p>
 			<p class="description">{t.nova.description}</p>
 			<NovaArchitecture />
-			<a class="cta" href={`${prefix}/projects/nova/`}>
-				{t.nova.cta}
-				<span aria-hidden="true">→</span>
-			</a>
+			<div class="foot">
+				<a class="cta" href={`${prefix}/projects/nova/`}>
+					{t.nova.cta}
+					<span aria-hidden="true">→</span>
+				</a>
+				<Reactions project="nova" />
+			</div>
 		</article>
 
 		<article class="card">
@@ -61,10 +68,13 @@ const prefix = lang === defaultLang ? '' : `/${lang}`;
 			<p class="tagline">{t.assistant.tagline}</p>
 			<p class="description">{t.assistant.description}</p>
 			<AssistantFlow />
-			<a class="cta" href={`${prefix}/projects/assistant/`}>
-				{t.assistant.cta}
-				<span aria-hidden="true">→</span>
-			</a>
+			<div class="foot">
+				<a class="cta" href={`${prefix}/projects/assistant/`}>
+					{t.assistant.cta}
+					<span aria-hidden="true">→</span>
+				</a>
+				<Reactions project="assistant" />
+			</div>
 		</article>
 
 		<a class="all" href={`${prefix}/projects/`}>
@@ -157,11 +167,18 @@ const prefix = lang === defaultLang ? '' : `/${lang}`;
 		max-width: 60rem;
 	}
 
+	.foot {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 0.5rem 1.4rem;
+		margin-top: var(--space-block);
+	}
+
 	.cta {
 		display: inline-flex;
 		align-items: center;
 		gap: 0.45rem;
-		margin-top: var(--space-block);
 		font-family: var(--font-mono);
 		font-size: 0.88rem;
 		font-weight: 600;
