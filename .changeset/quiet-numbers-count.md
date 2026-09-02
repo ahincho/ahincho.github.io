@@ -12,6 +12,7 @@ never shows a pressed button as unpressed.
 
 Visitors are identified by a salted hash of address and browser that stores
 nothing personal — carrying the date for a visit, so it expires at midnight, and
-omitting it for a reaction, which has to outlive the night. The footer now says
-so plainly. With `PUBLIC_COUNTER_URL` unset the site builds exactly as before,
-without so much as a script for any of it.
+omitting it for a reaction, which has to outlive the night. The footer says so plainly,
+and only while it is true: with `PUBLIC_COUNTER_URL` unset the site builds
+exactly as before, without the note and without so much as a script for any of
+it.

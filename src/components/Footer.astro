@@ -3,6 +3,10 @@ import { translations, getLang } from '../i18n';
 
 const lang = getLang(Astro.currentLocale);
 const t = translations[lang].footer;
+
+// Only true once the site is actually pointed at the counter Worker. A
+// privacy note is the last place to describe something that is not happening.
+const counterUrl = import.meta.env.PUBLIC_COUNTER_URL;
 ---
 
 <footer>
@@ -16,7 +20,7 @@ const t = translations[lang].footer;
 				>LinkedIn</a
 			>
 		</p>
-		<p class="note">{t.privacy}</p>
+		{counterUrl && <p class="note">{t.privacy}</p>}
 	</div>
 </footer>
 
