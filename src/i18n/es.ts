@@ -96,7 +96,6 @@ export const es = {
 				caption:
 					'Presentación final del programa de especialización en IA Generativa y MLOps de la UNI, con la plataforma en funcionamiento.',
 				play: 'Reproducir la demo de Spark Match',
-				alt: 'Página de inicio de Spark Match',
 				iframeTitle: 'Demo de Spark Match',
 			},
 			cta: 'Ver el caso de estudio',

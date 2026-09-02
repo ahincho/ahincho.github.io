@@ -98,7 +98,6 @@ export const en: Translations = {
 				caption:
 					'Final presentation for the Generative AI & MLOps specialization at UNI, with the platform running.',
 				play: 'Play the Spark Match demo',
-				alt: 'Spark Match landing page',
 				iframeTitle: 'Spark Match demo',
 			},
 			cta: 'Read the case study',
