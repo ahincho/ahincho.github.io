@@ -1,5 +1,6 @@
 {
   "extends": "astro/tsconfigs/strict",
   "include": [".astro/types.d.ts", "**/*"],
-  "exclude": ["dist"]
+  "// worker": "Deployed on its own and typed against the Workers runtime, so it carries its own tsconfig.",
+  "exclude": ["dist", "worker"]
 }
