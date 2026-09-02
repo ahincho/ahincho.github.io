@@ -202,3 +202,34 @@ after it has begun, and whitespace travels with the word that follows it. The
 property that matters — that the reader cannot tell where the network cut the
 response — is checked against every possible cut of six different answers rather
 than a chosen one.
+
+## The cache, which is what streaming was not
+
+Added 2 September 2026, closing the loop the section above opened. The gateway
+cache was the guess for what would actually shorten the wait, and measured
+against the deployed endpoint it is:
+
+| Question          | First ask | Asked again |
+| ----------------- | --------- | ----------- |
+| Without streaming | 10.88s    | **0.91s**   |
+| With streaming    | 5.09s     | **0.85s**   |
+
+The Worker logs `cf-aig-cache-status`, and the second ask reports `HIT` rather
+than being fast by chance. Caching and streaming turn out to compose, which the
+documentation does not say either way.
+
+It costs nothing in both senses. Cloudflare lists caching among the free core
+features, alongside dashboard analytics and rate limiting, and a hit never
+reaches Google, so it spends no part of a free tier measured in single-digit
+requests a minute. The paid parts of AI Gateway — Guardrails, Logpush, Unified
+Billing — remain unused.
+
+The entries live a week. The cache key is a hash of the whole request body and
+the body carries the corpus, so publishing the site invalidates every entry by
+itself; a long life cannot serve a stale answer. A long life is also what a
+portfolio needs, since its readers arrive days apart rather than seconds.
+
+One consequence left alone deliberately: the per-visitor cap still counts a
+question that was answered from cache, even though such an answer costs no
+quota. Refunding it would mean unwinding a row already written, and twelve an
+hour is generous enough that nobody will meet the edge.

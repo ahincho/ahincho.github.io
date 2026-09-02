@@ -28,6 +28,11 @@ const CORPUS_TTL_MS = 10 * 60 * 1000;
 // Two of these back to back is already a long wait in a chat bubble, so the
 // deadline is what bounds the worst case, not the provider's patience.
 const UPSTREAM_TIMEOUT_MS = 10_000;
+// The cache key is a hash of the whole request body, and the body carries the
+// corpus, so publishing the site invalidates every entry by itself. That makes
+// a long life safe, and a long life is what a portfolio needs: its readers are
+// days apart, not seconds.
+const CACHE_TTL_SECONDS = 7 * 24 * 60 * 60;
 const BOT_PATTERN =
 	/bot|crawler|spider|slurp|facebookexternalhit|headless|preview|monitor|curl|wget/i;
 
@@ -254,6 +259,7 @@ export default {
 						method: 'POST',
 						headers: {
 							'cf-aig-authorization': `Bearer ${env.CF_AIG_TOKEN}`,
+							'cf-aig-cache-ttl': String(CACHE_TTL_SECONDS),
 							Authorization: `Bearer ${env.GEMINI_API_KEY}`,
 							'Content-Type': 'application/json',
 						},
@@ -280,7 +286,12 @@ export default {
 			} finally {
 				clearTimeout(deadline);
 			}
-			if (upstream.ok) break;
+			if (upstream.ok) {
+				// HIT means the answer never reached the provider, which is the whole
+				// point: it costs no quota and arrives without the model thinking.
+				console.log(`cache ${upstream.headers.get('cf-aig-cache-status') ?? 'unknown'}`);
+				break;
+			}
 
 			// The reader gets nothing actionable, so the reason belongs in the logs:
 			// a wrong model name and a spent quota look identical from outside.
