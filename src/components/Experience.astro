@@ -11,29 +11,37 @@ const t = translations[lang].experience;
 		<p class="section-eyebrow">{t.eyebrow}</p>
 		<h2 class="section-title">{t.title}</h2>
 		<ol class="timeline">
-			{t.jobs.map((job) => (
-				<li>
-					<div class="meta">{job.meta}</div>
-					<h3>{job.role}</h3>
-					<p class="company">{job.company}</p>
-					<ul class="bullets">
-						{job.bullets.map((b) => <li>{b}</li>)}
-					</ul>
-					<div class="tags">
-						{job.tags.map((tag) => <TechPill label={tag} />)}
-					</div>
-				</li>
-			))}
+			{
+				t.jobs.map((job) => (
+					<li>
+						<div class="meta">{job.meta}</div>
+						<h3>{job.role}</h3>
+						<p class="company">{job.company}</p>
+						<ul class="bullets">
+							{job.bullets.map((b) => (
+								<li>{b}</li>
+							))}
+						</ul>
+						<div class="tags">
+							{job.tags.map((tag) => (
+								<TechPill label={tag} />
+							))}
+						</div>
+					</li>
+				))
+			}
 		</ol>
 		<h3 class="edu-title">{t.educationTitle}</h3>
 		<div class="education">
-			{t.education.map((e) => (
-				<div class="edu-card">
-					<p class="school">{e.school}</p>
-					<p class="degree">{e.degree}</p>
-					<p class="edu-meta">{e.meta}</p>
-				</div>
-			))}
+			{
+				t.education.map((e) => (
+					<div class="edu-card">
+						<p class="school">{e.school}</p>
+						<p class="degree">{e.degree}</p>
+						<p class="edu-meta">{e.meta}</p>
+					</div>
+				))
+			}
 		</div>
 	</div>
 </section>

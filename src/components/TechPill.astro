@@ -12,7 +12,13 @@ const icon = techIcon(label);
 <span class="pill">
 	{
 		icon && (
-			<svg class="glyph" viewBox={icon.viewBox} fill="currentColor" aria-hidden="true" set:html={icon.body} />
+			<svg
+				class="glyph"
+				viewBox={icon.viewBox}
+				fill="currentColor"
+				aria-hidden="true"
+				set:html={icon.body}
+			/>
 		)
 	}
 	{label}

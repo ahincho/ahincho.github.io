@@ -11,14 +11,18 @@ const t = translations[lang].skills;
 		<p class="section-eyebrow">{t.eyebrow}</p>
 		<h2 class="section-title">{t.title}</h2>
 		<div class="grid">
-			{t.groups.map((group) => (
-				<div class="group">
-					<h3>{group.name}</h3>
-					<div class="items">
-						{group.items.map((item) => <TechPill label={item} />)}
+			{
+				t.groups.map((group) => (
+					<div class="group">
+						<h3>{group.name}</h3>
+						<div class="items">
+							{group.items.map((item) => (
+								<TechPill label={item} />
+							))}
+						</div>
 					</div>
-				</div>
-			))}
+				))
+			}
 		</div>
 	</div>
 </section>

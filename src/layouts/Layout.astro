@@ -83,7 +83,8 @@ const jsonLd = JSON.stringify({
 		<script is:inline>
 			try {
 				const saved = localStorage.getItem('theme');
-				const theme = saved ?? (matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+				const theme =
+					saved ?? (matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
 				document.documentElement.dataset.theme = theme;
 			} catch {
 				document.documentElement.dataset.theme = 'dark';
