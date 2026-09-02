@@ -9,7 +9,7 @@
   },
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build",
+    "build": "node scripts/chat-corpus.ts && astro build",
     "preview": "astro preview",
     "astro": "astro",
     "og": "node scripts/og-image.mjs",
@@ -20,7 +20,8 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "format": "prettier --write .",
-    "format:check": "prettier --check ."
+    "format:check": "prettier --check .",
+    "corpus": "node scripts/chat-corpus.ts"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.3",

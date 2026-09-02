@@ -1,0 +1,392 @@
+---
+import { translations, getLang } from '../i18n';
+
+const lang = getLang(Astro.currentLocale);
+const t = translations[lang].chat;
+
+// Opt-in the same way the visit counter is: with no endpoint configured the
+// widget is not rendered at all, so the site builds exactly as before.
+const endpoint = import.meta.env.PUBLIC_CHAT_URL;
+---
+
+{
+	endpoint && (
+		<div
+			class="chat"
+			data-endpoint={endpoint}
+			data-lang={lang}
+			data-strings={JSON.stringify({
+				thinking: t.thinking,
+				error: t.error,
+				exhausted: t.exhausted,
+			})}
+		>
+			<button class="launcher" type="button" aria-expanded="false" aria-controls="chat-panel">
+				<svg
+					width="22"
+					height="22"
+					viewBox="0 0 24 24"
+					fill="none"
+					stroke="currentColor"
+					stroke-width="2"
+					stroke-linecap="round"
+					stroke-linejoin="round"
+					aria-hidden="true"
+				>
+					<path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z" />
+				</svg>
+				<span class="launcher-label">{t.open}</span>
+			</button>
+
+			<section id="chat-panel" class="panel" hidden aria-label={t.title}>
+				<header class="panel-head">
+					<div>
+						<p class="panel-title">{t.title}</p>
+						<p class="panel-sub">{t.subtitle}</p>
+					</div>
+					<button class="close" type="button" aria-label={t.close}>
+						<svg
+							width="18"
+							height="18"
+							viewBox="0 0 24 24"
+							fill="none"
+							stroke="currentColor"
+							stroke-width="2"
+							stroke-linecap="round"
+							aria-hidden="true"
+						>
+							<path d="M18 6 6 18M6 6l12 12" />
+						</svg>
+					</button>
+				</header>
+
+				<div class="log" role="log" aria-live="polite">
+					<p class="msg bot">{t.greeting}</p>
+					<div class="suggestions">
+						{t.suggestions.map((s) => (
+							<button class="chip" type="button">
+								{s}
+							</button>
+						))}
+					</div>
+				</div>
+
+				<form class="composer">
+					<label class="sr-only" for="chat-input">
+						{t.placeholder}
+					</label>
+					<input
+						id="chat-input"
+						type="text"
+						autocomplete="off"
+						maxlength="300"
+						placeholder={t.placeholder}
+					/>
+					<button type="submit" aria-label={t.send}>
+						<svg
+							width="18"
+							height="18"
+							viewBox="0 0 24 24"
+							fill="none"
+							stroke="currentColor"
+							stroke-width="2"
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							aria-hidden="true"
+						>
+							<path d="m22 2-7 20-4-9-9-4Z" />
+							<path d="M22 2 11 13" />
+						</svg>
+					</button>
+				</form>
+				<p class="disclaimer">{t.disclaimer}</p>
+			</section>
+		</div>
+	)
+}
+
+<script>
+	const root = document.querySelector<HTMLElement>('.chat');
+	if (root) {
+		const endpoint = root.dataset.endpoint!;
+		const lang = root.dataset.lang!;
+		const launcher = root.querySelector<HTMLButtonElement>('.launcher')!;
+		const panel = root.querySelector<HTMLElement>('.panel')!;
+		const closeButton = root.querySelector<HTMLButtonElement>('.close')!;
+		const log = root.querySelector<HTMLElement>('.log')!;
+		const form = root.querySelector<HTMLFormElement>('.composer')!;
+		const input = root.querySelector<HTMLInputElement>('#chat-input')!;
+		const strings = JSON.parse(root.dataset.strings ?? '{}');
+
+		// Only the last few turns travel with each question: the corpus is what
+		// grounds the answer, and a growing transcript would only cost quota.
+		const history: { role: 'user' | 'assistant'; content: string }[] = [];
+
+		function open(next: boolean) {
+			panel.hidden = !next;
+			launcher.setAttribute('aria-expanded', String(next));
+			if (next) input.focus();
+			else launcher.focus();
+		}
+
+		function bubble(text: string, who: 'user' | 'bot' | 'error') {
+			const p = document.createElement('p');
+			p.className = `msg ${who}`;
+			p.textContent = text;
+			log.append(p);
+			log.scrollTop = log.scrollHeight;
+			return p;
+		}
+
+		async function ask(question: string) {
+			root.querySelector('.suggestions')?.remove();
+			bubble(question, 'user');
+			const pending = bubble(strings.thinking, 'bot');
+			pending.classList.add('pending');
+			input.value = '';
+			input.disabled = true;
+
+			try {
+				const response = await fetch(endpoint, {
+					method: 'POST',
+					headers: { 'Content-Type': 'application/json' },
+					body: JSON.stringify({ question, lang, history: history.slice(-4) }),
+				});
+				if (response.status === 429) {
+					pending.classList.remove('pending');
+					pending.className = 'msg error';
+					pending.textContent = strings.exhausted;
+					return;
+				}
+				if (!response.ok) throw new Error(String(response.status));
+				const payload: { answer: string } = await response.json();
+				pending.classList.remove('pending');
+				pending.textContent = payload.answer;
+				history.push({ role: 'user', content: question });
+				history.push({ role: 'assistant', content: payload.answer });
+			} catch {
+				pending.classList.remove('pending');
+				pending.className = 'msg error';
+				pending.textContent = strings.error;
+			} finally {
+				input.disabled = false;
+				input.focus();
+				log.scrollTop = log.scrollHeight;
+			}
+		}
+
+		launcher.addEventListener('click', () => open(panel.hidden));
+		closeButton.addEventListener('click', () => open(false));
+		document.addEventListener('keydown', (event) => {
+			if (event.key === 'Escape' && !panel.hidden) open(false);
+		});
+		root.querySelectorAll<HTMLButtonElement>('.chip').forEach((chip) => {
+			chip.addEventListener('click', () => ask(chip.textContent!.trim()));
+		});
+		form.addEventListener('submit', (event) => {
+			event.preventDefault();
+			const question = input.value.trim();
+			if (question) ask(question);
+		});
+	}
+</script>
+
+<style>
+	.chat {
+		position: fixed;
+		right: 1.2rem;
+		bottom: 1.2rem;
+		z-index: 90;
+		display: flex;
+		flex-direction: column;
+		align-items: flex-end;
+		gap: 0.7rem;
+	}
+
+	.launcher {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.5rem;
+		padding: 0.7rem 1.1rem;
+		border: 1px solid var(--accent-border);
+		border-radius: 999px;
+		background: var(--accent);
+		color: var(--accent-contrast);
+		font-family: var(--font-mono);
+		font-size: 0.82rem;
+		font-weight: 600;
+		cursor: pointer;
+		box-shadow: 0 6px 24px rgb(0 0 0 / 28%);
+		transition: transform 0.2s ease;
+	}
+
+	.launcher:hover {
+		transform: translateY(-2px);
+	}
+
+	.panel {
+		width: min(23rem, calc(100vw - 2.4rem));
+		height: min(30rem, calc(100vh - 8rem));
+		display: flex;
+		flex-direction: column;
+		background: var(--card);
+		border: 1px solid var(--border-strong);
+		border-radius: 16px;
+		box-shadow: 0 18px 48px rgb(0 0 0 / 32%);
+		overflow: hidden;
+	}
+
+	.panel-head {
+		display: flex;
+		align-items: flex-start;
+		justify-content: space-between;
+		gap: 0.8rem;
+		padding: 0.9rem 1rem;
+		border-bottom: 1px solid var(--border);
+	}
+
+	.panel-title {
+		font-weight: 700;
+		font-size: 0.95rem;
+	}
+
+	.panel-sub {
+		color: var(--text-faint);
+		font-size: 0.76rem;
+		margin-top: 0.15rem;
+	}
+
+	.close {
+		background: none;
+		border: 0;
+		color: var(--text-muted);
+		cursor: pointer;
+		padding: 0.2rem;
+	}
+
+	.close:hover {
+		color: var(--text);
+	}
+
+	.log {
+		flex: 1;
+		overflow-y: auto;
+		padding: 1rem;
+		display: flex;
+		flex-direction: column;
+		gap: 0.6rem;
+	}
+
+	.msg {
+		font-size: 0.88rem;
+		line-height: 1.55;
+		padding: 0.6rem 0.85rem;
+		border-radius: 12px;
+		max-width: 90%;
+	}
+
+	.msg.bot {
+		background: var(--bg-soft);
+		border: 1px solid var(--border);
+		align-self: flex-start;
+	}
+
+	.msg.user {
+		background: var(--accent-dim);
+		border: 1px solid var(--accent-border);
+		align-self: flex-end;
+	}
+
+	.msg.error {
+		background: var(--bg-soft);
+		border: 1px solid var(--border-strong);
+		color: var(--text-muted);
+		align-self: flex-start;
+	}
+
+	.msg.pending {
+		color: var(--text-faint);
+	}
+
+	.suggestions {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.35rem;
+	}
+
+	.chip {
+		font-family: var(--font-mono);
+		font-size: 0.72rem;
+		color: var(--text-muted);
+		background: transparent;
+		border: 1px solid var(--border-strong);
+		border-radius: 999px;
+		padding: 0.3rem 0.7rem;
+		cursor: pointer;
+		text-align: left;
+	}
+
+	.chip:hover {
+		color: var(--accent);
+		border-color: var(--accent-border);
+	}
+
+	.composer {
+		display: flex;
+		gap: 0.4rem;
+		padding: 0.7rem 0.8rem 0.4rem;
+		border-top: 1px solid var(--border);
+	}
+
+	.composer input {
+		flex: 1;
+		background: var(--bg-soft);
+		border: 1px solid var(--border-strong);
+		border-radius: 10px;
+		padding: 0.55rem 0.7rem;
+		color: var(--text);
+		font: inherit;
+		font-size: 0.88rem;
+	}
+
+	.composer input:disabled {
+		opacity: 0.6;
+	}
+
+	.composer button {
+		display: grid;
+		place-items: center;
+		width: 2.4rem;
+		border: 1px solid var(--accent-border);
+		border-radius: 10px;
+		background: var(--accent);
+		color: var(--accent-contrast);
+		cursor: pointer;
+	}
+
+	.disclaimer {
+		font-size: 0.68rem;
+		color: var(--text-faint);
+		text-align: center;
+		padding: 0 0.8rem 0.7rem;
+	}
+
+	.sr-only {
+		position: absolute;
+		width: 1px;
+		height: 1px;
+		overflow: hidden;
+		clip-path: inset(50%);
+		white-space: nowrap;
+	}
+
+	@media (max-width: 560px) {
+		.launcher-label {
+			display: none;
+		}
+
+		.launcher {
+			padding: 0.85rem;
+		}
+	}
+</style>

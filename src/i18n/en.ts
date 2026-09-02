@@ -341,6 +341,25 @@ export const en: Translations = {
 		home: 'Back to home',
 		project: 'See my projects',
 	},
+	chat: {
+		open: 'Ask about my profile',
+		close: 'Close the chat',
+		title: 'Ask me',
+		subtitle: 'I answer only from what is on this portfolio.',
+		greeting:
+			'Hi! I can tell you about Angel’s experience, projects or stack. What would you like to know?',
+		suggestions: [
+			'What experience does he have with AWS?',
+			'Tell me about Spark Match',
+			'Which countries has he worked in?',
+		],
+		placeholder: 'Type your question…',
+		send: 'Send',
+		thinking: 'Thinking…',
+		error: 'Something went wrong. Please try again in a moment.',
+		exhausted: 'I have hit my daily question limit. Reach him directly from the contact section.',
+		disclaimer: 'AI-generated answers, based on the content of this site.',
+	},
 	footer: {
 		rights: '© 2026 Angel Hincho — Arequipa, Peru',
 		madeWith: 'Built with',
