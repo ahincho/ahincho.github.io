@@ -25,6 +25,9 @@ jobs:
           # Set this repository variable to the deployed Worker URL to enable
           # the public counters. Unset means the site builds without them.
           PUBLIC_COUNTER_URL: ${{ vars.PUBLIC_COUNTER_URL }}
+          # Same arrangement for the chat: unset means the widget still
+          # renders, but says it is not connected instead of asking.
+          PUBLIC_CHAT_URL: ${{ vars.PUBLIC_CHAT_URL }}
 
   deploy:
     needs: build

@@ -1,0 +1,35 @@
+{
+	"$schema": "./node_modules/wrangler/config-schema.json",
+	"name": "portfolio-chat",
+	"main": "src/index.ts",
+	"compatibility_date": "2026-09-01",
+	"observability": {
+		"enabled": true,
+	},
+	"durable_objects": {
+		"bindings": [
+			{
+				"name": "LIMITS",
+				"class_name": "Limits",
+			},
+		],
+	},
+	// SQLite-backed Durable Objects are the only kind on the Workers free plan.
+	"migrations": [
+		{
+			"tag": "v1",
+			"new_sqlite_classes": ["Limits"],
+		},
+	],
+	"vars": {
+		"ALLOWED_ORIGINS": "https://ahincho.github.io,http://localhost:4321",
+		"CORPUS_URL": "https://ahincho.github.io/chat-corpus.json",
+		"ACCOUNT_ID": "5d0285adb93b9e9e4d56d0a436ce1c33",
+		"GATEWAY_ID": "ahincho-portfolio",
+		// Preference order, tried left to right. Measured on 2026-09-02: every Flash
+		// model answered 503 "high demand" on the free tier, while both Flash-Lite
+		// models answered in seconds. Reliability first; the corpus is small enough
+		// that reading it is extraction, not reasoning.
+		"MODEL": "google-ai-studio/gemini-3.1-flash-lite,google-ai-studio/gemini-3.5-flash-lite",
+	},
+}
