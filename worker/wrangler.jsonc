@@ -23,6 +23,9 @@
 	],
 	"vars": {
 		"ALLOWED_ORIGINS": "https://ahincho.github.io,http://localhost:4321",
-		"COUNTER_KEYS": "site-visits,spark-match-likes,cv-downloads",
+		// Counted once per visitor per day, and never go down.
+		"COUNTER_KEYS": "site-visits,cv-downloads",
+		// One row per visitor, which they can take back.
+		"REACTION_KEYS": "spark-match,nova,assistant",
 	},
 }
