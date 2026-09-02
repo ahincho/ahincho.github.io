@@ -75,7 +75,7 @@ export const jobs = [
 	{
 		id: 'bytexbyte',
 		company: 'ByteXByte',
-		employment: 'staff',
+		employment: 'freelance',
 		modality: 'hybrid',
 		industry: 'retail',
 		start: '2021-04',
