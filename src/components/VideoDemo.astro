@@ -7,6 +7,12 @@ const lang = getLang(Astro.currentLocale);
 const t = translations[lang].projects.sparkMatch.video;
 
 const VIDEO_ID = '_wiDqTKroxk';
+
+// The recording is the full 14:34 course presentation, and the first nine
+// minutes are slides. The walkthrough of the running platform opens at 9:35
+// with "continuando con el recorrido de la aplicación", so that is where a
+// visitor should land — nobody browsing a portfolio sits through the theory.
+const VIDEO_START = 575;
 ---
 
 <figure class="demo">
@@ -15,6 +21,7 @@ const VIDEO_ID = '_wiDqTKroxk';
 		type="button"
 		aria-label={t.play}
 		data-video={VIDEO_ID}
+		data-start={VIDEO_START}
 		data-title={t.iframeTitle}
 	>
 		<Image
@@ -39,7 +46,7 @@ const VIDEO_ID = '_wiDqTKroxk';
 			'click',
 			() => {
 				const frame = document.createElement('iframe');
-				frame.src = `https://www.youtube-nocookie.com/embed/${button.dataset.video}?autoplay=1&rel=0`;
+				frame.src = `https://www.youtube-nocookie.com/embed/${button.dataset.video}?start=${button.dataset.start}&autoplay=1&rel=0`;
 				frame.title = button.dataset.title ?? '';
 				frame.allow =
 					'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
