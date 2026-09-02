@@ -149,6 +149,9 @@ const stackJson = `{
 		font-family: var(--font-mono);
 		font-size: clamp(1rem, 2.2vw, 1.25rem);
 		font-weight: 600;
+		/* Three roles are too long for one line on a phone, and the default break
+		 * leaves 'Engineer' alone underneath. Balancing splits it where it reads. */
+		text-wrap: balance;
 		color: var(--accent);
 		margin-top: 0.75rem;
 	}

@@ -4,11 +4,11 @@ import type { JobId, StudyId } from '../data/experience';
 
 export const en: Translations = {
 	meta: {
-		title: 'Angel Hincho — Full Stack & DevSecOps Engineer',
+		title: 'Angel Hincho — Full Stack, DevSecOps & AI Engineer',
 		description:
 			"Angel Hincho's portfolio: 5+ years building education platforms, e-commerce and multi-country systems with Spring Boot, NestJS, React, Angular and AWS. Focused on Generative AI and MLOps.",
 		ogLocale: 'en_US',
-		ogImageAlt: 'Angel Hincho — Full Stack & DevSecOps Engineer, Arequipa, Peru',
+		ogImageAlt: 'Angel Hincho — Full Stack, DevSecOps & AI Engineer, Arequipa, Peru',
 		siteName: "Angel Hincho's portfolio",
 	},
 	nav: {
@@ -27,7 +27,7 @@ export const en: Translations = {
 	},
 	hero: {
 		location: 'Arequipa, Peru',
-		role: 'Full Stack & DevSecOps Engineer',
+		role: 'Full Stack, DevSecOps & AI Engineer',
 		lead: '5+ years building education platforms, e-commerce and multi-country systems — from architecture design to the pipeline that ships it to production. Currently focused on Generative AI and MLOps.',
 		ctaProject: 'See my projects',
 		ctaContact: 'Get in touch',
@@ -63,7 +63,7 @@ export const en: Translations = {
 		index: {
 			title: 'Projects | Angel Hincho',
 			description:
-				"Angel Hincho's projects: Spark Match, a career guidance agent built with Generative AI, and Nova, a meta-framework for enterprise microservices.",
+				"Angel Hincho's projects: Spark Match, a career guidance agent built with Generative AI; Nova, a meta-framework for enterprise microservices; and the AI assistant on this portfolio.",
 			heading: 'Projects',
 			back: 'Back to the portfolio',
 			read: 'Read the case study',
@@ -71,7 +71,7 @@ export const en: Translations = {
 		all: 'All projects',
 		eyebrow: 'what I build',
 		title: 'Featured projects',
-		lead: 'Two platforms I designed and built end to end. Each one has its own case study.',
+		lead: 'Three things I designed and built end to end. One of them is running on this very page.',
 		sparkMatch: {
 			eyebrow: 'featured project',
 			title: 'Spark Match',
@@ -197,6 +197,81 @@ export const en: Translations = {
 					label: 'Architecture rules',
 				},
 				{ href: 'https://github.com/ahincho/nova-docs', label: 'ADRs and documentation' },
+			],
+		},
+		assistant: {
+			eyebrow: 'my own tool',
+			title: 'Portfolio assistant',
+			tagline: 'A chatbot that cannot invent my experience',
+			badgeKind: 'In production',
+			badgeStatus: 'Live on this site',
+			description:
+				'The chat waiting in the corner of this page. It answers only with what this portfolio says: the corpus is generated at build time from the very sources that render the site, travels whole inside the prompt, and there is nothing else. It runs on a Cloudflare Worker with abuse limits, guardrails against prompt injection, and two models racing to answer first.',
+			figures: [
+				{ value: '0.9s', label: 'repeated question' },
+				{ value: '3.8s', label: 'fresh question' },
+				{ value: '$0', label: 'monthly cost' },
+			],
+			archAria: 'The path of a question: browser to Worker, then gateway, then model',
+			flowLabel: 'The path of a question',
+			flow: [
+				{
+					name: 'the browser',
+					note: 'hand-written widget, no framework',
+					items: ['the question', '4 turns of context', 'reads the answer in pieces'],
+				},
+				{
+					name: 'the Worker',
+					note: 'Cloudflare, at the edge',
+					items: [
+						'12 per visitor/hour',
+						'90 in total/hour',
+						'builds the prompt',
+						'filters the answer',
+					],
+				},
+				{
+					name: 'the gateway',
+					note: 'AI Gateway',
+					items: ['a week of cache', 'logs for review', 'two models at once'],
+				},
+				{
+					name: 'the model',
+					note: 'Gemini Flash-Lite, free tier',
+					items: ['prose anchored to the document'],
+				},
+			],
+			highlights: [
+				'It cannot claim anything this site no longer says: the corpus is generated at build time from the very sources that render the site, so publishing is the only way to change what the assistant knows.',
+				'Two layers against prompt injection. The system ignores instructions arriving inside the question, and an output filter removes any link or address that is not mine before it reaches the screen — even when the model was talked into offering one.',
+				'That filter survives streaming, which is the hard part: a link can only be judged whole, so nothing is published until the word after it has begun. The property is checked against every possible cut of the text rather than a chosen one.',
+				'When the first model takes longer than four seconds, the second starts alongside it and whichever answers first wins. The mean fell from 8.3s to 3.8s and the worst case from 13.0s to 5.8s.',
+				'A repeated question comes back from cache in under a second without spending any provider quota, and publishing the site invalidates the entries by itself because the corpus is part of the key.',
+				'Zero cost and no card: Workers, Durable Objects on SQLite, AI Gateway and the Google AI Studio free tier.',
+			],
+			roleLabel: 'My role:',
+			roleText:
+				'I designed and built all of it — the widget, the endpoint, the guardrails, the measurements that decided every setting, and the ADR explaining why.',
+			cta: 'Read the case study',
+			back: 'Back to the portfolio',
+			detailMeta: {
+				title: 'Portfolio assistant — Case study | Angel Hincho',
+				description:
+					'A chatbot anchored to the portfolio content: corpus generated at build time, guardrails against prompt injection, two models in parallel and caching. On Cloudflare Workers, at no cost.',
+			},
+			links: [
+				{
+					href: 'https://github.com/ahincho/ahincho.github.io/blob/main/docs/adr/0002-portfolio-chatbot.md',
+					label: 'The decision, written down (ADR)',
+				},
+				{
+					href: 'https://github.com/ahincho/ahincho.github.io/tree/main/chat',
+					label: 'The assistant Worker',
+				},
+				{
+					href: 'https://github.com/ahincho/ahincho.github.io/blob/main/chat/src/answer.ts',
+					label: 'The output filter and its tests',
+				},
 			],
 		},
 	},
