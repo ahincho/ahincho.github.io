@@ -336,34 +336,44 @@ const endpoint = import.meta.env.PUBLIC_CHAT_URL ?? '';
 		gap: 0.6rem;
 	}
 
-	.msg {
+	/*
+	 * Messages are created with createElement once a conversation starts, so they
+	 * never carry the data-astro-cid attribute a scoped selector needs. Written
+	 * scoped, only the greeting in the template was ever styled and every later
+	 * message rendered as bare text — which is why a question and its answer
+	 * looked identical. The parent is scoped; the messages are matched globally.
+	 */
+	.log :global(.msg) {
 		font-size: 0.88rem;
 		line-height: 1.55;
 		padding: 0.6rem 0.85rem;
-		border-radius: 12px;
-		max-width: 90%;
+		max-width: 85%;
+		width: fit-content;
 	}
 
-	.msg.bot {
+	/* The flat corner marks who is speaking even before the colour registers. */
+	.log :global(.msg.bot),
+	.log :global(.msg.error) {
 		background: var(--bg-soft);
 		border: 1px solid var(--border);
+		border-radius: 12px 12px 12px 3px;
 		align-self: flex-start;
 	}
 
-	.msg.user {
+	.log :global(.msg.user) {
 		background: var(--accent-dim);
 		border: 1px solid var(--accent-border);
+		border-radius: 12px 12px 3px 12px;
 		align-self: flex-end;
+		color: var(--text);
 	}
 
-	.msg.error {
-		background: var(--bg-soft);
-		border: 1px solid var(--border-strong);
+	.log :global(.msg.error) {
+		border-color: var(--border-strong);
 		color: var(--text-muted);
-		align-self: flex-start;
 	}
 
-	.msg.pending {
+	.log :global(.msg.pending) {
 		color: var(--text-faint);
 	}
 
