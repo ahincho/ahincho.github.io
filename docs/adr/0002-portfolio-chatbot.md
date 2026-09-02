@@ -123,3 +123,43 @@ configuration, not of architecture.
 Billing must not be enabled on the Google AI Studio project — doing so moves it
 off the free tier. And reader questions do reach Google, though the material the
 bot works from is a public CV.
+
+## What deploying it changed
+
+Added 2 September 2026, the day it went live. The table above was read from
+published quotas; the endpoint measured what those quotas actually deliver, and
+two of its rows did not survive contact.
+
+**Every Flash model is out of room.** `gemini-3.8-flash`, `3.7` and `3.6` each
+answered `503 · This model is currently experiencing high demand`, repeatedly
+and across several minutes. The per-minute ceiling reported on refusal was five
+requests, not the ~37 estimated. `gemini-2.5-flash` — the model Cloudflare's own
+documentation still uses in its examples — answers `404`: no longer available to
+new users.
+
+**Flash-Lite has the capacity Flash lacks.** Measured over three questions each:
+`gemini-3.1-flash-lite` answered in 3.0–4.2s with no failures, and
+`gemini-3.5-flash-lite` in 4.7–5.2s with one timeout. Both read the corpus
+correctly, which is the only thing being asked of them — this is extraction from
+a document that is handed over in full, not reasoning.
+
+So what shipped is `gemini-3.1-flash-lite` with `gemini-3.5-flash-lite` behind
+it. `MODEL` holds a comma-separated preference order and the endpoint walks it,
+retrying only on a busy provider, so tracking Google's lineup stays a change of
+configuration.
+
+Two things about the models themselves were only visible from inside. Gemini 3
+cannot be told to stop reasoning, and `max_tokens` is shared between thinking
+and the answer, so the original 400-token cap was spent before the first word
+and answers arrived cut mid-sentence; the cap is now 1,600 with the reasoning
+effort set low. And each attempt carries a ten-second deadline, because two
+patient retries add up to a wait no one watching a chat bubble will sit through.
+
+The rate limit gained a second half. The visitor key is derived from the
+address, which a dual-stack client can change between requests, so a per-visitor
+cap alone does not bind; a window-wide cap sits in front of it. On a free tier
+counted in single-digit requests per minute, that is the one that matters.
+
+The capacity estimate in **Consequences** was calculated from the Flash row and
+should be read as unverified until the same measurement is repeated against
+Flash-Lite.

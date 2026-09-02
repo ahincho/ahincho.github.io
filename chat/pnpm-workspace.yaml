@@ -1,0 +1,7 @@
+# Marks chat/ as its own pnpm root so it keeps a separate lockfile and the
+# Pages build never installs the Workers runtime.
+packages: []
+
+allowBuilds:
+  esbuild: true
+  workerd: true

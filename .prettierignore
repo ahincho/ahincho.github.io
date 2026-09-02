@@ -4,3 +4,5 @@ pnpm-lock.yaml
 CHANGELOG.md
 worker/node_modules
 worker/.wrangler
+chat/worker-configuration.d.ts
+chat/.wrangler
