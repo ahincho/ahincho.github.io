@@ -1,5 +1,11 @@
 # ahincho-portfolio
 
+## 0.3.3
+
+### Patch Changes
+
+- 32db60c: Give the assistant a face. It now carries an avatar in its header and beside every answer, stamps each message with the time it arrived, and the panel is wider — 27rem instead of 23 — so answers of a few sentences no longer read as a narrow column.
+
 ## 0.3.2
 
 ### Patch Changes
