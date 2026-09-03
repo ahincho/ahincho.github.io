@@ -4,6 +4,7 @@ import '@fontsource-variable/jetbrains-mono';
 import '../styles/global.css';
 import { translations, getLang } from '../i18n';
 import ChatWidget from '../components/ChatWidget.astro';
+import { cardVersion } from '../lib/og-card';
 
 interface Props {
 	title?: string;
@@ -23,6 +24,15 @@ const {
 	noindex = false,
 	chat = true,
 } = Astro.props;
+
+/*
+ * The sharing card sat at a URL that never changed, so a scraper that fetched it
+ * once had no reason to ask again: Discord was still serving the version from
+ * before "AI Engineer" was in the role, while reading the new title off the same
+ * page. The fingerprint moves the URL whenever the image moves, which is the only
+ * thing those caches key on. It is written by the same script that draws the card.
+ */
+const cardUrl = Astro.site ? new URL(`/og.png?v=${cardVersion}`, Astro.site).href : undefined;
 
 // Every page exists in both languages at the same path, prefixed with /en for English.
 const path = Astro.url.pathname;
@@ -47,9 +57,7 @@ const jsonLd = JSON.stringify({
 		address: { '@type': 'PostalAddress', addressLocality: 'Arequipa', addressCountry: 'PE' },
 	},
 	sameAs: ['https://github.com/ahincho', 'https://www.linkedin.com/in/ahincho'],
-	...(Astro.site
-		? { url: new URL('/', Astro.site).href, image: new URL('/og.png', Astro.site).href }
-		: {}),
+	...(Astro.site ? { url: new URL('/', Astro.site).href, image: cardUrl } : {}),
 });
 ---
 
@@ -79,11 +87,11 @@ const jsonLd = JSON.stringify({
 					<link rel="alternate" hreflang="x-default" href={new URL(esPath, Astro.site)} />
 					<meta property="og:url" content={new URL(path, Astro.site)} />
 					{/* Scrapers do not resolve relative paths, so the card image needs the full URL. */}
-					<meta property="og:image" content={new URL('/og.png', Astro.site)} />
+					<meta property="og:image" content={cardUrl} />
 					<meta property="og:image:width" content="1200" />
 					<meta property="og:image:height" content="630" />
 					<meta property="og:image:alt" content={t.meta.ogImageAlt} />
-					<meta name="twitter:image" content={new URL('/og.png', Astro.site)} />
+					<meta name="twitter:image" content={cardUrl} />
 				</>
 			)
 		}
