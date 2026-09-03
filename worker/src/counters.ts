@@ -48,9 +48,27 @@ export function cors(
 	};
 }
 
-/** The UTC day, which is what makes a visit token expire at midnight. */
+/**
+ * The site's own day, not UTC and not the reader's.
+ *
+ * Not UTC, because these numbers are read from Arequipa and a UTC day puts a
+ * Peruvian evening into tomorrow's row. Not the reader's either, and that one
+ * matters more: the visitor token is derived from the day, so a visitor who got
+ * to choose it could mint a fresh identity on every request and walk straight
+ * through the rate limit. The day has to be something only the server decides.
+ */
+const SITE_TIME_ZONE = 'America/Lima';
+
+const DAY = new Intl.DateTimeFormat('en-CA', {
+	timeZone: SITE_TIME_ZONE,
+	year: 'numeric',
+	month: '2-digit',
+	day: '2-digit',
+});
+
 export function today(now = Date.now()): string {
-	return new Date(now).toISOString().slice(0, 10);
+	const parts = new Map(DAY.formatToParts(now).map((part) => [part.type, part.value]));
+	return `${parts.get('year')}-${parts.get('month')}-${parts.get('day')}`;
 }
 
 /**

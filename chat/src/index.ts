@@ -153,7 +153,9 @@ export class Limits extends DurableObject<Env> {
 async function visitorToken(request: Request, salt: string): Promise<string> {
 	const ip = request.headers.get('CF-Connecting-IP') ?? 'unknown';
 	const agent = request.headers.get('User-Agent') ?? 'unknown';
-	const day = new Date().toISOString().slice(0, 10);
+	// The same day the roll-up uses; they have to agree or one visitor would
+	// land in two buckets on the same evening.
+	const day = dayOf();
 	const digest = await crypto.subtle.digest(
 		'SHA-256',
 		new TextEncoder().encode(`${salt}:${ip}:${agent}:${day}`),

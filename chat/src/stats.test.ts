@@ -63,9 +63,13 @@ describe('summarise', () => {
 });
 
 describe('dayOf and cutoff', () => {
-	it('reads the UTC day, not the local one', () => {
-		expect(dayOf(Date.parse('2026-09-02T23:59:00Z'))).toBe('2026-09-02');
-		expect(dayOf(Date.parse('2026-09-03T00:01:00Z'))).toBe('2026-09-03');
+	it('rolls the day over at midnight in Arequipa, not in London', () => {
+		// Seven in the evening in Peru is already tomorrow in UTC. It must not be
+		// a new day here, or one evening's questions would be split across rows.
+		expect(dayOf(Date.parse('2026-09-03T00:01:00Z'))).toBe('2026-09-02');
+		expect(dayOf(Date.parse('2026-09-03T04:59:00Z'))).toBe('2026-09-02');
+		// 05:00Z is where the day actually turns.
+		expect(dayOf(Date.parse('2026-09-03T05:00:00Z'))).toBe('2026-09-03');
 	});
 
 	it('counts back the days it was asked for', () => {
