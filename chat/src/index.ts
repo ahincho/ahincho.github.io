@@ -185,7 +185,7 @@ function cors(request: Request, env: Env): Record<string, string> | 'forbidden' 
 	if (!allowed.includes(origin)) return 'forbidden';
 	return {
 		'Access-Control-Allow-Origin': origin,
-		'Access-Control-Allow-Methods': 'POST, OPTIONS',
+		'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
 		'Access-Control-Allow-Headers': 'Content-Type',
 		'Access-Control-Max-Age': '86400',
 		Vary: 'Origin',
@@ -195,7 +195,7 @@ function cors(request: Request, env: Env): Record<string, string> | 'forbidden' 
 function json(body: unknown, status: number, headers: Record<string, string>): Response {
 	return new Response(JSON.stringify(body), {
 		status,
-		headers: { ...headers, 'Content-Type': 'application/json', 'Cache-Control': 'no-store' },
+		headers: { 'Content-Type': 'application/json', 'Cache-Control': 'no-store', ...headers },
 	});
 }
 
@@ -364,14 +364,21 @@ export default {
 			return new Response(null, { status: 204, headers: corsHeaders });
 
 		if (new URL(request.url).pathname === '/stats') {
-			// 404 rather than 401: an endpoint that answers "wrong token" is an
-			// endpoint worth guessing at. Without a token configured there is
-			// nothing here at all.
-			if (!matches(request.headers.get('X-Stats-Token'), env.STATS_TOKEN)) {
-				return json({ error: 'not_found' }, 404, corsHeaders);
-			}
 			const counts = env.LIMITS.get(env.LIMITS.idFromName('global'));
-			return json(summarise(await counts.stats(90)), 200, corsHeaders);
+			const everything = summarise(await counts.stats(90));
+			// How much the assistant was used is on the page, so the totals are
+			// public. Which days carried that traffic is not: it says more about
+			// the site than the number does, and nothing on the page needs it.
+			if (matches(request.headers.get('X-Stats-Token'), env.STATS_TOKEN)) {
+				return json(everything, 200, corsHeaders);
+			}
+			const { days: _days, ...totals } = everything;
+			// Five minutes at the edge. The number moves slowly and the page asks
+			// for it on every visit, so the Durable Object need not hear about it.
+			return json(totals, 200, {
+				...corsHeaders,
+				'Cache-Control': 'public, max-age=300',
+			});
 		}
 		if (request.method !== 'POST') return json({ error: 'method_not_allowed' }, 405, corsHeaders);
 

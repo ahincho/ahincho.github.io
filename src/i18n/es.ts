@@ -36,6 +36,7 @@ export const es = {
 		now: 'Especialización IA Generativa & MLOps — UNI',
 		visits: { one: 'visita única', other: 'visitas únicas' },
 		downloads: { one: 'descarga del CV', other: 'descargas del CV' },
+		questions: { one: 'pregunta al asistente', other: 'preguntas al asistente' },
 		stats: [
 			{ value: '5+', label: 'años de experiencia' },
 			{ value: '300k+', label: 'usuarios en producción' },

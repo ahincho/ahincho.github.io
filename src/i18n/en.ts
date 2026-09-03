@@ -37,6 +37,7 @@ export const en: Translations = {
 		now: 'Generative AI & MLOps specialization — UNI',
 		visits: { one: 'unique visit', other: 'unique visits' },
 		downloads: { one: 'CV download', other: 'CV downloads' },
+		questions: { one: 'question to the assistant', other: 'questions to the assistant' },
 		stats: [
 			{ value: '5+', label: 'years of experience' },
 			{ value: '300k+', label: 'users in production' },
