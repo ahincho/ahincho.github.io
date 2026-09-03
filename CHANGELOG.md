@@ -1,5 +1,20 @@
 # ahincho-portfolio
 
+## 0.7.7
+
+### Patch Changes
+
+- b8f44c8: Correct Nova's repository count. The case study claimed 28 public repositories
+  in three places; there are 30, all public, none of them forks or archived. The
+  other two figures were checked against GitHub at the same time and both hold:
+  three stacks (Spring Boot, Quarkus and NestJS each have their own repositories)
+  and seven framework-free core libraries.
+- ed03876: Start the terminal's metrics at zero and let them climb. The block used to wait
+  for every endpoint to answer and then reveal three rows at once; now it is drawn
+  at zero as the page loads and each figure counts up to its real value the moment
+  its own answer lands. A metric that fails or has nothing to report still leaves,
+  and a visitor who asked for reduced motion gets the figure without the climb.
+
 ## 0.7.6
 
 ### Patch Changes
