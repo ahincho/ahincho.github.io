@@ -8,6 +8,8 @@ const lang = getLang(Astro.currentLocale);
 const t = translations[lang].projects.assistant;
 
 const homePath = lang === defaultLang ? '/#projects' : `/${lang}/#projects`;
+
+const chatUrl = import.meta.env.PUBLIC_CHAT_URL;
 ---
 
 <section class="section">
@@ -35,6 +37,18 @@ const homePath = lang === defaultLang ? '/#projects' : `/${lang}/#projects`;
 							<dd>{figure.value}</dd>
 						</div>
 					))
+				}{
+					/*
+					 * The other three are what the thing costs and how fast it is. This one
+					 * is whether anyone asked, which no build can know — so it stays out of
+					 * the way until the endpoint has answered.
+					 */
+					chatUrl && (
+						<div data-answered data-one={t.answered.one} data-other={t.answered.other} hidden>
+							<dt />
+							<dd />
+						</div>
+					)
 				}
 			</dl>
 			<AssistantFlow />
@@ -73,6 +87,44 @@ const homePath = lang === defaultLang ? '/#projects' : `/${lang}/#projects`;
 		</article>
 	</div>
 </section>
+
+<script>
+	import { climb } from '../lib/climb';
+
+	const chatUrl = import.meta.env.PUBLIC_CHAT_URL;
+
+	// The query lives inside the check so that a build without the variable
+	// leaves nothing behind at all, not even a script that finds no figure.
+	if (chatUrl) {
+		const figure = document.querySelector<HTMLElement>('[data-answered]');
+
+		if (figure) {
+			const lang = document.documentElement.lang;
+			const number = new Intl.NumberFormat(lang);
+			const plural = new Intl.PluralRules(lang);
+			const value = figure.querySelector('dd');
+			const label = figure.querySelector('dt');
+
+			fetch(`${chatUrl}/stats`)
+				.then((response) => (response.ok ? response.json() : Promise.reject(response.status)))
+				.then((body: { questions?: number }) => {
+					const answered = body.questions ?? 0;
+					// Nobody has asked yet is not a figure worth putting in a stat band.
+					if (!answered || !value || !label) return;
+
+					// Read off the figure it is heading for, so the label does not flick
+					// through the singular on the way past one.
+					label.textContent =
+						plural.select(answered) === 'one' ? figure.dataset.one! : figure.dataset.other!;
+					figure.hidden = false;
+					climb(answered, (shown) => {
+						value.textContent = number.format(shown);
+					});
+				})
+				.catch(() => {});
+		}
+	}
+</script>
 
 <style>
 	.back {
@@ -152,10 +204,13 @@ const homePath = lang === defaultLang ? '/#projects' : `/${lang}/#projects`;
 		max-width: 60rem;
 	}
 
-	/* Same stat band as the hero and the Spark Match case study. */
+	/* The stat band the hero and the other case studies use, except this one has a
+	 * fourth figure when the endpoint answers. auto-fit rather than a fixed three,
+	 * so it lays out as four across, two by two on a phone, or three when the
+	 * question count is not there. */
 	.figures {
 		display: grid;
-		grid-template-columns: repeat(3, 1fr);
+		grid-template-columns: repeat(auto-fit, minmax(8rem, 1fr));
 		gap: 1rem;
 		margin: var(--space-block) 0 0;
 		padding: 1.4rem 0;
@@ -167,6 +222,12 @@ const homePath = lang === defaultLang ? '/#projects' : `/${lang}/#projects`;
 		display: flex;
 		flex-direction: column-reverse;
 		justify-content: flex-end;
+	}
+
+	/* The rule above is an author rule, so it beats the browser's own
+	 * `[hidden] { display: none }` and would leave an empty cell in the band. */
+	.figures div[hidden] {
+		display: none;
 	}
 
 	.figures dd {
