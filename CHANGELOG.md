@@ -1,5 +1,32 @@
 # ahincho-portfolio
 
+## 0.7.6
+
+### Patch Changes
+
+- 44919b6: Both Workers declare their Durable Object class through `exports` now instead of
+  the `migrations` array, which Cloudflare has marked as the legacy flow. The
+  namespaces were provisioned by that array and stay exactly where they were —
+  only the shape of the declaration changed, and every number survived the deploy.
+  
+  The cost is worth stating: deploys must keep using `exports` from here, and a
+  rollback cannot cross the change.
+- f3e6172: The hero terminal now prints how many questions the assistant has answered,
+  under the visits and the CV downloads. The count was already being kept and was
+  readable only with a token and a `curl`.
+  
+  `GET /stats` answers the totals to anyone now, cached five minutes at the edge
+  so the page asking on every visit never reaches the Durable Object. The
+  day-by-day breakdown still needs the token: it says more about the site than the
+  total does, and nothing on the page needs it.
+  
+  Each line still appears only when its number is worth printing, and one endpoint
+  failing no longer hides the others.
+- 3b681da: The chat widget's connection indicator was called `.status`, which is also what
+  two project badges call themselves. Astro scopes both, so nothing ever
+  collided — but a name that means two things is a trap left for later. It is
+  `.presence` now, which is what it actually shows.
+
 ## 0.7.5
 
 ### Patch Changes
