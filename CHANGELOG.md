@@ -1,5 +1,26 @@
 # ahincho-portfolio
 
+## 0.7.3
+
+### Patch Changes
+
+- 373cb9c: Days now turn over at midnight in Arequipa rather than in UTC. A UTC day starts
+  at seven in the evening local time, which split an evening's visits and
+  questions across two rows and made the numbers awkward to read from the place
+  they are read.
+  
+  Not the reader's own timezone, which would be the obvious next step and is the
+  one thing that must not happen: the visitor token is derived from the day, so a
+  reader who chose it could mint a fresh identity on every request and walk
+  straight through the rate limit. The day is the server's to decide.
+- ee2dbad: The social sharing card still said "Full Stack & DevSecOps Engineer". The role
+  was written by hand into the image script, so renaming it everywhere else left
+  the card behind — the same drift that once stopped the assistant describing
+  itself.
+  
+  The script now reads `hero.role` from the dictionary, which makes the
+  dictionary the only place the role exists, and the card is regenerated.
+
 ## 0.7.2
 
 ### Patch Changes
