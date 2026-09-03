@@ -97,17 +97,48 @@ const stackJson = `{
 			const lang = document.documentElement.lang;
 			const number = new Intl.NumberFormat(lang);
 			const plural = new Intl.PluralRules(lang);
+			const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-			const show = (metric: string, value: number) => {
-				const line = wrapper.querySelector<HTMLElement>(`[data-metric="${metric}"]`);
-				if (!line || value === 0) return false;
+			const find = (metric: string) =>
+				wrapper.querySelector<HTMLElement>(`[data-metric="${metric}"]`);
+
+			const write = (line: HTMLElement, value: number) => {
 				const label = plural.select(value) === 'one' ? line.dataset.one : line.dataset.other;
 				// The newline belongs to the line rather than sitting between them, so a
 				// metric with nothing to say leaves no blank row behind it.
 				line.textContent = `
 ${number.format(value)} ${label}`;
+			};
+
+			// Drawn at zero before anything is asked, so the figures grow into a block
+			// that is already there rather than rows arriving when the network answers.
+			for (const line of wrapper.querySelectorAll<HTMLElement>('[data-metric]')) {
+				write(line, 0);
 				line.hidden = false;
-				return true;
+			}
+			wrapper.hidden = false;
+
+			const climb = (metric: string, value: number) => {
+				const line = find(metric);
+				if (!line) return;
+				// A metric with nothing to report leaves, rather than sitting at zero.
+				if (value === 0) {
+					line.hidden = true;
+					return;
+				}
+				if (still) {
+					write(line, value);
+					return;
+				}
+				const started = performance.now();
+				const step = (now: number) => {
+					// Eased, so the count leaves zero quickly and settles onto the figure. The
+					// frame stamp can predate the call, so the floor keeps it off negatives.
+					const through = Math.min(Math.max((now - started) / 900, 0), 1);
+					write(line, Math.round(value * (1 - (1 - through) ** 3)));
+					if (through < 1) requestAnimationFrame(step);
+				};
+				requestAnimationFrame(step);
 			};
 
 			const count =
@@ -140,12 +171,22 @@ ${number.format(value)} ${label}`;
 				});
 			}
 
+			// Each figure climbs as its own answer lands, so a slow endpoint holds up
+			// nothing but its own line.
+			for (const source of sources) {
+				source.asked.then(
+					(value) => climb(source.metric, value),
+					() => {
+						const line = find(source.metric);
+						if (line) line.hidden = true;
+					},
+				);
+			}
+
 			// Settled rather than all, so one number failing does not hide the others.
 			Promise.allSettled(sources.map((source) => source.asked)).then((results) => {
-				const drawn = results.map(
-					(result, i) => result.status === 'fulfilled' && show(sources[i]!.metric, result.value),
-				);
-				wrapper.hidden = !drawn.includes(true);
+				const any = results.some((result) => result.status === 'fulfilled' && result.value > 0);
+				wrapper.hidden = !any;
 			});
 		}
 	}
