@@ -214,6 +214,7 @@ export const en: Translations = {
 				{ value: '3.8s', label: 'fresh question' },
 				{ value: '$0', label: 'monthly cost' },
 			],
+			answered: { one: 'question answered', other: 'questions answered' },
 			archAria: 'The path of a question: browser to Worker, then gateway, then model',
 			flowLabel: 'The path of a question',
 			flow: [

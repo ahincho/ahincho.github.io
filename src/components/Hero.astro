@@ -86,6 +86,8 @@ const stackJson = `{
 </section>
 
 <script>
+	import { climb } from '../lib/climb';
+
 	const counterUrl = import.meta.env.PUBLIC_COUNTER_URL;
 	const chatUrl = import.meta.env.PUBLIC_CHAT_URL;
 
@@ -97,13 +99,15 @@ const stackJson = `{
 			const lang = document.documentElement.lang;
 			const number = new Intl.NumberFormat(lang);
 			const plural = new Intl.PluralRules(lang);
-			const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 			const find = (metric: string) =>
 				wrapper.querySelector<HTMLElement>(`[data-metric="${metric}"]`);
 
-			const write = (line: HTMLElement, value: number) => {
-				const label = plural.select(value) === 'one' ? line.dataset.one : line.dataset.other;
+			// The label belongs to the figure the count is heading for, not to
+			// whatever it reads mid-climb, so it does not flick through the singular
+			// on its way past one.
+			const write = (line: HTMLElement, value: number, of = value) => {
+				const label = plural.select(of) === 'one' ? line.dataset.one : line.dataset.other;
 				// The newline belongs to the line rather than sitting between them, so a
 				// metric with nothing to say leaves no blank row behind it.
 				line.textContent = `
@@ -118,7 +122,7 @@ ${number.format(value)} ${label}`;
 			}
 			wrapper.hidden = false;
 
-			const climb = (metric: string, value: number) => {
+			const show = (metric: string, value: number) => {
 				const line = find(metric);
 				if (!line) return;
 				// A metric with nothing to report leaves, rather than sitting at zero.
@@ -126,19 +130,7 @@ ${number.format(value)} ${label}`;
 					line.hidden = true;
 					return;
 				}
-				if (still) {
-					write(line, value);
-					return;
-				}
-				const started = performance.now();
-				const step = (now: number) => {
-					// Eased, so the count leaves zero quickly and settles onto the figure. The
-					// frame stamp can predate the call, so the floor keeps it off negatives.
-					const through = Math.min(Math.max((now - started) / 900, 0), 1);
-					write(line, Math.round(value * (1 - (1 - through) ** 3)));
-					if (through < 1) requestAnimationFrame(step);
-				};
-				requestAnimationFrame(step);
+				climb(value, (shown) => write(line, shown, value));
 			};
 
 			const count =
@@ -175,7 +167,7 @@ ${number.format(value)} ${label}`;
 			// nothing but its own line.
 			for (const source of sources) {
 				source.asked.then(
-					(value) => climb(source.metric, value),
+					(value) => show(source.metric, value),
 					() => {
 						const line = find(source.metric);
 						if (line) line.hidden = true;

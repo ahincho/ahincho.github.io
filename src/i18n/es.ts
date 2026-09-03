@@ -217,6 +217,7 @@ export const es = {
 				{ value: '3,8 s', label: 'pregunta nueva' },
 				{ value: '$0', label: 'coste al mes' },
 			],
+			answered: { one: 'pregunta respondida', other: 'preguntas respondidas' },
 			archAria:
 				'El camino de una pregunta: del navegador al Worker, de ahí a la pasarela y al modelo',
 			flowLabel: 'El camino de una pregunta',
