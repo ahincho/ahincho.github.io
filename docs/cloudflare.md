@@ -82,7 +82,11 @@ cannot be recognised by the other.
 ## The Durable Objects
 
 Both Workers use a single Durable Object instance, addressed as
-`idFromName('global')`. One instance means every count is strongly consistent —
+`idFromName('global')`. Each declares its class through the `exports` field —
+`{ "type": "durable-object", "storage": "sqlite" }` — which replaced the older
+`migrations` array. The namespaces were provisioned by that array and stayed
+exactly where they were; only the shape of the declaration changed. Deploys must
+keep using `exports` from here, and a rollback cannot cross the change. One instance means every count is strongly consistent —
 Workers KV would not be, and its free tier caps at 1,000 writes a day. SQLite is
 the only Durable Object storage on the free plan.
 
