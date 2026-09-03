@@ -1,5 +1,6 @@
 import { DurableObject } from 'cloudflare:workers';
 import { ANSWER_MAX, StreamedAnswer, systemPrompt } from './answer';
+import { cutoff, dayOf, matches, summarise } from './stats';
 
 export interface Env {
 	LIMITS: DurableObjectNamespace<Limits>;
@@ -17,6 +18,8 @@ export interface Env {
 	CF_AIG_TOKEN: string;
 	/** Google AI Studio key — set with `wrangler secret put`. */
 	GEMINI_API_KEY: string;
+	/** Guards the stats endpoint; without it there is no stats endpoint. */
+	STATS_TOKEN: string;
 }
 
 const QUESTION_MAX = 300;
@@ -38,6 +41,9 @@ const HEDGE_AFTER_MS = 4_000;
 // a long life safe, and a long life is what a portfolio needs: its readers are
 // days apart, not seconds.
 const CACHE_TTL_SECONDS = 7 * 24 * 60 * 60;
+// How long a per-person row is kept so a day's people can be counted. The
+// daily totals themselves are a row a day and stay.
+const ASKER_DAYS = 60;
 const BOT_PATTERN =
 	/bot|crawler|spider|slurp|facebookexternalhit|headless|preview|monitor|curl|wget/i;
 
@@ -55,6 +61,19 @@ export class Limits extends DurableObject<Env> {
 				at      INTEGER NOT NULL
 			);
 			CREATE INDEX IF NOT EXISTS asks_token ON asks (token, at);
+			-- The limiter throws its rows away after an hour, which is right for a
+			-- limit and useless for anyone asking later whether the thing was used.
+			-- These keep the shape of a day without keeping the day's questions.
+			CREATE TABLE IF NOT EXISTS daily (
+				day       TEXT PRIMARY KEY,
+				questions INTEGER NOT NULL DEFAULT 0,
+				people    INTEGER NOT NULL DEFAULT 0
+			);
+			CREATE TABLE IF NOT EXISTS askers (
+				day   TEXT NOT NULL,
+				token TEXT NOT NULL,
+				PRIMARY KEY (day, token)
+			);
 		`);
 	}
 
@@ -84,7 +103,46 @@ export class Limits extends DurableObject<Env> {
 		if (used >= PER_WINDOW) return { allowed: false, remaining: 0 };
 
 		this.ctx.storage.sql.exec('INSERT INTO asks (token, at) VALUES (?, ?)', token, now);
+		this.record(token);
 		return { allowed: true, remaining: PER_WINDOW - used - 1 };
+	}
+
+	/**
+	 * Counts an ask that got through. The token already carries the day, so one
+	 * row per person per day falls out of the primary key rather than needing a
+	 * check, and nothing here is any more identifying than the token was.
+	 */
+	private record(token: string): void {
+		const day = dayOf();
+		this.ctx.storage.sql.exec(
+			`INSERT INTO daily (day, questions, people) VALUES (?, 1, 0)
+			 ON CONFLICT(day) DO UPDATE SET questions = questions + 1`,
+			day,
+		);
+		const firstToday =
+			this.ctx.storage.sql
+				.exec(
+					'INSERT INTO askers (day, token) VALUES (?, ?) ON CONFLICT DO NOTHING RETURNING 1',
+					day,
+					token,
+				)
+				.toArray().length > 0;
+		if (!firstToday) return;
+
+		this.ctx.storage.sql.exec('UPDATE daily SET people = people + 1 WHERE day = ?', day);
+		// Somebody is only new once, so this is the rarest moment available to
+		// let go of the days nobody will count again.
+		this.ctx.storage.sql.exec('DELETE FROM askers WHERE day < ?', cutoff(ASKER_DAYS));
+	}
+
+	stats(days: number): { day: string; questions: number; people: number }[] {
+		return this.ctx.storage.sql
+			.exec<{
+				day: string;
+				questions: number;
+				people: number;
+			}>('SELECT day, questions, people FROM daily ORDER BY day DESC LIMIT ?', days)
+			.toArray();
 	}
 }
 
@@ -302,6 +360,17 @@ export default {
 
 		if (request.method === 'OPTIONS')
 			return new Response(null, { status: 204, headers: corsHeaders });
+
+		if (new URL(request.url).pathname === '/stats') {
+			// 404 rather than 401: an endpoint that answers "wrong token" is an
+			// endpoint worth guessing at. Without a token configured there is
+			// nothing here at all.
+			if (!matches(request.headers.get('X-Stats-Token'), env.STATS_TOKEN)) {
+				return json({ error: 'not_found' }, 404, corsHeaders);
+			}
+			const counts = env.LIMITS.get(env.LIMITS.idFromName('global'));
+			return json(summarise(await counts.stats(90)), 200, corsHeaders);
+		}
 		if (request.method !== 'POST') return json({ error: 'method_not_allowed' }, 405, corsHeaders);
 
 		let body: Ask;

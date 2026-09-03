@@ -265,3 +265,40 @@ One thing the first version got wrong: cancelling the losing model logged as
 `gateway stalled`, which is exactly what a real stall logs. A flag now
 distinguishes a deliberate cancellation from a provider that failed, because a
 log that cries wolf is worse than no log.
+
+## Knowing whether anyone used it
+
+The first time the question came up — had anyone besides me talked to this
+thing? — there was no way to answer it. The Worker keeps a rolling hour of
+request times for rate limiting and throws the rows away; nothing else on the
+site records anything. The only history was in the AI Gateway logs, behind a
+dashboard, and the OAuth token wrangler holds does not carry `AI Gateway Read`.
+
+What was reachable was Cloudflare's GraphQL analytics, which said the Worker had
+served 149 requests, all on one day, 107 of which reached the model. That last
+number is what makes it evidence rather than noise: the widget only calls the
+Worker when somebody submits a question, and a malformed request from a scanner
+is rejected before any model call. But the analytics cannot say who asked, and
+the requests were served from thirteen data centres on four continents, which
+anycast makes suggestive rather than conclusive.
+
+So the limiter's Durable Object now keeps a daily roll-up before it prunes: how
+many questions, and how many people asked them. The visitor token already
+carries the date, so one row per person per day falls out of the primary key
+instead of needing a check, and the roll-up is no more identifying than the
+token it counts. Per-person rows are kept for sixty days; the daily totals are a
+row a day and stay.
+
+`GET /stats` reads it, behind a token compared without early exit, and answers
+404 rather than 401 — an endpoint that says "wrong token" is an endpoint worth
+guessing at. Without a token configured there is no endpoint at all.
+
+It is deliberately not public. The counters on the site are public because they
+were built to be shown; question volume was not, and a number that starts at
+zero is easier to publish later than to withdraw. The totals also add people per
+day rather than claiming a unique count across days: a token that changes at
+midnight cannot tell one reader on three days from three readers.
+
+The count happens where the limiter admits the ask, before the corpus is fetched
+and before any model is called. A question whose answer never arrived was still
+a question somebody asked.
