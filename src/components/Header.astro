@@ -207,6 +207,24 @@ const languages = [
 		color: var(--text-faint);
 	}
 
+	/*
+	 * The controls are 38px: over what WCAG asks for, under what a thumb wants.
+	 * Growing the box would change the header; growing an invisible one around
+	 * it does not. There are 9px between them, so 4px a side still cannot make
+	 * two targets touch.
+	 *
+	 * The language pills are left at 31x33, which clears the 24px WCAG asks for.
+	 * They cannot be grown this way — .lang clips its children to keep its
+	 * corners round — and growing them for real would either make the header
+	 * taller or put the line between ES and EN somewhere it does not look.
+	 */
+	.menu::after,
+	#theme-toggle::after {
+		content: '';
+		position: absolute;
+		inset: -0.25rem;
+	}
+
 	.lang a:hover {
 		color: var(--text);
 	}
@@ -218,6 +236,7 @@ const languages = [
 
 	.menu,
 	#theme-toggle {
+		position: relative;
 		flex-shrink: 0;
 		display: grid;
 		place-items: center;
