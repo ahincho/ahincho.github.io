@@ -1,0 +1,10 @@
+# Git stores text with LF and hands it back the same way, on every machine.
+# Without this, Windows checks out CRLF, Prettier expects LF, and `format:check`
+# fails locally on files nobody has touched while CI stays green on Linux.
+* text=auto eol=lf
+
+# Left byte for byte. `text=auto` would guess right on most of these, but a CV
+# is not the place to find out.
+*.pdf  binary
+*.png  binary
+*.webp binary
