@@ -14,13 +14,13 @@
 			},
 		],
 	},
-	// SQLite-backed Durable Objects are the only kind available on the Workers free plan.
-	"migrations": [
-		{
-			"tag": "v1",
-			"new_sqlite_classes": ["Counters"],
-		},
-	],
+	// Which classes this Worker exports, and how their storage is backed.
+	// SQLite is the only kind on the free plan. This replaces the older
+	// `migrations` array: the namespace was provisioned by it and stays
+	// exactly where it was — only the shape of the declaration changed.
+	"exports": {
+		"Counters": { "type": "durable-object", "storage": "sqlite" },
+	},
 	"vars": {
 		"ALLOWED_ORIGINS": "https://ahincho.github.io,http://localhost:4321",
 		// Counted once per visitor per day, and never go down.
