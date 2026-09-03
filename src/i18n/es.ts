@@ -139,7 +139,7 @@ export const es = {
 			description:
 				'La fontanería que toda empresa reescribe en cada servicio — estándar de API, observabilidad, seguridad y convenciones de build — resuelta una vez, versionada y publicada. Un núcleo en Java puro, sin dependencias de framework, y encima adaptadores finos para Spring Boot, Quarkus y NestJS.',
 			figures: [
-				{ value: '28', label: 'repositorios públicos' },
+				{ value: '30', label: 'repositorios públicos' },
 				{ value: '3', label: 'stacks soportados' },
 				{ value: '7', label: 'librerías de núcleo sin framework' },
 			],
@@ -180,7 +180,7 @@ export const es = {
 			],
 			roleLabel: 'Mi rol:',
 			roleText:
-				'diseño y construyo la plataforma entera — la arquitectura, los 28 repositorios, los pipelines reutilizables y la documentación.',
+				'diseño y construyo la plataforma entera — la arquitectura, los 30 repositorios, los pipelines reutilizables y la documentación.',
 			cta: 'Ver el caso de estudio',
 			back: 'Volver al portafolio',
 			detailMeta: {
@@ -191,7 +191,7 @@ export const es = {
 			links: [
 				{
 					href: 'https://github.com/ahincho?tab=repositories&q=nova',
-					label: 'Los 28 repositorios',
+					label: 'Los 30 repositorios',
 				},
 				{
 					href: 'https://github.com/ahincho/nova-java-api-standard',

@@ -139,7 +139,7 @@ export const en: Translations = {
 			description:
 				'The plumbing every company rewrites in every service — API standards, observability, security and build conventions — solved once, versioned and published. A core in plain Java with no framework dependencies, and thin adapters on top of it for Spring Boot, Quarkus and NestJS.',
 			figures: [
-				{ value: '28', label: 'public repositories' },
+				{ value: '30', label: 'public repositories' },
 				{ value: '3', label: 'stacks supported' },
 				{ value: '7', label: 'framework-free core libraries' },
 			],
@@ -180,7 +180,7 @@ export const en: Translations = {
 			],
 			roleLabel: 'My role:',
 			roleText:
-				'I design and build the whole platform — the architecture, all 28 repositories, the reusable pipelines and the documentation.',
+				'I design and build the whole platform — the architecture, all 30 repositories, the reusable pipelines and the documentation.',
 			cta: 'Read the case study',
 			back: 'Back to the portfolio',
 			detailMeta: {
@@ -191,7 +191,7 @@ export const en: Translations = {
 			links: [
 				{
 					href: 'https://github.com/ahincho?tab=repositories&q=nova',
-					label: 'All 28 repositories',
+					label: 'All 30 repositories',
 				},
 				{ href: 'https://github.com/ahincho/nova-java-api-standard', label: 'Core: API standard' },
 				{
