@@ -132,7 +132,11 @@ ${number.format(value)} ${label}`;
 <style>
 	.hero {
 		position: relative;
-		padding-block: 6.5rem 4rem;
+		/* The header above this is sticky and 65px tall, so whatever sits here is
+	 * on top of that. A flat 4rem left a phone with 129px — a sixth of the
+	 * screen — before the first word. Fluid instead of a breakpoint, so the
+	 * room grows with the room there is. */
+		padding-block: clamp(2.25rem, 7vw, 6.5rem) clamp(3rem, 5vw, 4rem);
 		overflow: hidden;
 	}
 
@@ -199,13 +203,18 @@ ${number.format(value)} ${label}`;
 	.social {
 		display: flex;
 		align-items: center;
-		gap: 0.9rem;
+		gap: 1.25rem;
 		margin-top: 2rem;
 	}
 
 	.social a {
 		color: var(--text-muted);
 		display: inline-flex;
+		/* The icons are 20px, which is under what a thumb needs and under what
+		 * WCAG asks for. The padding grows the target and the negative margin
+		 * gives back the space, so nothing on the line moves. */
+		padding: 0.6rem;
+		margin: -0.6rem;
 	}
 
 	.social a:hover {
@@ -346,10 +355,6 @@ ${number.format(value)} ${label}`;
 		.grid {
 			grid-template-columns: 1fr;
 			gap: 2.5rem;
-		}
-
-		.hero {
-			padding-block: 4rem 3rem;
 		}
 
 		.stats {
