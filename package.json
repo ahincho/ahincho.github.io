@@ -12,7 +12,7 @@
     "build": "node scripts/chat-corpus.ts && astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "og": "node scripts/og-image.mjs",
+    "og": "node scripts/og-image.ts",
     "prepare": "husky",
     "changeset": "changeset",
     "version": "changeset version",

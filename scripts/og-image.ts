@@ -5,10 +5,14 @@
 // ones as a laptop. Generating it here and checking it in keeps the card deterministic.
 //
 // Run with: pnpm og
-import { writeFile, mkdir } from 'node:fs/promises';
+import { mkdir } from 'node:fs/promises';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import sharp from 'sharp';
+import { es } from '../src/i18n/es.ts';
+
+/** SVG is XML, and the role has an ampersand in it. */
+const xml = (text: string) => text.replace(/&/g, '&amp;').replace(/</g, '&lt;');
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const out = resolve(root, 'public/og.png');
@@ -45,7 +49,7 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${WIDTH}" height="${
   <text x="80" y="128" font-family="${MONO}" font-size="40" font-weight="700" fill="${TEXT}">ah<tspan fill="${ACCENT}">.</tspan></text>
 
   <text x="80" y="300" font-family="${SANS}" font-size="96" font-weight="700" fill="${TEXT}" letter-spacing="-3">Angel Hincho</text>
-  <text x="80" y="368" font-family="${MONO}" font-size="36" font-weight="600" fill="${ACCENT}">Full Stack &amp; DevSecOps Engineer</text>
+  <text x="80" y="368" font-family="${MONO}" font-size="36" font-weight="600" fill="${ACCENT}">${xml(es.hero.role)}</text>
 
   <rect x="80" y="418" width="150" height="2" fill="${CARD}" />
 
