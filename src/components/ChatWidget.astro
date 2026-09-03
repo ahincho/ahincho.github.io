@@ -57,9 +57,9 @@ const READER = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strok
 			<div>
 				<p class="panel-title">{t.title}</p>
 				<p class="panel-sub">{t.subtitle}</p>
-				<p class="status" data-state={endpoint ? 'online' : 'offline'}>
+				<p class="presence" data-state={endpoint ? 'online' : 'offline'}>
 					<span class="dot" aria-hidden="true"></span>
-					<span class="status-label">{endpoint ? t.status.online : t.status.offline}</span>
+					<span class="presence-label">{endpoint ? t.status.online : t.status.offline}</span>
 				</p>
 			</div>
 			<button class="close" type="button" aria-label={t.close}>
@@ -146,15 +146,15 @@ const READER = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strok
 		const form = root.querySelector<HTMLFormElement>('.composer')!;
 		const input = root.querySelector<HTMLInputElement>('#chat-input')!;
 		const strings = JSON.parse(root.dataset.strings ?? '{}');
-		const status = root.querySelector<HTMLElement>('.status')!;
-		const statusLabel = status.querySelector<HTMLElement>('.status-label')!;
+		const presence = root.querySelector<HTMLElement>('.presence')!;
+		const presenceLabel = presence.querySelector<HTMLElement>('.presence-label')!;
 
 		// The header claims the assistant is up, so a failed turn has to take that
 		// claim back rather than leave a green dot over an error bubble.
 		function setStatus(state: 'online' | 'trouble') {
 			if (!endpoint) return;
-			status.dataset.state = state;
-			statusLabel.textContent = state === 'online' ? strings.online : strings.trouble;
+			presence.dataset.state = state;
+			presenceLabel.textContent = state === 'online' ? strings.online : strings.trouble;
 		}
 
 		// Only the last few turns travel with each question: the corpus is what
@@ -462,7 +462,7 @@ const READER = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strok
 		margin-top: 0.15rem;
 	}
 
-	.status {
+	.presence {
 		display: flex;
 		align-items: center;
 		gap: 0.35rem;
@@ -481,7 +481,7 @@ const READER = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strok
 		background: var(--text-faint);
 	}
 
-	.status[data-state='online'] .dot {
+	.presence[data-state='online'] .dot {
 		background: var(--accent);
 		box-shadow: 0 0 0 0.15rem var(--accent-dim);
 	}
