@@ -66,7 +66,7 @@ const stackJson = `{
 <span class="p">~ $</span> cat stack.json
 <span class="o">{stackJson}</span>
 <span class="p">~ $</span> echo $NOW
-<span class="o">{t.now}</span>{counterUrl && (<span class="visits" hidden data-label={t.visits}>&#10;<span class="p">~ $</span> cat visits.log&#10;<span class="o" data-visits /></span>)}
+<span class="o">{t.now}</span>{counterUrl && (<span class="metrics" hidden>&#10;<span class="p">~ $</span> cat metrics.log<span class="o" data-metric="visits" data-one={t.visits.one} data-other={t.visits.other} hidden /><span class="o" data-metric="downloads" data-one={t.downloads.one} data-other={t.downloads.other} hidden /></span>)}
 <span class="p">~ $</span> <span class="cursor" /></code></pre>
 		</div>
 	</div>
@@ -89,20 +89,42 @@ const stackJson = `{
 
 	// Inside the check, so a build without the variable emits no script at all.
 	if (endpoint) {
-		const wrapper = document.querySelector<HTMLElement>('.visits');
-		const target = wrapper?.querySelector('[data-visits]');
+		const wrapper = document.querySelector<HTMLElement>('.metrics');
 
-		if (wrapper && target) {
-			fetch(`${endpoint}/v1/counters/site-visits`, { method: 'POST' })
-				.then((response) => (response.ok ? response.json() : Promise.reject(response.status)))
-				.then((payload: { value: number }) => {
-					const formatted = new Intl.NumberFormat(document.documentElement.lang).format(
-						payload.value,
-					);
-					target.textContent = `${formatted} ${wrapper.dataset.label}`;
-					wrapper.hidden = false;
-				})
-				.catch(() => {});
+		if (wrapper) {
+			const lang = document.documentElement.lang;
+			const number = new Intl.NumberFormat(lang);
+			const plural = new Intl.PluralRules(lang);
+
+			const show = (metric: string, value: number) => {
+				const line = wrapper.querySelector<HTMLElement>(`[data-metric="${metric}"]`);
+				if (!line || value === 0) return false;
+				const label = plural.select(value) === 'one' ? line.dataset.one : line.dataset.other;
+				// The newline belongs to the line rather than sitting between the two,
+				// so a metric with nothing to say leaves no blank row behind it.
+				line.textContent = `
+${number.format(value)} ${label}`;
+				line.hidden = false;
+				return true;
+			};
+
+			const value = (response: Response): Promise<number> =>
+				response.ok
+					? response.json().then((body: { value: number }) => body.value)
+					: Promise.reject(response.status);
+
+			// The visit has to be recorded either way; the downloads are only read.
+			// Settled rather than all, so one number failing does not hide the other.
+			Promise.allSettled([
+				fetch(`${endpoint}/v1/counters/site-visits`, { method: 'POST' }).then(value),
+				fetch(`${endpoint}/v1/counters/cv-downloads`).then(value),
+			]).then(([visits, downloads]) => {
+				const drawn = [
+					visits.status === 'fulfilled' && show('visits', visits.value),
+					downloads.status === 'fulfilled' && show('downloads', downloads.value),
+				];
+				wrapper.hidden = !drawn.includes(true);
+			});
 		}
 	}
 </script>
@@ -269,7 +291,8 @@ const stackJson = `{
 		color: var(--text-muted);
 	}
 
-	.visits[hidden] {
+	.metrics[hidden],
+	.o[data-metric][hidden] {
 		display: none;
 	}
 

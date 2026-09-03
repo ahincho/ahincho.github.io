@@ -35,7 +35,8 @@ export const en: Translations = {
 		linkedinAria: "Angel Hincho's LinkedIn",
 		whoami: 'Angel Hincho · BSc in Systems Engineering',
 		now: 'Generative AI & MLOps specialization — UNI',
-		visits: 'unique visits',
+		visits: { one: 'unique visit', other: 'unique visits' },
+		downloads: { one: 'CV download', other: 'CV downloads' },
 		stats: [
 			{ value: '5+', label: 'years of experience' },
 			{ value: '300k+', label: 'users in production' },
