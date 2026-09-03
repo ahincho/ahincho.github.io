@@ -173,6 +173,10 @@ The first two are public, because the site shows those numbers anyway. The third
 is not: question volume was never meant to be displayed, and a number that
 starts at zero is easier to publish later than to withdraw.
 
-Days are counted in **UTC**, so an evening in Peru falls into the next day's row.
-The visitor token derives its day the same way, and the two have to agree or the
-same person would count twice at midnight.
+Days turn over at **midnight in Arequipa** (`America/Lima`), not in UTC, so an
+evening's activity stays in that evening's row. The visitor token derives its day
+the same way — the two have to agree, or the same person would count twice.
+
+It is deliberately not the reader's own timezone. The token is derived from the
+day, so a reader who got to choose it could mint a fresh identity on every
+request and walk straight through the rate limit.

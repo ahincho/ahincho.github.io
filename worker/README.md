@@ -77,3 +77,10 @@ pnpm deploy
 Then point the site at the deployed Worker by setting the `PUBLIC_COUNTER_URL`
 repository variable in GitHub to the `*.workers.dev` URL. Leaving it unset
 builds the site with no counters and no scripts for them at all.
+
+## Which day a day is
+
+Days turn over at midnight in Arequipa (`America/Lima`), not in UTC, so an
+evening's visits stay in that evening. Never the visitor's own timezone: the
+token is derived from the day, so a visitor who chose it could mint a fresh
+identity on every request and be counted as many times as they liked.

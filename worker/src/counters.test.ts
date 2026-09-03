@@ -71,6 +71,15 @@ describe('isBot', () => {
 	});
 });
 
+describe('today', () => {
+	it('turns the day over in Arequipa rather than in UTC', () => {
+		// A visit at seven in the evening belongs to that evening, not to the
+		// next morning's row.
+		expect(today(Date.parse('2026-09-03T00:01:00Z'))).toBe('2026-09-02');
+		expect(today(Date.parse('2026-09-03T05:00:00Z'))).toBe('2026-09-03');
+	});
+});
+
 describe('fingerprint', () => {
 	const address = '203.0.113.9';
 	const agent = 'Mozilla/5.0';
@@ -100,8 +109,9 @@ describe('fingerprint', () => {
 	// The two counters exist for different spans of time, and this is where that
 	// difference is actually decided.
 	it('makes a visit expire at midnight but a reaction outlive it', async () => {
-		const monday = today(Date.parse('2026-09-07T23:59:00Z'));
-		const tuesday = today(Date.parse('2026-09-08T00:01:00Z'));
+		// Either side of midnight in Arequipa, which is 05:00 UTC.
+		const monday = today(Date.parse('2026-09-08T04:59:00Z'));
+		const tuesday = today(Date.parse('2026-09-08T05:00:00Z'));
 		expect(monday).not.toBe(tuesday);
 
 		expect(await fingerprint(SALT, address, agent, monday)).not.toBe(
