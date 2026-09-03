@@ -1,0 +1,39 @@
+---
+interface Props {
+	/** A COUNTER_KEYS entry the Worker accepts, without its `-reads` suffix. */
+	project: string;
+}
+
+const { project } = Astro.props;
+
+const endpoint = import.meta.env.PUBLIC_COUNTER_URL;
+---
+
+{
+	/*
+	 * Nothing to look at. It only marks which case study is open, so the script
+	 * below knows what to record. Which project gets read is worth knowing;
+	 * printing the figure would only tell a visitor how few came before them.
+	 */
+	endpoint && <span data-read={project} hidden />
+}
+
+<script>
+	const endpoint = import.meta.env.PUBLIC_COUNTER_URL;
+
+	// The query lives inside the check so that a build without the variable
+	// leaves nothing behind at all, not even a script that finds no marker.
+	if (endpoint) {
+		const project = document.querySelector<HTMLElement>('[data-read]')?.dataset.read;
+
+		if (project) {
+			// The Worker counts one read per visitor per day, so a reload or a
+			// second look the same afternoon does not inflate the figure.
+			// keepalive, because a reader who bounces straight back still read it.
+			fetch(`${endpoint}/v1/counters/${project}-reads`, {
+				method: 'POST',
+				keepalive: true,
+			}).catch(() => {});
+		}
+	}
+</script>

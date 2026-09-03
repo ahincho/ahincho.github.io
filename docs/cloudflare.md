@@ -63,11 +63,11 @@ Secrets:
 
 Vars, in `worker/wrangler.jsonc`:
 
-| Var               | Value                         | Read by                                      |
-| ----------------- | ----------------------------- | -------------------------------------------- |
-| `ALLOWED_ORIGINS` | the site and `localhost:4321` | `cors()`                                     |
-| `COUNTER_KEYS`    | `site-visits,cv-downloads`    | the `counters` family; unlisted keys are 404 |
-| `REACTION_KEYS`   | `spark-match,nova,assistant`  | the `reactions` family                       |
+| Var               | Value                                              | Read by                                      |
+| ----------------- | -------------------------------------------------- | -------------------------------------------- |
+| `ALLOWED_ORIGINS` | the site and `localhost:4321`                      | `cors()`                                     |
+| `COUNTER_KEYS`    | `site-visits,cv-downloads`, plus `<project>-reads` | the `counters` family; unlisted keys are 404 |
+| `REACTION_KEYS`   | `spark-match,nova,assistant`                       | the `reactions` family                       |
 
 Secrets:
 

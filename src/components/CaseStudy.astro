@@ -3,6 +3,7 @@ import { Image } from 'astro:assets';
 import { translations, getLang, defaultLang } from '../i18n';
 import VideoDemo from './VideoDemo.astro';
 import Reactions from './Reactions.astro';
+import Reads from './Reads.astro';
 import chatSubagents from '../assets/spark-match/chat-subagents.webp';
 import reportCareers from '../assets/spark-match/report-careers.webp';
 import reportPdf from '../assets/spark-match/report-pdf.webp';
@@ -125,6 +126,7 @@ const shots = [chatSubagents, reportCareers, reportPdf, evalsLangsmith].map((ima
 					))
 				}
 				<Reactions project="spark-match" />
+				<Reads project="spark-match" />
 			</div>
 		</article>
 	</div>

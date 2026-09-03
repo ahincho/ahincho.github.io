@@ -1,6 +1,7 @@
 ---
 import { translations, getLang, defaultLang } from '../i18n';
 import Reactions from './Reactions.astro';
+import Reads from './Reads.astro';
 import NovaArchitecture from './NovaArchitecture.astro';
 
 const lang = getLang(Astro.currentLocale);
@@ -67,6 +68,7 @@ const homePath = lang === defaultLang ? '/#projects' : `/${lang}/#projects`;
 					))
 				}
 				<Reactions project="nova" />
+				<Reads project="nova" />
 			</div>
 		</article>
 	</div>
