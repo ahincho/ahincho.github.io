@@ -71,6 +71,13 @@ const jsonLd = JSON.stringify({
 		<title>{title}</title>
 		<meta name="description" content={description} />
 		<meta name="author" content="Angel Hincho" />
+		{
+			/* Proves to Google Search Console that this site is ours, which is what buys
+			 * the index coverage and search performance reports. Not a secret — the whole
+			 * mechanism is that it is published here for Google to read — but it does have
+			 * to stay: deleting it drops the verification and the reports with it. */
+		}
+		<meta name="google-site-verification" content="XQD0BGj_ehOBD9Fs-7C9Unubd_SvA2asbgJDiPuU4VI" />
 		<meta property="og:type" content="website" />
 		<meta property="og:title" content={title} />
 		<meta property="og:description" content={description} />
