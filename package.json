@@ -34,7 +34,7 @@
     "esbuild": true
   },
   "devDependencies": {
-    "@changesets/cli": "^3.0.1",
+    "@changesets/cli": "^3.0.2",
     "@commitlint/cli": "^21.2.2",
     "@commitlint/config-conventional": "^21.2.2",
     "@iconify-json/devicon-plain": "^1.2.57",
