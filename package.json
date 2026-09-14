@@ -40,7 +40,7 @@
     "@iconify-json/devicon-plain": "^1.2.57",
     "husky": "^9.1.7",
     "prettier": "^3.9.6",
-    "prettier-plugin-astro": "^0.14.1",
+    "prettier-plugin-astro": "^1.0.0",
     "simple-icons": "^16.29.0",
     "typescript": "^7.0.2",
     "vitest": "^4.1.11"
